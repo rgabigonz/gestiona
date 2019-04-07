@@ -201,7 +201,7 @@
                 fecha_nota_pedido: new Date(),
                 formato_fecha_nota_pedido: "dd-MM-yyyy",
                 es: es,
-                quotes: {},
+//                pedidos: {},
                 cliente: {},
                 codigo_cliente: '',
                 items: [],
@@ -289,12 +289,14 @@
                 });
             },
             agregaProducto() {
-                if (this.existeProducto(parseInt(this.codigo_producto)) === false) {
-                    this.items.push({ cod: parseInt(this.codigo_producto), 
-                                      descripcion: this.producto.nombre, 
-                                      cantidad: this.cantidad_producto, 
-                                      precio: this.precio_producto 
-                    });
+                if (this.codigo_producto > 0 && this.cantidad_producto > 0 && this.precio_producto > 0) {
+                    if (this.existeProducto(parseInt(this.codigo_producto)) === false) {
+                        this.items.push({ cod: parseInt(this.codigo_producto), 
+                                        descripcion: this.producto.nombre, 
+                                        cantidad: this.cantidad_producto, 
+                                        precio: this.precio_producto 
+                        });
+                    }
                 }
 
                 this.codigo_producto = '';
