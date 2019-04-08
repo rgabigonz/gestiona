@@ -37,6 +37,9 @@ Vue.use(VueRouter)
 
 let routes = [
     { path: '/productos', name: 'productos', component: require('./components/Productos.vue') },
+    { path: '/depositos', name: 'depositos', component: require('./components/Depositos.vue') },
+    { path: '/formasventa', name: 'formasventa', component: require('./components/FormasVenta.vue') },
+    { path: '/formaspago', name: 'formaspago', component: require('./components/FormasPago.vue') },
     { path: '/clientes', name: 'clientes', component: require('./components/Clientes.vue') },
     { path: '/proveedores', name: 'proveedores', component: require('./components/Proveedores.vue') },    
     { path: '/dashboard', name: 'dashboard', component: require('./components/Dashboard.vue') },

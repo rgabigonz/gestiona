@@ -18,6 +18,30 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::middleware('auth:api')->group( function () {
+    // Rutas Depositos
+    Route::apiResources([
+        'deposito' => 'Api\DepositoController'
+    ]);
+
+    Route::put('/deposito/desactivar/{deposito}', 'Api\DepositoController@desactivar');
+    Route::put('/deposito/activar/{deposito}', 'Api\DepositoController@activar');
+
+    // Rutas Formas Pago
+    Route::apiResources([
+        'formapago' => 'Api\FormaPagoController'
+    ]);
+
+    Route::put('/formapago/desactivar/{formapago}', 'Api\FormaPagoController@desactivar');
+    Route::put('/formapago/activar/{formapago}', 'Api\FormaPagoController@activar');
+
+    // Rutas Formas Venta
+    Route::apiResources([
+        'formaventa' => 'Api\FormaVentaController'
+    ]);
+
+    Route::put('/formaventa/desactivar/{formaventa}', 'Api\FormaVentaController@desactivar');
+    Route::put('/formaventa/activar/{formaventa}', 'Api\FormaVentaController@activar');
+
     // Rutas Productos
     Route::get('/producto/devuelveDatosProducto/{producto}', 'Api\ProductoController@devuelveDatosProducto');
 

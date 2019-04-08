@@ -5,26 +5,25 @@
             <div class="card border-success mb-3">
                 <div class="card-header bg-transparent border-light">Busqueda
                     <div class="card-tools">
-                        <button class="btn btn-secondary" @click="cargarProductos(1, sBuscar, sCriterio)"><i class="fas fa-search fa-fw"></i></button>
+                        <button class="btn btn-secondary" @click="cargarFormasVenta(1, sBuscar, sCriterio)"><i class="fas fa-search fa-fw"></i></button>
                     </div>
                 </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col col-md-4">
                             <select class="form-control" v-model="sCriterio">
-                                <option value="nombre">Producto</option>
-                                <option value="precio">Precio</option>
+                                <option value="descripcion">Descripcion</option>
                             </select>
                         </div>
                         <div class="col col-md-8">
-                            <input v-model="sBuscar" @keyup.enter="cargarProductos(1, sBuscar, sCriterio)" type="text" class="form-control" placeholder="Dato a buscar...">
+                            <input v-model="sBuscar" @keyup.enter="cargarFormasVenta(1, sBuscar, sCriterio)" type="text" class="form-control" placeholder="Dato a buscar...">
                         </div>
                     </div>
                 </div>
             </div>
             <div class="card border-info mb-3">
               <div class="card-header border-light">
-                <h3 class="card-title">Lista de Productos</h3>
+                <h3 class="card-title">Lista de Formas de Venta</h3>
                 <div class="card-tools">
                     <button class="btn btn-success" @click="nuevoModal()"><i class="fas fa-plus fa-fw"></i></button>
                 </div>
@@ -35,17 +34,15 @@
                     <tbody>
                         <tr>
                             <th style="width: 8%">#</th>
-                            <th style="width: 60%">Nombre</th>
-                            <th style="width: 15%">Precio</th>
+                            <th style="width: 75%">Descripcion</th>
                             <th style="width: 8%">Estado</th>
                             <th style="width: 9%"></th>
                         </tr>
-                        <tr v-for="producto in productos" :key="producto.id">
-                            <td>{{ producto.id }}</td>
-                            <td>{{ producto.nombre }}</td>
-                            <td>$ {{ producto.precio }}</td>
+                        <tr v-for="forma_venta in formas_venta" :key="forma_venta.id">
+                            <td>{{ forma_venta.id }}</td>
+                            <td>{{ forma_venta.descripcion }}</td>
                             <td>
-                                <div v-if="producto.estado == 'A'">
+                                <div v-if="forma_venta.estado == 'A'">
                                     <span class="badge badge-success">Activo</span>
                                 </div>
                                 <div v-else>
@@ -53,13 +50,13 @@
                                 </div>
                             </td>                            
                             <td>
-                                <a href="#" @click="editarModal(producto)">
+                                <a href="#" @click="editarModal(forma_venta)">
                                     <i class="fa fa-edit blue"></i>
                                 </a>
-                                <a href="#" v-if="producto.estado == 'A'" @click="desactivaProducto(producto.id)">
+                                <a href="#" v-if="forma_venta.estado == 'A'" @click="desactivaFormaVenta(forma_venta.id)">
                                     <i class="fa fa-trash-alt red"></i>
                                 </a>
-                                <a href="#" v-else @click="activaProducto(producto.id)">
+                                <a href="#" v-else @click="activaFormaVenta(forma_venta.id)">
                                     <i class="fa fa-check green"></i>
                                 </a>
                             </td>
@@ -92,59 +89,20 @@
             <div style="min-width: 35%" class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 v-show="!modoEdicion" class="modal-title" id="ventanaModalLabel">Agregar Producto</h5>
-                        <h5 v-show="modoEdicion" class="modal-title" id="ventanaModalLabel">Editar Producto</h5>
+                        <h5 v-show="!modoEdicion" class="modal-title" id="ventanaModalLabel">Agregar Forma de Venta</h5>
+                        <h5 v-show="modoEdicion" class="modal-title" id="ventanaModalLabel">Editar Forma de Venta</h5>
                         <button type="button" class="close"  @click="cerrarModal()" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form @submit.prevent="modoEdicion ? actualizaProducto() : creaProducto()">
+                    <form @submit.prevent="modoEdicion ? actualizaFormaVenta() : creaFormaVenta()">
                         <div class="modal-body">
-                            <div class="form-group">
-                                <label class="control-label" for="nombre"><i class="fa fa-bell-o"></i>Nombre</label>
-                                <input v-model="form.nombre" type="text" name="nombre" placeholder="Ingrese un nombre"
-                                    class="form-control" :class="{ 'is-invalid': form.errors.has('nombre') }">
-                                <has-error :form="form" field="nombre"></has-error>
-                            </div>
                             <div class="form-group">
                                 <label class="control-label" for="descripcion"><i class="fa fa-bell-o"></i>Descripcion</label>
                                 <textarea v-model="form.descripcion" type="text" name="descripcion" placeholder="Ingrese una descripcion"
                                       class="form-control" :class="{ 'is-invalid': form.errors.has('descripcion') }"></textarea>
                                 <has-error :form="form" field="descripcion"></has-error>
                             </div>   
-
-                            <div class="row">
-                                <div class="col col-md-3">
-                                  <div class="form-group">
-                                      <label class="control-label" for="precio"><i class="fa fa-bell-o"></i> Precio</label>
-                                      <input v-model="form.precio" type="number" name="precio" min="0" value="0" step=".01"
-                                          class="form-control" :class="{ 'is-invalid': form.errors.has('precio') }">
-                                      <has-error :form="form" field="precio"></has-error>
-                                  </div>
-                                </div>
-                                <div class="col col-md-3">
-                                  <div class="form-group">
-                                      <label class="control-label" for="stk_min"><i class="fa fa-bell-o"></i>Stock Minimo</label>
-                                      <input v-model="form.stk_min" type="number" name="stk_min" min="0" value="0" step=".01"
-                                          class="form-control" :class="{ 'is-invalid': form.errors.has('stk_min') }">
-                                      <has-error :form="form" field="stk_min"></has-error>
-                                  </div>
-                                </div>
-                                <div class="col col-md-3">
-                                  <div class="form-group">
-                                    <label class="control-label" for="stk_max"><i class="fa fa-bell-o"></i>Stock maximo</label>
-                                      <input v-model="form.stk_max" type="number" name="stk_max"  min="0" value="0" step=".01"
-                                          class="form-control" :class="{ 'is-invalid': form.errors.has('stk_max') }">
-                                      <has-error :form="form" field="stk_max"></has-error>
-                                  </div>
-                                </div>
-                                <div class="col col-md-3">
-                                  <div class="form-group">
-                                    <label class="control-label" for="stk_actual"><i class="fa fa-bell-o"></i>Stock actual</label>
-                                      <input v-model="form.stk_actual" type="number" name="stk_actual" disabled class="form-control">
-                                  </div>
-                                </div>
-                            </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger" @click="cerrarModal()">Cerrar</button> <!--data-dismiss="modal" -->
@@ -163,14 +121,10 @@
         data() {
             return {
                 modoEdicion: false,
-                productos: {},
+                formas_venta: {},
                 form: new Form({
                     id: 0,
-                    nombre: '',
-                    descripcion: '',
-                    precio: 0,
-                    stk_min: 0,
-                    stk_max: 0
+                    descripcion: ''
                 }),
                 pagination: {
                     'total': 0,
@@ -181,7 +135,7 @@
                     'to': 0
                 },
                 offset: 3,
-                sCriterio: 'nombre',
+                sCriterio: 'descripcion',
                 sBuscar: ''
             }
         },
@@ -216,30 +170,30 @@
         methods: {
             cambiarPagina(page, buscar, criterio){
                 this.pagination.current_page = page;
-                this.cargarProductos(page, buscar, criterio);
+                this.cargarFormasVenta(page, buscar, criterio);
             },
             nuevoModal() {
                 this.modoEdicion = false;
                 this.form.reset();
                 $('#ventanaModal').modal('show');
             },
-            editarModal(producto) {
+            editarModal(forma_venta) {
                 this.modoEdicion = true;
                 this.form.reset();
                 $('#ventanaModal').modal('show');
-                this.form.fill(producto);
+                this.form.fill(forma_venta);
             },
             cerrarModal() {
                 this.form.errors.clear();
                 this.form.reset();
                 $('#ventanaModal').modal('hide');
             },
-            cargarProductos(page, buscar, criterio) {
+            cargarFormasVenta(page, buscar, criterio) {
                 let me = this;                
-                var url = 'api/producto?page=' + page + '&buscar=' + buscar + '&criterio=' + criterio;
+                var url = 'api/formaventa?page=' + page + '&buscar=' + buscar + '&criterio=' + criterio;
                 axios.get(url).then(data => {
                     var response = data.data;
-                    me.productos = response.productos.data;
+                    me.formas_venta = response.formas_venta.data;
                     me.pagination = response.pagination;
                 }).catch((error) => {
                     //console.log(error.response.status);
@@ -249,10 +203,10 @@
                     }
                 });
             },
-            actualizaProducto() {
+            actualizaFormaVenta() {
                 this.$Progress.start();
                 
-                this.form.put('api/producto/'+this.form.id)
+                this.form.put('api/formaventa/'+this.form.id)
                 .then(() => {
                     Fire.$emit('AfterAction');
                     this.cerrarModal();
@@ -266,16 +220,16 @@
                     this.$Progress.fail();
                 });
             },
-            creaProducto() {
+            creaFormaVenta() {
                 this.$Progress.start();
                 
-                this.form.post('api/producto')
+                this.form.post('api/formaventa')
                 .then(() => {
                     Fire.$emit('AfterAction');
                     this.cerrarModal();
                     toast({
                         type: 'success',
-                        title: 'Se creo el producto correctamente!'
+                        title: 'Se creo la forma de venta correctamente!'
                     });
 
                 })
@@ -285,10 +239,10 @@
 
                 this.$Progress.finish();
             },
-            activaProducto(id) {
+            activaFormaVenta(id) {
                 swal({
                     title: 'Esta seguro?',
-                    //text: "Activar Producto!",
+                    //text: "Activar Forma de Venta!",
                     type: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
@@ -297,7 +251,7 @@
                     cancelButtonText: 'Cancelar'
                 }).then((result) => {
                     if (result.value) {
-                        this.form.put('api/producto/activar/'+id)
+                        this.form.put('api/formaventa/activar/'+id)
                         .then(() => {
                             swal(
                                 'ACTIVADO!',
@@ -312,10 +266,10 @@
                     swal('Fallo!', 'Hubo un error al procesar la transaccion.', 'warning');                    
                 });
             },
-            desactivaProducto(id) {
+            desactivaFormaVenta(id) {
                 swal({
                     title: 'Esta seguro?',
-                    //text: "Desactivar Producto!",
+                    //text: "Desactivar Forma de Venta!",
                     type: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
@@ -324,7 +278,7 @@
                     cancelButtonText: 'Cancelar'
                 }).then((result) => {
                     if (result.value) {
-                        this.form.put('api/producto/desactivar/'+id)
+                        this.form.put('api/formaventa/desactivar/'+id)
                         .then(() => {
                             swal(
                                 'DESACTIVADO!',
@@ -341,9 +295,9 @@
             }
         },
         created() {
-            this.cargarProductos(1, this.sBuscar, this.sCriterio);
+            this.cargarFormasVenta(1, this.sBuscar, this.sCriterio);
             Fire.$on('AfterAction', () => {
-                this.cargarProductos(1, this.sBuscar, this.sCriterio);
+                this.cargarFormasVenta(1, this.sBuscar, this.sCriterio);
             });
         }
     }

@@ -93,13 +93,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </router-link>
               </li>
               <li class="nav-item">
-                <router-link to="/depositos" class="nav-link">
+                <router-link to="/formaspago" class="nav-link">
                   <i class="fas fa-dollar-sign nav-icon"></i>
                   <p>Formas de Pago</p>
                 </router-link>
               </li>
               <li class="nav-item">
-                <router-link to="/depositos" class="nav-link">
+                <router-link to="/formasventa" class="nav-link">
                 <i class="fas fa-cart-arrow-down nav-icon"></i>
                   <p>Formas de Venta</p>
                 </router-link>

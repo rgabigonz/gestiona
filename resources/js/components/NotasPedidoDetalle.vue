@@ -289,7 +289,7 @@
                 });
             },
             agregaProducto() {
-                if (this.codigo_producto > 0 && this.cantidad_producto > 0 && this.precio_producto > 0) {
+                if (this.codigo_producto.length > 0 && this.cantidad_producto > 0 && this.precio_producto > 0) {
                     if (this.existeProducto(parseInt(this.codigo_producto)) === false) {
                         this.items.push({ cod: parseInt(this.codigo_producto), 
                                         descripcion: this.producto.nombre, 
