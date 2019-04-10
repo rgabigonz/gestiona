@@ -3,7 +3,7 @@
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class DepositosTableSeeder extends Seeder
+class VendedoresTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -12,9 +12,12 @@ class DepositosTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('depositos')->insert([
-            'descripcion' => 'DEPOSITO PROPIO',
+        DB::table('vendedores')->insert([
+            'nombre' => 'AGRO PROYECCIONES DRL',
             'direccion' => 'EL TIPAL, SALTA',
+            'correo_electronico' => 'agroproyecciones@gmail.com',
+            'telefono' => 'SIN TELEFONO'
         ]);
+
     }
 }

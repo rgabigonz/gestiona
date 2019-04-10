@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDepositosTable extends Migration
+class CreateVendedoresTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,12 @@ class CreateDepositosTable extends Migration
      */
     public function up()
     {
-        Schema::create('depositos', function (Blueprint $table) {
+        Schema::create('vendedores', function (Blueprint $table) {
             $table->increments('id');
-            $table->mediumText('descripcion');
+            $table->string('nombre', 100);
             $table->mediumText('direccion');
+            $table->string('correo_electronico')->unique();
+            $table->string('telefono', 50);
             $table->char('estado', 1)->default('A');
             $table->timestamps();
         });
@@ -29,6 +31,6 @@ class CreateDepositosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('depositos');
+        Schema::dropIfExists('vendedores');
     }
 }

@@ -5,7 +5,7 @@
             <div class="card border-success mb-3">
                 <div class="card-header bg-transparent border-light">Busqueda
                     <div class="card-tools">
-                        <button class="btn btn-secondary" @click="cargarClientes(1, sBuscar, sCriterio)"><i class="fas fa-search fa-fw"></i></button>
+                        <button class="btn btn-secondary" @click="cargarVendedores(1, sBuscar, sCriterio)"><i class="fas fa-search fa-fw"></i></button>
                     </div>
                 </div>
                 <div class="card-body">
@@ -17,14 +17,14 @@
                             </select>
                         </div>
                         <div class="col col-md-8">
-                            <input v-model="sBuscar" @keyup.enter="cargarClientes(1, sBuscar, sCriterio)" type="text" class="form-control" placeholder="Dato a buscar...">
+                            <input v-model="sBuscar" @keyup.enter="cargarVendedores(1, sBuscar, sCriterio)" type="text" class="form-control" placeholder="Dato a buscar...">
                         </div>
                     </div>
                 </div>
             </div>
             <div class="card border-info mb-3">
               <div class="card-header border-light">
-                <h3 class="card-title">Lista de Clientes</h3>
+                <h3 class="card-title">Lista de Vendedores</h3>
                 <div class="card-tools">
                     <button class="btn btn-success" @click="nuevoModal()"><i class="fas fa-plus fa-fw"></i></button>
                 </div>
@@ -40,12 +40,12 @@
                             <th style="width: 8%">Estado</th>
                             <th style="width: 9%"></th>
                         </tr>
-                        <tr v-for="cliente in clientes" :key="cliente.id">
-                            <td>{{ cliente.id }}</td>
-                            <td>{{ cliente.nombre }}</td>
-                            <td>{{ cliente.direccion }}</td>
+                        <tr v-for="vendedor in vendedores" :key="vendedor.id">
+                            <td>{{ vendedor.id }}</td>
+                            <td>{{ vendedor.nombre }}</td>
+                            <td>{{ vendedor.direccion }}</td>
                             <td>
-                                <div v-if="cliente.estado == 'A'">
+                                <div v-if="vendedor.estado == 'A'">
                                     <span class="badge badge-success">Activo</span>
                                 </div>
                                 <div v-else>
@@ -53,13 +53,13 @@
                                 </div>
                             </td>                            
                             <td>
-                                <a href="#" @click="editarModal(cliente)">
+                                <a href="#" @click="editarModal(vendedor)">
                                     <i class="fa fa-edit blue"></i>
                                 </a>
-                                <a href="#" v-if="cliente.estado == 'A'" @click="desactivaCliente(cliente.id)">
+                                <a href="#" v-if="vendedor.estado == 'A'" @click="desactivaVendedor(vendedor.id)">
                                     <i class="fa fa-trash-alt red"></i>
                                 </a>
-                                <a href="#" v-else @click="activaCliente(cliente.id)">
+                                <a href="#" v-else @click="activaVendedor(vendedor.id)">
                                     <i class="fa fa-check green"></i>
                                 </a>
                             </td>
@@ -92,13 +92,13 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 v-show="!modoEdicion" class="modal-title" id="ventanaModalLabel">Agregar Cliente</h5>
-                        <h5 v-show="modoEdicion" class="modal-title" id="ventanaModalLabel">Editar Cliente</h5>
+                        <h5 v-show="!modoEdicion" class="modal-title" id="ventanaModalLabel">Agregar Vendedor</h5>
+                        <h5 v-show="modoEdicion" class="modal-title" id="ventanaModalLabel">Editar Vendedor</h5>
                         <button type="button" class="close" @click="cerrarModal()" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form @submit.prevent="modoEdicion ? actualizaCliente() : creaCliente()">
+                    <form @submit.prevent="modoEdicion ? actualizaVendedor() : creaVendedor()">
                         <div class="modal-body">
                             <div class="form-group">
                                 <div class="input-group mb-3">
@@ -140,33 +140,6 @@
                                     <has-error :form="form" field="telefono"></has-error>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col col-md-6">
-                                    <div class="form-group">
-                                        <div class="input-group mb-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="fa fa-list-ol"></i></span>
-                                            </div>
-                                            <select v-model="form.tipo_documento" name="tipo_documento" class="form-control" :class="{ 'is-invalid': form.errors.has('tipo_documento') }">
-                                                <option v-for="tipoDocumento in tiposDocumento" :key="tipoDocumento.id" :value="tipoDocumento.id">{{ tipoDocumento.descripcion }}</option>
-                                            </select>
-                                            <has-error :form="form" field="tipo_documento"></has-error>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col col-md-6">
-                                  <div class="form-group">
-                                        <div class="input-group mb-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="fa fa-address-card"></i></span>
-                                            </div>
-                                            <input v-model="form.numero_documento" name="numero_documento" placeholder="Numero documento"
-                                                class="form-control" :class="{ 'is-invalid': form.errors.has('numero_documento') }">
-                                            <has-error :form="form" field="numero_documento"></has-error>
-                                        </div>
-                                  </div>
-                                </div>
-                            </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger" @click="cerrarModal()">Cerrar</button>
@@ -185,16 +158,14 @@
         data() {
             return {
                 modoEdicion: false,
-                clientes: {},
+                vendedores: {},
                 tiposDocumento: {},
                 form: new Form({
                     id: 0,
                     nombre: '',
                     direccion: '',
                     correo_electronico: '',
-                    telefono: '',
-                    tipo_documento: 1,
-                    numero_documento: ''
+                    telefono: ''
                 }),
                 pagination: {
                     'total': 0,
@@ -240,32 +211,30 @@
         methods: {
             cambiarPagina(page, buscar, criterio){
                 this.pagination.current_page = page;
-                this.cargarClientes(page, buscar, criterio);
+                this.cargarVendedores(page, buscar, criterio);
             },
             nuevoModal() {
-                this.cargarTD();
                 this.modoEdicion = false;
                 this.form.reset();
                 $('#ventanaModal').modal('show');
             },
-            editarModal(cliente) {
-                this.cargarTD();
+            editarModal(vendedor) {
                 this.modoEdicion = true;
                 this.form.reset();
                 $('#ventanaModal').modal('show');
-                this.form.fill(cliente);
+                this.form.fill(vendedor);
             },
             cerrarModal() {
                 this.form.errors.clear();
                 this.form.reset();
                 $('#ventanaModal').modal('hide');
             },
-            cargarClientes(page, buscar, criterio) {
+            cargarVendedores(page, buscar, criterio) {
                 let me = this;                
-                var url = 'api/cliente?page=' + page + '&buscar=' + buscar + '&criterio=' + criterio;
+                var url = 'api/vendedor?page=' + page + '&buscar=' + buscar + '&criterio=' + criterio;
                 axios.get(url).then(data => {
                     var response = data.data;
-                    me.clientes = response.clientes.data;
+                    me.vendedores = response.vendedores.data;
                     me.pagination = response.pagination;
                 }).catch((error) => {
                     if (error.response.status == 401) {
@@ -274,23 +243,10 @@
                     }
                 });
             },
-            cargarTD() {
-                let me = this;                
-                var url = 'api/cliente/cargaTD';
-                axios.get(url).then(data => {
-                    var response = data.data;
-                    me.tiposDocumento = response.tiposDocumento;
-                }).catch((error) => {
-                    if (error.response.status == 401) {
-                        swal('Error!', 'La sesion ha caducado.', 'warning');
-			                  me.$router.push('/login');
-                    }
-                });
-            },
-            actualizaCliente() {
+            actualizaVendedor() {
                 this.$Progress.start();
                 
-                this.form.put('api/cliente/'+this.form.id)
+                this.form.put('api/vendedor/'+this.form.id)
                 .then(() => {
                     Fire.$emit('AfterAction');
                     this.cerrarModal();
@@ -304,16 +260,16 @@
                     this.$Progress.fail();
                 });
             },
-            creaCliente() {
+            creaVendedor() {
                 this.$Progress.start();
                 
-                this.form.post('api/cliente')
+                this.form.post('api/vendedor')
                 .then(() => {
                     Fire.$emit('AfterAction');
                     this.cerrarModal();
                     toast({
                         type: 'success',
-                        title: 'Se creo el producto correctamente!'
+                        title: 'Se creo el vendedor correctamente!'
                     });
 
                 })
@@ -323,10 +279,10 @@
 
                 this.$Progress.finish();
             },
-            activaCliente(id) {
+            activaVendedor(id) {
                 swal({
                     title: 'Esta seguro?',
-                    //text: "Activar Cliente!",
+                    //text: "Activar Vendedor!",
                     type: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
@@ -335,7 +291,7 @@
                     cancelButtonText: 'Cancelar'
                 }).then((result) => {
                     if (result.value) {
-                        this.form.put('api/cliente/activar/'+id)
+                        this.form.put('api/vendedor/activar/'+id)
                         .then(() => {
                             swal(
                                 'ACTIVADO!',
@@ -350,10 +306,10 @@
                     swal('Fallo!', 'Hubo un error al procesar la transaccion.', 'warning');                    
                 });
             },
-            desactivaCliente(id) {
+            desactivaVendedor(id) {
                 swal({
                     title: 'Esta seguro?',
-                    //text: "Desactivar Cliente!",
+                    //text: "Desactivar Vendedor!",
                     type: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
@@ -362,7 +318,7 @@
                     cancelButtonText: 'Cancelar'
                 }).then((result) => {
                     if (result.value) {
-                        this.form.put('api/cliente/desactivar/'+id)
+                        this.form.put('api/vendedor/desactivar/'+id)
                         .then(() => {
                             swal(
                                 'DESACTIVADO!',
@@ -379,9 +335,9 @@
             }
         },
         created() {
-            this.cargarClientes(1, this.sBuscar, this.sCriterio);
+            this.cargarVendedores(1, this.sBuscar, this.sCriterio);
             Fire.$on('AfterAction', () => {
-                this.cargarClientes(1, this.sBuscar, this.sCriterio);
+                this.cargarVendedores(1, this.sBuscar, this.sCriterio);
             });
         }
     }

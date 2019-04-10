@@ -98,11 +98,17 @@
                     <form @submit.prevent="modoEdicion ? actualizaDeposito() : creaDeposito()">
                         <div class="modal-body">
                             <div class="form-group">
-                                <label class="control-label" for="descripcion"><i class="fa fa-bell-o"></i>Descripcion</label>
+                                <label class="control-label" for="descripcion">Descripcion</label>
                                 <textarea v-model="form.descripcion" type="text" name="descripcion" placeholder="Ingrese una descripcion"
                                       class="form-control" :class="{ 'is-invalid': form.errors.has('descripcion') }"></textarea>
                                 <has-error :form="form" field="descripcion"></has-error>
                             </div>   
+                            <div class="form-group">
+                                <label class="control-label" for="direccion">Direccion</label>
+                                <textarea v-model="form.direccion" type="text" name="direccion" placeholder="Ingrese una direccion"
+                                    class="form-control" :class="{ 'is-invalid': form.errors.has('direccion') }"></textarea>
+                                <has-error :form="form" field="direccion"></has-error>
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger" @click="cerrarModal()">Cerrar</button> <!--data-dismiss="modal" -->
@@ -124,7 +130,8 @@
                 depositos: {},
                 form: new Form({
                     id: 0,
-                    descripcion: ''
+                    descripcion: '',
+                    direccion: ''
                 }),
                 pagination: {
                     'total': 0,

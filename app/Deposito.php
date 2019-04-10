@@ -9,6 +9,6 @@ class Deposito extends Model
     protected $table = 'depositos';
 
     protected $fillable = [
-        'descripcion'
+        'descripcion', 'direccion'
     ];    
 }

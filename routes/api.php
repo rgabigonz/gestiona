@@ -26,6 +26,14 @@ Route::middleware('auth:api')->group( function () {
     Route::put('/deposito/desactivar/{deposito}', 'Api\DepositoController@desactivar');
     Route::put('/deposito/activar/{deposito}', 'Api\DepositoController@activar');
 
+    // Rutas Vendedores
+    Route::apiResources([
+        'vendedor' => 'Api\VendedorController'
+    ]);
+
+    Route::put('/vendedor/desactivar/{vendedor}', 'Api\VendedorController@desactivar');
+    Route::put('/vendedor/activar/{vendedor}', 'Api\VendedorController@activar');
+
     // Rutas Formas Pago
     Route::apiResources([
         'formapago' => 'Api\FormaPagoController'

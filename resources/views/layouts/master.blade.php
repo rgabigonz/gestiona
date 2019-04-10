@@ -145,6 +145,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </router-link>
               </li>
               <li class="nav-item">
+                <router-link to="/vendedores" class="nav-link">
+                  <i class="fas fa-user-alt nav-icon"></i>
+                  <p>Vendedores</p>
+                </router-link>
+              </li>
+              <li class="nav-item">
                 <router-link to="/notaspedido" class="nav-link">
                   <i class="fas fa-file-invoice nav-icon"></i>
                   <p>Notas de Pedido</p>
