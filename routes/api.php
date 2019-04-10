@@ -84,8 +84,10 @@ Route::middleware('auth:api')->group( function () {
 
     //Rutas Notas Pedidos
     Route::get('/notaPedido/devuelveNotaPedido/{nota_pedido}', 'Api\NotaPedidoController@devuelveNotaPedido');
-    Route::put('/notaPedido/anulaNotaPedido/{nota_pedido}', 'Api\NotaPedidoController@anulaNotaPedido');
-    Route::put('/notaPedido/confirmaNotaPedido/{nota_pedido}', 'Api\NotaPedidoController@confirmaNotaPedido');
+    //Route::put('/notaPedido/anulaNotaPedido/{nota_pedido}', 'Api\NotaPedidoController@anulaNotaPedido');
+    //Route::put('/notaPedido/confirmaNotaPedido/{nota_pedido}', 'Api\NotaPedidoController@confirmaNotaPedido');
 
-    Route::apiResources(['notaPedido' => 'Api\NotaPedidoController']);
+    Route::apiResources([
+        'notaPedido' => 'Api\NotaPedidoController'
+    ]);
 });

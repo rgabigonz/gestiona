@@ -79856,7 +79856,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             fecha_nota_pedido: new Date(),
             formato_fecha_nota_pedido: "dd-MM-yyyy",
             es: __WEBPACK_IMPORTED_MODULE_1_vuejs_datepicker_dist_locale__["a" /* es */],
-            //                pedidos: {},
             cliente: {},
             codigo_cliente: '',
             items: [],
@@ -80000,6 +79999,27 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 });
             }).catch(function () {
                 _this4.$Progress.fail();
+            });
+
+            this.$Progress.finish();
+        },
+        actualizaNotaPedido: function actualizaNotaPedido() {
+            var _this5 = this;
+
+            this.$Progress.start();
+
+            axios.put('api/notaPedido/' + this.notas_pedido_id_edicion, {
+                codigo_cliente: this.codigo_cliente,
+                fecha_nota_pedido: this.fecha_nota_pedido,
+                total_pedido: this.total,
+                items: this.items }).then(function () {
+                Fire.$emit('AfterAction');
+                toast({
+                    type: 'success',
+                    title: 'Se actualizo el pedido correctamente!'
+                });
+            }).catch(function () {
+                _this5.$Progress.fail();
             });
 
             this.$Progress.finish();
@@ -82123,7 +82143,7 @@ var render = function() {
                   attrs: { type: "button" },
                   on: {
                     click: function($event) {
-                      _vm.creaNotaPedido()
+                      _vm.actualizaNotaPedido()
                     }
                   }
                 },

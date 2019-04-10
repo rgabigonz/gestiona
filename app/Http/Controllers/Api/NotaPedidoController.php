@@ -63,9 +63,9 @@ class NotaPedidoController extends Controller
         $nota_pedido->cliente_id = $request->codigo_cliente;
         $nota_pedido->user_id = $user->id;
         $nota_pedido->total = $request->total_pedido;
-        $nota_pedido->fecha = $fecha_pedido->format('Y-m-d');//$request->fecha_nota_pedido;
+        $nota_pedido->fecha = $fecha_pedido->format('Y-m-d');
 
-        $nota_pedido->save(); 
+        $nota_pedido->save();
 
         for($i = 0; $i < $cantidad_items; $i++)
         {
@@ -82,22 +82,30 @@ class NotaPedidoController extends Controller
 
     public function update(Request $request, $id)
     {
-        $NotaPedidoDetalle = NotaPedidoDetalle::where('nota_pedido_id', '=', $id)->findOrFail();
+        $user = auth('api')->user();
+        
+        $NotaPedido = NotaPedido::findOrFail($id);
+        $NotaPedido->total = $request->total_pedido;
+        $NotaPedido->update();
+
+        $NotaPedidoDetalle = NotaPedidoDetalle::where('nota_pedido_id', $id)->delete();
 
         $cantidad_items = count($request->items);
 
-        /*for($i = 0; $i < $cantidad_items; $i++)
+        for($i = 0; $i < $cantidad_items; $i++)
         {
             $nota_pedido_item = new NotaPedidoDetalle();
+            $nota_pedido_item->nota_pedido_id = $id;
             $nota_pedido_item->producto_id = $request->items[$i]['cod'];
             $nota_pedido_item->cantidad = $request->items[$i]['cantidad'];
             $nota_pedido_item->precio = $request->items[$i]['precio'];
             $nota_pedido_item->user_id = $user->id;
-            $nota_pedido->notaPedidoDetalle()->save($nota_pedido_item);
-        }    */   
+            $nota_pedido_item->save();
+        }
         
-        return $NotaPedidoDetalle;
+        return $request->items;
     }    
+
     public function devuelveNotaPedido(Request $request, $id)
     {
         $datoNotaPedido = NotaPedido::findOrFail($id);

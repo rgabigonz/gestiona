@@ -175,7 +175,7 @@
                 <button v-if="!modoEdicion" type="button" class="btn btn-success float-right" @click="creaNotaPedido()">
                     <i class="fa fa-save fa-fw"></i> Guardar
                 </button>
-                <button v-if="modoEdicion" type="button" class="btn btn-success float-right" @click="creaNotaPedido()">
+                <button v-if="modoEdicion" type="button" class="btn btn-success float-right" @click="actualizaNotaPedido()">
                     <i class="fa fa-save fa-fw"></i> Modificar
                 </button>
                 <router-link to="/notaspedido" class="btn btn-primary float-right" style="margin-right: 5px;">
@@ -201,7 +201,6 @@
                 fecha_nota_pedido: new Date(),
                 formato_fecha_nota_pedido: "dd-MM-yyyy",
                 es: es,
-//                pedidos: {},
                 cliente: {},
                 codigo_cliente: '',
                 items: [],
@@ -334,6 +333,27 @@
                     toast({
                         type: 'success',
                         title: 'Se genero el pedido correctamente!'
+                    });
+                })
+                .catch(() => {
+                    this.$Progress.fail();
+                });
+
+                this.$Progress.finish();
+            },
+            actualizaNotaPedido() {
+                this.$Progress.start();
+                
+                axios.put('api/notaPedido/'+this.notas_pedido_id_edicion, {
+                    codigo_cliente: this.codigo_cliente, 
+                    fecha_nota_pedido: this.fecha_nota_pedido,
+                    total_pedido: this.total,
+                    items: this.items})
+                .then(() => {
+                    Fire.$emit('AfterAction');
+                    toast({
+                        type: 'success',
+                        title: 'Se actualizo el pedido correctamente!'
                     });
                 })
                 .catch(() => {
