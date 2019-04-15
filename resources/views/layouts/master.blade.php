@@ -122,7 +122,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </router-link>
               </li>
               <li class="nav-item">
-                <router-link to="/presupuestos" class="nav-link">
+                <router-link to="/ordenescompra" class="nav-link">
                   <i class="fas fa-file-invoice nav-icon"></i>
                   <p>Ordenes de Compra</p>
                 </router-link>

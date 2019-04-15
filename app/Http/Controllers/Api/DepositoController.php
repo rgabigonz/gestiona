@@ -97,4 +97,13 @@ class DepositoController extends Controller
         $deposito->estado = 'A';
         $deposito->update();
     }
+
+    public function cargaDepositos()
+    {
+        $ldepositos = Deposito::orderBy('descripcion', 'asc')->get();
+        return [
+            'ldepositos' => $ldepositos
+        ];
+
+    }
 }

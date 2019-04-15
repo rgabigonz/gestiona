@@ -13,7 +13,7 @@
                         <div class="col col-md-4">
                             <select class="form-control" v-model="sCriterio">
                                 <option value="nombre">Nombre</option>
-                                <option value="numero_documento">Documento</option>
+                                <option value="telefono">Telefono</option>
                             </select>
                         </div>
                         <div class="col col-md-8">

@@ -5,27 +5,27 @@
             <div class="card border-success mb-3">
                 <div class="card-header bg-transparent border-light">Busqueda
                     <div class="card-tools">
-                        <button class="btn btn-secondary" @click="cargarNotasPedido(1, sBuscar, sCriterio)"><i class="fas fa-search fa-fw"></i></button>
+                        <button class="btn btn-secondary" @click="cargarOrdenesCompra(1, sBuscar, sCriterio)"><i class="fas fa-search fa-fw"></i></button>
                     </div>
                 </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col col-md-4">
                             <select class="form-control" v-model="sCriterio">
-                                <option value="notas_pedidos.id">Numero Pedido</option>
+                                <option value="ordenes_compras.id">Numero Orden de Compra</option>
                             </select>
                         </div>
                         <div class="col col-md-8">
-                            <input v-model="sBuscar" @keyup.enter="cargarNotasPedido(1, sBuscar, sCriterio)" type="text" class="form-control" placeholder="Dato a buscar...">
+                            <input v-model="sBuscar" @keyup.enter="cargarOrdenesCompra(1, sBuscar, sCriterio)" type="text" class="form-control" placeholder="Dato a buscar...">
                         </div>
                     </div>
                 </div>
             </div>
             <div class="card border-info mb-3">
               <div class="card-header border-light">
-                <h3 class="card-title">Notas de Pedido</h3>
+                <h3 class="card-title">Orden de Compra</h3>
                 <div class="card-tools">
-                    <router-link :to="{ name: 'notaspedidodetalle', params: { notaspedidoId: 0 } }" class="btn btn-success">
+                    <router-link :to="{ name: 'ordenescompradetalle', params: { ordenescompraId: 0 } }" class="btn btn-success">
                         <i class="fas fa-plus fa-fw"></i>
                     </router-link>                     
                 </div>
@@ -36,36 +36,36 @@
                     <tbody>
                         <tr>
                             <th style="width: 10%">#</th>
-                            <th style="width: 40%">Cliente</th>
+                            <th style="width: 40%">Proveedor</th>
                             <th style="width: 16%">Fecha</th>
                             <th style="width: 11%">Estado</th>
                             <th style="width: 13%">Total</th>
                             <th style="width: 10%"></th>
                         </tr>
-                        <tr v-for="nota_pedido in notas_pedidos" :key="nota_pedido.id">
-                            <td>{{ nota_pedido.id }}</td>
-                            <td>{{ nota_pedido.nombre_cliente }}</td>
-                            <td>{{ nota_pedido.fecha | formatDate }}</td>
+                        <tr v-for="orden_compra in ordenes_compras" :key="orden_compra.id">
+                            <td>{{ orden_compra.id }}</td>
+                            <td>{{ orden_compra.nombre_proveedor }}</td>
+                            <td>{{ orden_compra.fecha | formatDate }}</td>
                             <td>
-                                <div v-if="nota_pedido.estado == 'PE'">
+                                <div v-if="orden_compra.estado == 'PE'">
                                     <span class="badge badge-info">Pendiente</span>
                                 </div>
-                                <div v-else-if="nota_pedido.estado == 'CO'">
+                                <div v-else-if="orden_compra.estado == 'CO'">
                                     <span class="badge badge-success">Confirmado</span>
                                 </div>
                                 <div v-else>
                                     <span class="badge badge-danger">Anulado</span>
                                 </div>
                             </td>      
-                            <td>$ {{ nota_pedido.total }}</td>                      
+                            <td>$ {{ orden_compra.total }}</td>                      
                             <td>
-                                <a href="#" v-if="nota_pedido.estado == 'PE'" @click="confirmaPresupuesto(nota_pedido.id)">
+                                <a href="#" v-if="orden_compra.estado == 'PE'" @click="confirmaOrdenCompra(orden_compra.id)">
                                     <i class="fa fa-check green"></i>
                                 </a>
-                                <a href="#" v-if="nota_pedido.estado == 'PE'" @click="anulaPresupuesto(nota_pedido.id)">
+                                <a href="#" v-if="orden_compra.estado == 'PE'" @click="anulaOrdenCompra(orden_compra.id)">
                                     <i class="fa fa-trash-alt red"></i>
                                 </a>
-                                <router-link :to="{ name: 'notaspedidodetalle', params: { notaspedidoId: nota_pedido.id } }">
+                                <router-link :to="{ name: 'ordenescompradetalle', params: { ordenescompraId: orden_compra.id } }">
                                     <i class="fa fa-table indigo"></i>
                                 </router-link>                                
                             </td>
@@ -100,7 +100,7 @@
         data() {
             return {
                 modoEdicion: false,
-                notas_pedidos: {},
+                ordenes_compras: {},
                 pagination: {
                     'total': 0,
                     'current_page': 0,
@@ -110,7 +110,7 @@
                     'to': 0
                 },
                 offset: 3,
-                sCriterio: 'notas_pedidos.id',
+                sCriterio: 'ordenes_compras.id',
                 sBuscar: ''
             }
         },
@@ -147,22 +147,20 @@
                 this.pagination.current_page = page;
                 this.cargarClientes(page, buscar, criterio);
             },
-            cargarNotasPedido(page, buscar, criterio) {
+            cargarOrdenesCompra(page, buscar, criterio) {
                 let me = this;                
-                var url = 'api/notaPedido?page=' + page + '&buscar=' + buscar + '&criterio=' + criterio;
+                var url = 'api/ordenCompra?page=' + page + '&buscar=' + buscar + '&criterio=' + criterio;
                 axios.get(url).then(data => {
                     var response = data.data;
-                    me.notas_pedidos = response.notas_pedidos.data;
+                    me.ordenes_compras = response.ordenes_compras.data;
                     me.pagination = response.pagination;
                 }).catch((error) => {
                     if (error.response.status == 401) {
                         swal('Error!', 'La sesion ha caducado.', 'warning');
-                        //me.router.push('/login');
-                        //this.$router.push('/salir');
                     }
                 });
             },
-            anulaPresupuesto(id) {
+            anulaOrdenCompra(id) {
                 swal({
                     title: 'Esta seguro?',
                     //text: "Desactivar Cliente!",
@@ -174,15 +172,14 @@
                     cancelButtonText: 'Cancelar'
                 }).then((result) => {
                     if (result.value) {
-                        axios.put('api/notaPedido/anulaNotaPedido/'+id)
+                        axios.put('api/ordenCompra/anulaOrdenCompra/'+id)
                         .then(() => {
                             swal(
                                 'ANULADO!',
-                                'El PEDIDO a sido ANULADO.',
+                                'La ORDEN DE COMPRA a sido ANULADA.',
                                 'success'
                             );
-                            //Fire.$emit('AfterAction');
-                            this.cargarNotasPedido(1, this.sBuscar, this.sCriterio);
+                            this.cargarOrdenesCompra(1, this.sBuscar, this.sCriterio);
                         })
                     }
                 })
@@ -190,7 +187,7 @@
                     swal('Fallo!', 'Hubo un error al procesar la transaccion.', 'warning');                    
                 });
             },
-            confirmaPresupuesto(id) {
+            confirmaOrdenCompra(id) {
                 swal({
                     title: 'Esta seguro?',
                     //text: "Desactivar Cliente!",
@@ -202,15 +199,15 @@
                     cancelButtonText: 'Cancelar'
                 }).then((result) => {
                     if (result.value) {
-                        axios.put('api/notaPedido/confirmaNotaPedido/'+id)
+                        axios.put('api/ordenCompra/confirmaOrdenCompra/'+id)
                         .then(() => {
                             swal(
                                 'CONFIRMADO!',
-                                'El PEDIDO a sido CONFIRMADO.',
+                                'La ORDEN DE COMPRA a sido CONFIRMADA.',
                                 'success'
                             );
                             //Fire.$emit('AfterAction');
-                            this.cargarNotasPedido(1, this.sBuscar, this.sCriterio);
+                            this.cargarOrdenesCompra(1, this.sBuscar, this.sCriterio);
                         })
                     }
                 })
@@ -220,7 +217,7 @@
             }
         },
         created() {
-            this.cargarNotasPedido(1, this.sBuscar, this.sCriterio);
+            this.cargarOrdenesCompra(1, this.sBuscar, this.sCriterio);
         }
     }
 </script>

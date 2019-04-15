@@ -129,7 +129,7 @@ class ProveedorController extends Controller
 
     public function devuelveDatosProveedor(Request $request, $id)
     {
-        $datoProveedor = Provider::findOrFail($id);
+        $datoProveedor = Proveedor::findOrFail($id);
         return [
             'datoProveedor' => $datoProveedor
         ];

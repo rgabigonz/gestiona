@@ -92,4 +92,13 @@ class FormaPagoController extends Controller
         $forma_pago->estado = 'A';
         $forma_pago->update();
     }
+
+    public function cargaFormasPago()
+    {
+        $lformaspagos = FormaPago::orderBy('descripcion', 'asc')->get();
+        return [
+            'lformaspagos' => $lformaspagos
+        ];
+
+    }        
 }

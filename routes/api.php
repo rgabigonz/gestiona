@@ -19,6 +19,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::middleware('auth:api')->group( function () {
     // Rutas Depositos
+    Route::get('/deposito/cargaDepositos', 'Api\DepositoController@cargaDepositos');
+
     Route::apiResources([
         'deposito' => 'Api\DepositoController'
     ]);
@@ -35,6 +37,8 @@ Route::middleware('auth:api')->group( function () {
     Route::put('/vendedor/activar/{vendedor}', 'Api\VendedorController@activar');
 
     // Rutas Formas Pago
+    Route::get('/formapago/cargaFormasPago', 'Api\FormaPagoController@cargaFormasPago');
+
     Route::apiResources([
         'formapago' => 'Api\FormaPagoController'
     ]);
@@ -84,10 +88,19 @@ Route::middleware('auth:api')->group( function () {
 
     //Rutas Notas Pedidos
     Route::get('/notaPedido/devuelveNotaPedido/{nota_pedido}', 'Api\NotaPedidoController@devuelveNotaPedido');
-    //Route::put('/notaPedido/anulaNotaPedido/{nota_pedido}', 'Api\NotaPedidoController@anulaNotaPedido');
-    //Route::put('/notaPedido/confirmaNotaPedido/{nota_pedido}', 'Api\NotaPedidoController@confirmaNotaPedido');
+    Route::put('/notaPedido/anulaNotaPedido/{nota_pedido}', 'Api\NotaPedidoController@anulaNotaPedido');
+    Route::put('/notaPedido/confirmaNotaPedido/{nota_pedido}', 'Api\NotaPedidoController@confirmaNotaPedido');
 
     Route::apiResources([
         'notaPedido' => 'Api\NotaPedidoController'
     ]);
+
+    //Rutas Ordenes Compra
+    Route::get('/ordenCompra/devuelveOrdenCompra/{orden_compra}', 'Api\OrdenCompraController@devuelveOrdenCompra');
+    Route::put('/ordenCompra/anulaOrdenCompra/{orden_compra}', 'Api\OrdenCompraController@anulaOrdenCompra');
+    Route::put('/ordenCompra/confirmaOrdenCompra/{orden_compra}', 'Api\OrdenCompraController@confirmaOrdenCompra');
+
+    Route::apiResources([
+        'ordenCompra' => 'Api\OrdenCompraController'
+    ]);    
 });

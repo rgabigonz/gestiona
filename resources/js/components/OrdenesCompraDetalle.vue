@@ -10,7 +10,7 @@
                   <h4>
                     <i class="fa fa-globe"></i> Empresa VENTAS, Inc.
                   </h4>
-                  <div>Pedido {{ notas_pedido_id_edicion }}</div>
+                  <div>Orden de compra {{ orenes_compra_id_edicion }}</div>
                 </div>
                 <!-- /.col -->
               </div>
@@ -22,14 +22,52 @@
                 <div class="col-sm-2 invoice-col">
                     <div class="form-group">
                         <div class="input-group input-group-sm">
-                            <datepicker :bootstrap-styling="true" v-model="fecha_nota_pedido" name="fecha_nota_pedido" :language="es" 
-                                :format="formato_fecha_nota_pedido" inputClass="form-control form-control-sm" placeholder="Fecha" 
+                            <datepicker :bootstrap-styling="true" v-model="fecha_orden_compra" name="fecha_orden_compra" :language="es" 
+                                :format="formato_fecha_orden_compra" inputClass="form-control form-control-sm" placeholder="Fecha" 
                                 :disabled="modoEdicion ? true : false">
                             </datepicker>
                         </div>
                     </div>
                 </div>
                 <!-- /.col -->
+
+                <div class="col-sm-3 invoice-col">
+                    <div class="form-group">
+                        <div class="input-group input-group-sm">
+                            <select class="form-control" v-model="tipo">
+                                <option value="SN">Tipo...</option>
+                                <option value="PR">Propia</option>
+                                <option value="CL">Cliente</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.col -->
+
+                <div class="col-sm-3 invoice-col">
+                    <div class="form-group">
+                        <div class="input-group input-group-sm">
+                            <select class="form-control" v-model="codigo_deposito">
+                                <option value=0>Deposito...</option>
+                                <option v-for="ldeposito in ldepositos" :key="ldeposito.id" :value="ldeposito.id">{{ ldeposito.descripcion }}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.col -->
+
+                <div class="col-sm-4 invoice-col">
+                    <div class="form-group">
+                        <div class="input-group input-group-sm">
+                            <select class="form-control" v-model="codigo_formapago">
+                                <option value=0>Forma Pago...</option>
+                                <option v-for="lformaspago in lformaspagos" :key="lformaspago.id" :value="lformaspago.id">{{ lformaspago.descripcion }}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.col -->
+
               </div>
               <!-- info row -->
 
@@ -37,7 +75,7 @@
                 <div class="col-sm-2 invoice-col">
                     <div class="form-group">
                         <div class="input-group input-group-sm">
-                            <input v-model="codigo_cliente" type="number" name="codigo_cliente" ref="codigo_cliente"
+                            <input v-model="codigo_proveedor" type="number" name="codigo_proveedor" ref="codigo_proveedor" placeholder="Proveedor (F2)"
                                 @keydown ="keyMonitor" class="form-control form-control-sm" :disabled="modoEdicion ? true : false">
                         </div>
                     </div>
@@ -45,13 +83,13 @@
                 <!-- /.col -->
                 <div class="col-sm-6 invoice-col">
                     <div class="form-group">
-                        <input v-model="cliente.nombre" type="text" name="nombre_cliente" class="form-control form-control-sm" disabled>
+                        <input v-model="proveedor.nombre" type="text" name="nombre_proveedor" class="form-control form-control-sm" disabled>
                     </div>
                 </div>
                 <!-- /.col -->
                 <div class="col-sm-4 invoice-col">
                     <div class="form-group">
-                        <input v-model="cliente.correo_electronico" type="text" name="correo_cliente" class="form-control form-control-sm" disabled>
+                        <input v-model="proveedor.correo_electronico" type="text" name="correo_proveedor" class="form-control form-control-sm" disabled>
                     </div>
                 </div>
                 <!-- /.col -->
@@ -65,13 +103,13 @@
                 <!-- /.col -->
                 <div class="col-sm-6 invoice-col">
                     <div class="form-group">
-                        <input v-model="cliente.direccion" type="text" name="direccion_cliente" class="form-control form-control-sm" disabled>
+                        <input v-model="proveedor.direccion" type="text" name="direccion_proveedor" class="form-control form-control-sm" disabled>
                     </div>
                 </div>
                 <!-- /.col -->
                 <div class="col-sm-4 invoice-col">
                     <div class="form-group">
-                        <input v-model="cliente.telefono" type="text" name="telefono_cliente" class="form-control form-control-sm" disabled>
+                        <input v-model="proveedor.telefono" type="text" name="telefono_proveedor" class="form-control form-control-sm" disabled>
                     </div>
                 </div>
                 <!-- /.col -->
@@ -95,7 +133,7 @@
                             <td style="width: 15%" class="col-sm-2 invoice-col">
                                 <div class="form-group">
                                     <div class="input-group input-group-sm">
-                                        <input v-model="codigo_producto" type="number" name="codigo_producto" ref="codigo_producto"
+                                        <input v-model="codigo_producto" type="number" name="codigo_producto" ref="codigo_producto" placeholder="Producto (F2)"
                                             @keydown ="keyMonitor" class="form-control form-control-sm">
                                     </div>
                                 </div>
@@ -172,13 +210,13 @@
         <!-- this row will not appear when printing -->
         <div class="row no-print">
             <div class="col-12">
-                <button v-if="!modoEdicion" type="button" class="btn btn-success float-right" @click="creaNotaPedido()">
+                <button v-if="!modoEdicion" type="button" class="btn btn-success float-right" @click="creaOrdenCompra()">
                     <i class="fa fa-save fa-fw"></i> Guardar
                 </button>
-                <button v-if="modoEdicion" type="button" class="btn btn-success float-right" @click="actualizaNotaPedido()">
+                <button v-if="modoEdicion" type="button" class="btn btn-success float-right" @click="actualizaOrdenCompra()">
                     <i class="fa fa-save fa-fw"></i> Modificar
                 </button>
-                <router-link to="/notaspedido" class="btn btn-primary float-right" style="margin-right: 5px;">
+                <router-link to="/ordenescompra" class="btn btn-primary float-right" style="margin-right: 5px;">
                     <i class="fa fa-hand-point-left fa-fw"></i>Volver
                 </router-link>                
             </div>
@@ -197,20 +235,25 @@
         data() {
             return {
                 modoEdicion: false,
-                notas_pedido_id_edicion: 0,
-                fecha_nota_pedido: new Date(),
-                formato_fecha_nota_pedido: "dd-MM-yyyy",
+                orenes_compra_id_edicion: 0,
+                fecha_orden_compra: new Date(),
+                formato_fecha_orden_compra: "dd-MM-yyyy",
                 es: es,
-                cliente: {},
-                codigo_cliente: '',
+                proveedor: {},
+                ldepositos: {},
+                lformaspagos: {},
+                codigo_proveedor: '',
+                tipo: 'SN',
+                codigo_deposito: 0,
+                codigo_formapago: 0,
                 items: [],
                 producto: {},
                 codigo_producto: '',
                 cantidad_producto: 0,
                 nombre_producto: '',
                 precio_producto: 0,
-                nota_pedido: {},
-                nota_pedido_detalle: {}
+                orden_compra: {},
+                orden_compra_detalle: {}
             }
         },
         methods: {
@@ -219,11 +262,11 @@
                 let origenKey = event.key || String.fromCharCode(event.keyCode);
 
                 switch(origenInput) {
-                    case 'codigo_cliente':
+                    case 'codigo_proveedor':
                         switch(origenKey) {
                             case 'Enter':
                             case 'Tab':  
-                                this.cargarCliente(this.codigo_cliente);
+                                this.cargarProveedor(this.codigo_proveedor);
                                 break;
                             default:
                                 //code block
@@ -253,19 +296,19 @@
                         //code block
                 } 
             },
-            cargarCliente(cCod) {
-                let me = this;
-                var url = 'api/cliente/devuelveDatosCliente/'+cCod;
+            cargarProveedor(cCod) {
+                let me = this;                
+                var url = 'api/proveedor/devuelveDatosProveedor/'+cCod;
                 axios.get(url).then(data => {
                     var response = data.data;
-                    me.cliente = response.datoCliente;
+                    me.proveedor = response.datoProveedor;
                 }).catch((error) => {
-                    me.cliente = {};
-                    me.codigo_cliente = '';
+                    me.proveedor = {};
+                    me.codigo_proveedor = '';
 
-                    //Levo el foco al codigo de cliente
+                    //Levo el foco al codigo de proveedor
                     this.$nextTick(() => {
-                        this.$refs.codigo_cliente.focus();
+                        this.$refs.codigo_proveedor.focus();
                     });
                 });
             },
@@ -285,6 +328,30 @@
                     this.$nextTick(() => {
                         this.$refs.codigo_producto.focus();
                     });
+                });
+            },
+            cargaDepositos() {
+                let me = this;                
+                var url = 'api/deposito/cargaDepositos';
+                axios.get(url).then(data => {
+                    var response = data.data;
+                    me.ldepositos = response.ldepositos;
+                }).catch((error) => {
+                    if (error.response.status == 401) {
+                        swal('Error!', 'La sesion ha caducado.', 'warning');
+                    }
+                });
+            },
+            cargaFormasPago() {
+                let me = this;                
+                var url = 'api/formapago/cargaFormasPago';
+                axios.get(url).then(data => {
+                    var response = data.data;
+                    me.lformaspagos = response.lformaspagos;
+                }).catch((error) => {
+                    if (error.response.status == 401) {
+                        swal('Error!', 'La sesion ha caducado.', 'warning');
+                    }
                 });
             },
             agregaProducto() {
@@ -320,19 +387,23 @@
                 }
                 return false;
             },
-            creaNotaPedido() {
+            creaOrdenCompra() {
                 this.$Progress.start();
                 
-                axios.post('api/notaPedido', {
-                    codigo_cliente: this.codigo_cliente, 
-                    fecha_nota_pedido: this.fecha_nota_pedido,
-                    total_pedido: this.total,
+                axios.post('api/ordenCompra', {
+                    codigo_proveedor: this.codigo_proveedor, 
+                    codigo_deposito: this.codigo_deposito, 
+                    codigo_forma_pago: this.codigo_formapago, 
+                    fecha_orden_compra: this.fecha_orden_compra,
+                    tipo: this.tipo,
+                    total_orden: this.total,
                     items: this.items})
                 .then(() => {
                     Fire.$emit('AfterAction');
+
                     toast({
                         type: 'success',
-                        title: 'Se genero el pedido correctamente!'
+                        title: 'Se genero la orden de compra correctamente!'
                     });
                 })
                 .catch(() => {
@@ -341,19 +412,19 @@
 
                 this.$Progress.finish();
             },
-            actualizaNotaPedido() {
+            actualizaOrdenCompra() {
                 this.$Progress.start();
                 
-                axios.put('api/notaPedido/'+this.notas_pedido_id_edicion, {
-                    codigo_cliente: this.codigo_cliente, 
-                    fecha_nota_pedido: this.fecha_nota_pedido,
-                    total_pedido: this.total,
+                axios.put('api/ordenCompra/'+this.orenes_compra_id_edicion, {
+                    codigo_proveedor: this.codigo_cliente, 
+                    fecha_orden_compra: this.fecha_orden_compra,
+                    total_orden: this.total,
                     items: this.items})
                 .then(() => {
                     Fire.$emit('AfterAction');
                     toast({
                         type: 'success',
-                        title: 'Se actualizo el pedido correctamente!'
+                        title: 'Se actualizo la orden de compra correctamente!'
                     });
                 })
                 .catch(() => {
@@ -362,32 +433,35 @@
 
                 this.$Progress.finish();
             },
-            cargarNotaPedido(npCod) {
+            cargarOrdenCompra(ocCod) {
                 let me = this;                
-                var url = 'api/notaPedido/devuelveNotaPedido/'+npCod;
+                var url = 'api/ordenCompra/devuelveOrdenCompra/'+ocCod;
                 axios.get(url).then(data => {
                     var response = data.data;
-                    me.nota_pedido = response.datoNotaPedido;
-                    me.nota_pedido_detalle = response.datoNotaPedidoD;
+                    me.orden_compra = response.datoOrdenCompra;
+                    me.orden_compra_detalle = response.datoOrdenCompraD;
 
-                    //Datos Nota Pedido
-                    me.codigo_cliente = me.nota_pedido.cliente_id;
-                    me.fecha_nota_pedido = new Date(me.nota_pedido.fecha);
-                    me.fecha_nota_pedido = me.fecha_nota_pedido.setDate(me.fecha_nota_pedido.getDate() + 1);
+                    //Datos Orden Compra
+                    me.tipo = me.orden_compra.tipo;
+                    me.codigo_proveedor = me.orden_compra.proveedor_id;
+                    me.codigo_deposito = me.orden_compra.deposito_id;
+                    me.codigo_formapago = me.orden_compra.formapago_id;
+                    me.fecha_orden_compra = new Date(me.orden_compra.fecha);
+                    me.fecha_orden_compra = me.fecha_orden_compra.setDate(me.fecha_orden_compra.getDate() + 1);
 
-                    me.cargarCliente(me.codigo_cliente);
+                    me.cargarProveedor(me.codigo_proveedor);
 
-                    for (var i = 0; i < me.nota_pedido_detalle.length; i++) {
-                        me.items.push({ cod: me.nota_pedido_detalle[i].producto_id, 
-                                          descripcion: me.nota_pedido_detalle[i].nombre_producto, 
-                                          cantidad: me.nota_pedido_detalle[i].cantidad, 
-                                          precio: me.nota_pedido_detalle[i].precio 
+                    for (var i = 0; i < me.orden_compra_detalle.length; i++) {
+                        me.items.push({ cod: me.orden_compra_detalle[i].producto_id, 
+                                          descripcion: me.orden_compra_detalle[i].nombre_producto, 
+                                          cantidad: me.orden_compra_detalle[i].cantidad, 
+                                          precio: me.orden_compra_detalle[i].precio 
                         });
                     }
 
                 }).catch((error) => {
-                    me.nota_pedido = {};
-                    me.nota_pedido_detalle = {};
+                    me.orden_compra = {};
+                    me.orden_compra_detalle = {};
                 });
             }
         },
@@ -403,11 +477,14 @@
             }            
         },
         created() {
-            this.notas_pedido_id_edicion = this.$route.params.notaspedidoId;
+            this.cargaDepositos();
+            this.cargaFormasPago();
 
-            if(this.notas_pedido_id_edicion > 0) {
+            this.orenes_compra_id_edicion = this.$route.params.ordenescompraId;
+
+            if(this.orenes_compra_id_edicion > 0) {
                 this.modoEdicion = true;
-                this.cargarNotaPedido(this.notas_pedido_id_edicion);
+                this.cargarOrdenCompra(this.orenes_compra_id_edicion);
             }
         }
     }

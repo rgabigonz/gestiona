@@ -44,9 +44,10 @@ let routes = [
     { path: '/vendedores', name: 'vendedores', component: require('./components/Vendedores.vue') },
     { path: '/proveedores', name: 'proveedores', component: require('./components/Proveedores.vue') },    
     { path: '/dashboard', name: 'dashboard', component: require('./components/Dashboard.vue') },
-    { path: '/notaspedido', name: 'notaspedido', component: require('./components/NotasPedido.vue') }    ,
+    { path: '/notaspedido', name: 'notaspedido', component: require('./components/NotasPedido.vue') },
     { path: '/notaspedidodetalle/:notaspedidoId', name: 'notaspedidodetalle', component: require('./components/NotasPedidoDetalle.vue') },
-    //{ path: '/salir', redirect: '/logout' }
+    { path: '/ordenescompra', name: 'ordenescompra', component: require('./components/OrdenesCompra.vue') },
+    { path: '/ordenescompradetalle/:ordenescompraId', name: 'ordenescompradetalle', component: require('./components/OrdenesCompraDetalle.vue') },
 ]
 
 const router = new VueRouter({

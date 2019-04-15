@@ -123,7 +123,6 @@ class ClienteController extends Controller
         return [
             'tiposDocumento' => $tiposDocumento
         ];
-
     }
 
     public function devuelveDatosCliente(Request $request, $id)

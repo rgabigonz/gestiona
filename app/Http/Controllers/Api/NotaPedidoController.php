@@ -10,7 +10,6 @@ use Carbon\Carbon;
 
 class NotaPedidoController extends Controller
 {
-
     /**
      * Display a listing of the resource.
      *
@@ -24,11 +23,14 @@ class NotaPedidoController extends Controller
         if(empty($sBuscar)) {
             $notas_pedidos = NotaPedido::join('clientes', 'notas_pedidos.cliente_id', '=', 'clientes.id')
             ->select('notas_pedidos.*', 'clientes.nombre as nombre_cliente')
-            ->orderBy('created_at', 'asc')->paginate(15);//where('state', '=', 'A')
+            ->orderBy('created_at', 'asc')
+            ->paginate(15);//where('state', '=', 'A')
         } 
         else {
-            $notas_pedidos = Client::where($sCriterio, 'like', '%' . $sBuscar . '%')//where('state', '=', 'A')
-            ->orderBy('name', 'asc')
+            $notas_pedidos = NotaPedido::join('clientes', 'notas_pedidos.cliente_id', '=', 'clientes.id')
+            ->select('notas_pedidos.*', 'clientes.nombre as nombre_cliente')
+            ->where($sCriterio, 'like', '%' . $sBuscar . '%')//where('state', '=', 'A')
+            ->orderBy('created_at', 'asc')
             ->paginate(15);
         }
 
@@ -43,7 +45,6 @@ class NotaPedidoController extends Controller
             ],
             'notas_pedidos' => $notas_pedidos
         ];
-
     }
     /**
      * Store a newly created resource in storage.
