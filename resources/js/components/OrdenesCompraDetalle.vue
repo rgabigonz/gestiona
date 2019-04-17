@@ -220,7 +220,104 @@
                     <i class="fa fa-hand-point-left fa-fw"></i>Volver
                 </router-link>                
             </div>
-        </div>        
+        </div>   
+
+        <!-- Modal Seleccion de Proveedores-->
+        <div class="modal fade" id="ventanaLProveedores" tabindex="-1" role="dialog" aria-labelledby="ventanaLProveedoresLabel" aria-hidden="true">
+            <div style="min-width: 45%" class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="ventanaLProveedoresLabel">Lista de Proveedores</h5>
+                        <button type="button" class="close" @click="cerrarLProveedores()" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col col-md-4">
+                                <select class="form-control" v-model="sCriterio">
+                                    <option value="nombre">Nombre</option>
+                                </select>
+                            </div>
+                            <div class="col col-md-8">
+                                <input v-model="sBuscar" @keyup.enter="cargarProveedores(1, sBuscar, sCriterio)" type="text" class="form-control" placeholder="Dato a buscar...">
+                            </div>
+                        </div>
+                        <table class="table table-hover">
+                            <tbody>
+                                <tr>
+                                    <th style="width: 8%">#</th>
+                                    <th style="width: 82%">Nombre</th>
+                                    <th style="width: 10%"></th>
+                                </tr>
+                                <tr v-for="proveedor in proveedores" :key="proveedor.id">
+                                    <td>{{ proveedor.id }}</td>
+                                    <td>{{ proveedor.nombre }}</td>
+                                    <td>
+                                        <a href="#" @click="seleccionaProveedor(proveedor.id)">
+                                            <i class="fas fa-check-square green"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" @click="cerrarLProveedores()">Cerrar</button>
+                    </div> 
+                </div>
+            </div>
+        </div>
+        <!-- Modal Seleccion de Proveedores-->
+
+        <!-- Modal Seleccion de Productos-->
+        <div class="modal fade" id="ventanaLProductos" tabindex="-1" role="dialog" aria-labelledby="ventanaLProductosLabel" aria-hidden="true">
+            <div style="min-width: 45%" class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="ventanaLProductosLabel">Lista de Productos</h5>
+                        <button type="button" class="close" @click="cerrarLProductos()" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col col-md-4">
+                                <select class="form-control" v-model="sCriterio">
+                                    <option value="nombre">Nombre</option>
+                                </select>
+                            </div>
+                            <div class="col col-md-8">
+                                <input v-model="sBuscar" @keyup.enter="cargarProductos(1, sBuscar, sCriterio)" type="text" class="form-control" placeholder="Dato a buscar...">
+                            </div>
+                        </div>
+                        <table class="table table-hover">
+                            <tbody>
+                                <tr>
+                                    <th style="width: 8%">#</th>
+                                    <th style="width: 82%">Nombre</th>
+                                    <th style="width: 10%"></th>
+                                </tr>
+                                <tr v-for="producto in productos" :key="producto.id">
+                                    <td>{{ producto.id }}</td>
+                                    <td>{{ producto.nombre }}</td>
+                                    <td>
+                                        <a href="#" @click="seleccionaProducto(producto.id)">
+                                            <i class="fas fa-check-square green"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" @click="cerrarLProductos()">Cerrar</button>
+                    </div> 
+                </div>
+            </div>
+        </div>
+        <!-- Modal Seleccion de Productos-->
+
       </div>
 </template>
 
@@ -234,6 +331,22 @@
         },        
         data() {
             return {
+                //Lista de Seleccion proveedores y productos
+                proveedores: {},
+                productos: {},
+                pagination: {
+                    'total': 0,
+                    'current_page': 0,
+                    'per_page': 0,
+                    'last_page': 0,
+                    'from': 0,
+                    'to': 0
+                },
+                offset: 3,
+                sCriterio: 'nombre',
+                sBuscar: '',
+                //Lista de Seleccion proveedores y productos
+
                 modoEdicion: false,
                 orenes_compra_id_edicion: 0,
                 fecha_orden_compra: new Date(),
@@ -265,6 +378,9 @@
                     case 'codigo_proveedor':
                         switch(origenKey) {
                             case 'Enter':
+                            case 'F2':
+                                this.mostrarLProveedores();
+                                break;
                             case 'Tab':  
                                 this.cargarProveedor(this.codigo_proveedor);
                                 break;
@@ -275,6 +391,9 @@
                     case 'codigo_producto':
                         switch(origenKey) {
                             case 'Enter':
+                            case 'F2':
+                                this.mostrarLProductos();
+                                break;
                             case 'Tab':    
                                 this.cargarProducto(this.codigo_producto);
                                 break;
@@ -296,6 +415,63 @@
                         //code block
                 } 
             },
+
+            //INICIO Lista de Seleccion proveedores
+            mostrarLProveedores() {
+                this.cargarProveedores(1, this.sBuscar, this.sCriterio);
+                $('#ventanaLProveedores').modal('show');
+            },
+            cerrarLProveedores() {
+                $('#ventanaLProveedores').modal('hide');
+            },
+            cargarProveedores(page, buscar, criterio) {
+                let me = this;                
+                var url = 'api/proveedor?page=' + page + '&buscar=' + buscar + '&criterio=' + criterio;
+                axios.get(url).then(data => {
+                    var response = data.data;
+                    me.proveedores = response.proveedores.data;
+                    me.pagination = response.pagination;
+                }).catch((error) => {
+                    if (error.response.status == 401) {
+                        swal('Error!', 'La sesion ha caducado.', 'warning');
+                    }
+                });
+            },
+            seleccionaProveedor(proveedor) {
+                this.codigo_proveedor = proveedor;
+                this.cargarProveedor(proveedor);
+                this.cerrarLProveedores();
+            },
+            //FIN Lista de Seleccion proveedores
+
+            //INICIO Lista de Seleccion productos
+            mostrarLProductos() {
+                this.cargarProductos(1, this.sBuscar, this.sCriterio);
+                $('#ventanaLProductos').modal('show');
+            },
+            cerrarLProductos() {
+                $('#ventanaLProductos').modal('hide');
+            },
+            cargarProductos(page, buscar, criterio) {
+                let me = this;                
+                var url = 'api/producto?page=' + page + '&buscar=' + buscar + '&criterio=' + criterio;
+                axios.get(url).then(data => {
+                    var response = data.data;
+                    me.productos = response.productos.data;
+                    me.pagination = response.pagination;
+                }).catch((error) => {
+                    if (error.response.status == 401) {
+                        swal('Error!', 'La sesion ha caducado.', 'warning');
+                    }
+                });
+            },
+            seleccionaProducto(producto) {
+                this.codigo_producto = producto;
+                this.cargarProducto(producto);
+                this.cerrarLProductos();
+            },
+            //FIN Lista de Seleccion productos
+
             cargarProveedor(cCod) {
                 let me = this;                
                 var url = 'api/proveedor/devuelveDatosProveedor/'+cCod;
@@ -355,7 +531,7 @@
                 });
             },
             agregaProducto() {
-                if (this.codigo_producto.length > 0 && this.cantidad_producto > 0 && this.precio_producto > 0) {
+                if (this.cantidad_producto > 0 && this.precio_producto > 0) {
                     if (this.existeProducto(parseInt(this.codigo_producto)) === false) {
                         this.items.push({ cod: parseInt(this.codigo_producto), 
                                         descripcion: this.producto.nombre, 
