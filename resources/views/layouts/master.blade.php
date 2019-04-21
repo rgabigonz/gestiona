@@ -124,7 +124,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <li class="nav-item">
                 <router-link to="/ordenescompra" class="nav-link">
                   <i class="fas fa-file-invoice nav-icon"></i>
-                  <p>Ordenes de Compra</p>
+                  <p>Notas de Venta Proveedor</p>
                 </router-link>
               </li>
             </ul>
@@ -153,7 +153,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <li class="nav-item">
                 <router-link to="/notaspedido" class="nav-link">
                   <i class="fas fa-file-invoice nav-icon"></i>
-                  <p>Notas de Pedido</p>
+                  <p>Notas de Venta Cliente</p>
                 </router-link>
               </li>
             </ul>

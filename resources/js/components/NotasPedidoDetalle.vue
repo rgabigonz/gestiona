@@ -327,6 +327,12 @@
             }
         },
         methods: {
+            focusInput(inputRef) {
+                // $refs is an object that holds the DOM references to your inputs
+                this.$nextTick(function(){
+                    this.$refs[inputRef].focus();
+                });                
+            },
             keyMonitor(event) {
                 let origenInput = event.target.name;
                 let origenKey = event.key || String.fromCharCode(event.keyCode);
@@ -439,32 +445,35 @@
                     me.cliente = {};
                     me.codigo_cliente = '';
 
-                    //Levo el foco al codigo de cliente
-                    this.$nextTick(() => {
-                        this.$refs.codigo_cliente.focus();
-                    });
+                    this.focusInput('codigo_cliente');
                 });
             },
             cargarProducto(pCod) {
-                let me = this;                
-                var url = 'api/producto/devuelveDatosProducto/'+pCod;
-                axios.get(url).then(data => {
-                    var response = data.data;
-                    me.producto = response.datoProducto;
-                    me.nombre_producto = me.producto.nombre;
-                }).catch((error) => {
-                    me.producto = {};
-                    me.codigo_producto = '';
-                    me.nombre_producto = '';
+                let me = this;
 
-                    //Levo el foco al codigo de producto
-                    this.$nextTick(() => {
-                        this.$refs.codigo_producto.focus();
+                if (me.codigo_producto.length > 0) {
+                    var url = 'api/producto/devuelveDatosProducto/'+pCod;
+                    axios.get(url).then(data => {
+                        var response = data.data;
+                        me.producto = response.datoProducto;
+                        me.nombre_producto = me.producto.nombre;
+                    }).catch((error) => {
+                        me.producto = {};
+                        me.codigo_producto = '';
+                        me.nombre_producto = '';
+
+                        this.focusInput('codigo_producto');
+
+                        toast({
+                            type: 'error',
+                            title: 'Codigo de producto no encontrado!'
+                        });                        
                     });
-                });
+                }
             },
             agregaProducto() {
-                if (this.cantidad_producto > 0 && this.precio_producto > 0) {
+                if (this.codigo_producto > 0 && this.cantidad_producto > 0 && this.precio_producto > 0) {
+
                     if (this.existeProducto(parseInt(this.codigo_producto)) === false) {
                         this.items.push({ cod: parseInt(this.codigo_producto), 
                                         descripcion: this.producto.nombre, 
@@ -472,21 +481,23 @@
                                         precio: this.precio_producto 
                         });
                     }
-                }
+                    this.codigo_producto = '';
+                    this.cantidad_producto = 0;
+                    this.nombre_producto = '';
+                    this.precio_producto = 0;    
 
-                this.codigo_producto = '';
-                this.cantidad_producto = 0;
-                this.nombre_producto = '';
-                this.precio_producto = 0;
+                } else {
+                    toast({
+                        type: 'error',
+                        title: 'Debe ingresar producto, cantidad y precio'
+                    });                      
+                }
             },
             removerProducto(index) {
                 this.items.splice(index, 1);
             },
             existeProducto(pCod) {
-                //Levo el foco al codigo de producto
-                this.$nextTick(() => {
-                    this.$refs.codigo_producto.focus();
-                });
+                this.focusInput('codigo_producto');
 
                 for (var i = 0; i < this.items.length; i++) {
                     if (this.items[i].cod === pCod) {

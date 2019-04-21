@@ -5,19 +5,19 @@
             <div class="card border-success mb-3">
                 <div class="card-header bg-transparent border-light">Busqueda
                     <div class="card-tools">
-                        <button class="btn btn-secondary" @click="cargarClientes(1, sBuscar, sCriterio)"><i class="fas fa-search fa-fw"></i></button>
+                        <button class="btn btn-secondary" @click="fCargar_Clientes(1, vCadena_a_Buscar, vCriterio_Busqueda)"><i class="fas fa-search fa-fw"></i></button>
                     </div>
                 </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col col-md-4">
-                            <select class="form-control" v-model="sCriterio">
+                            <select class="form-control" v-model="vCriterio_Busqueda">
                                 <option value="nombre">Nombre</option>
                                 <option value="numero_documento">Documento</option>
                             </select>
                         </div>
                         <div class="col col-md-8">
-                            <input v-model="sBuscar" @keyup.enter="cargarClientes(1, sBuscar, sCriterio)" type="text" class="form-control" placeholder="Dato a buscar...">
+                            <input v-model="vCadena_a_Buscar" @keyup.enter="fCargar_Clientes(1, vCadena_a_Buscar, vCriterio_Busqueda)" type="text" class="form-control" placeholder="Dato a buscar...">
                         </div>
                     </div>
                 </div>
@@ -26,7 +26,7 @@
               <div class="card-header border-light">
                 <h3 class="card-title">Lista de Clientes</h3>
                 <div class="card-tools">
-                    <button class="btn btn-success" @click="nuevoModal()"><i class="fas fa-plus fa-fw"></i></button>
+                    <button class="btn btn-success" @click="fNuevo_Modal()"><i class="fas fa-plus fa-fw"></i></button>
                 </div>
               </div>
               <!-- /.card-header -->
@@ -40,12 +40,12 @@
                             <th style="width: 8%">Estado</th>
                             <th style="width: 9%"></th>
                         </tr>
-                        <tr v-for="cliente in clientes" :key="cliente.id">
-                            <td>{{ cliente.id }}</td>
-                            <td>{{ cliente.nombre }}</td>
-                            <td>{{ cliente.direccion }}</td>
+                        <tr v-for="lcliente in oClientes" :key="lcliente.id">
+                            <td>{{ lcliente.id }}</td>
+                            <td>{{ lcliente.nombre }}</td>
+                            <td>{{ lcliente.direccion }}</td>
                             <td>
-                                <div v-if="cliente.estado == 'A'">
+                                <div v-if="lcliente.estado == 'A'">
                                     <span class="badge badge-success">Activo</span>
                                 </div>
                                 <div v-else>
@@ -53,13 +53,13 @@
                                 </div>
                             </td>                            
                             <td>
-                                <a href="#" @click="editarModal(cliente)">
+                                <a href="#" @click="fEditar_Modal(lcliente)">
                                     <i class="fa fa-edit blue"></i>
                                 </a>
-                                <a href="#" v-if="cliente.estado == 'A'" @click="desactivaCliente(cliente.id)">
+                                <a href="#" v-if="lcliente.estado == 'A'" @click="fDesactiva_Cliente(lcliente.id)">
                                     <i class="fa fa-trash-alt red"></i>
                                 </a>
-                                <a href="#" v-else @click="activaCliente(cliente.id)">
+                                <a href="#" v-else @click="fActiva_Cliente(lcliente.id)">
                                     <i class="fa fa-check green"></i>
                                 </a>
                             </td>
@@ -71,13 +71,13 @@
               <div class="card-footer clearfix">
                 <ul class="pagination pagination-sm m-0 float-right">
                   <li class="page-item" v-if="pagination.current_page > 1">
-                      <a class="page-link" href="#" @click.prevent="cambiarPagina(pagination.current_page - 1, sBuscar, sCriterio)">«</a>
+                      <a class="page-link" href="#" @click.prevent="fCambiar_Pagina(pagination.current_page - 1, vCadena_a_Buscar, vCriterio_Busqueda)">«</a>
                   </li>
                   <li class="page-item" v-for="page in pageNumber" :key="page" :class="[page == isActived ? 'active': '']">
-                      <a class="page-link" href="#" @click.prevent="cambiarPagina(page, sBuscar, sCriterio)" v-text="page"></a>
+                      <a class="page-link" href="#" @click.prevent="fCambiar_Pagina(page, vCadena_a_Buscar, vCriterio_Busqueda)" v-text="page"></a>
                   </li>
                   <li class="page-item" v-if="pagination.current_page < pagination.last_page">
-                      <a class="page-link" href="#" @click.prevent="cambiarPagina(pagination.current_page + 1, sBuscar, sCriterio)">»</a>
+                      <a class="page-link" href="#" @click.prevent="fCambiar_Pagina(pagination.current_page + 1, vCadena_a_Buscar, vCriterio_Busqueda)">»</a>
                   </li>
                 </ul>
               </div>
@@ -92,13 +92,13 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 v-show="!modoEdicion" class="modal-title" id="ventanaModalLabel">Agregar Cliente</h5>
-                        <h5 v-show="modoEdicion" class="modal-title" id="ventanaModalLabel">Editar Cliente</h5>
-                        <button type="button" class="close" @click="cerrarModal()" aria-label="Close">
+                        <h5 v-show="!vModo_Edicion" class="modal-title" id="ventanaModalLabel">Agregar Cliente</h5>
+                        <h5 v-show="vModo_Edicion" class="modal-title" id="ventanaModalLabel">Editar Cliente</h5>
+                        <button type="button" class="close" @click="fCerrar_Modal()" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form @submit.prevent="modoEdicion ? actualizaCliente() : creaCliente()">
+                    <form @submit.prevent="vModo_Edicion ? fActualiza_Cliente() : fCrea_Cliente()">
                         <div class="modal-body">
                             <div class="form-group">
                                 <div class="input-group mb-3">
@@ -148,7 +148,7 @@
                                                 <span class="input-group-text"><i class="fa fa-list-ol"></i></span>
                                             </div>
                                             <select v-model="form.tipo_documento" name="tipo_documento" class="form-control" :class="{ 'is-invalid': form.errors.has('tipo_documento') }">
-                                                <option v-for="tipoDocumento in tiposDocumento" :key="tipoDocumento.id" :value="tipoDocumento.id">{{ tipoDocumento.descripcion }}</option>
+                                                <option v-for="ltipo_documento in oTipos_Documento" :key="ltipo_documento.id" :value="ltipo_documento.id">{{ ltipo_documento.descripcion }}</option>
                                             </select>
                                             <has-error :form="form" field="tipo_documento"></has-error>
                                         </div>
@@ -169,9 +169,9 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" @click="cerrarModal()">Cerrar</button>
-                            <button v-show="modoEdicion" type="submit" class="btn btn-success">Actualizar</button>
-                            <button v-show="!modoEdicion" type="submit" class="btn btn-primary">Crear</button>
+                            <button type="button" class="btn btn-danger" @click="fCerrar_Modal()">Cerrar</button>
+                            <button v-show="vModo_Edicion" type="submit" class="btn btn-success">Actualizar</button>
+                            <button v-show="!vModo_Edicion" type="submit" class="btn btn-primary">Crear</button>
                         </div>
                     </form>
                 </div>
@@ -184,9 +184,9 @@
     export default {
         data() {
             return {
-                modoEdicion: false,
-                clientes: {},
-                tiposDocumento: {},
+                vModo_Edicion: false,
+                oClientes: {},
+                oTipos_Documento: {},
                 form: new Form({
                     id: 0,
                     nombre: '',
@@ -204,9 +204,9 @@
                     'from': 0,
                     'to': 0
                 },
-                offset: 3,
-                sCriterio: 'nombre',
-                sBuscar: ''
+                vOffset: 3,
+                vCriterio_Busqueda: 'nombre',
+                vCadena_a_Buscar: ''
             }
         },
         computed: {
@@ -218,12 +218,12 @@
                     return [];
                 }
 
-                var from = this.pagination.current_page - this.offset;
+                var from = this.pagination.current_page - this.vOffset;
                 if(from < 1) {
                     from = 1;
                 }
 
-                var to = from + (this.offset * 2);
+                var to = from + (this.vOffset * 2);
                 if(to >= this.pagination.last_page) {
                     to = this.pagination.last_page;
                 }
@@ -238,62 +238,60 @@
             }
         },
         methods: {
-            cambiarPagina(page, buscar, criterio){
-                this.pagination.current_page = page;
-                this.cargarClientes(page, buscar, criterio);
+            fCambiar_Pagina(lPage, lBuscar, lCriterio){
+                this.pagination.current_page = lPage;
+                this.fCargar_Clientes(lPage, lBuscar, lCriterio);
             },
-            nuevoModal() {
-                this.cargarTD();
-                this.modoEdicion = false;
+            fNuevo_Modal() {
+                this.fCargar_TD();
+                this.vModo_Edicion = false;
                 this.form.reset();
                 $('#ventanaModal').modal('show');
             },
-            editarModal(cliente) {
-                this.cargarTD();
-                this.modoEdicion = true;
+            fEditar_Modal(lCliente) {
+                this.fCargar_TD();
+                this.vModo_Edicion = true;
                 this.form.reset();
                 $('#ventanaModal').modal('show');
-                this.form.fill(cliente);
+                this.form.fill(lCliente);
             },
-            cerrarModal() {
+            fCerrar_Modal() {
                 this.form.errors.clear();
                 this.form.reset();
                 $('#ventanaModal').modal('hide');
             },
-            cargarClientes(page, buscar, criterio) {
-                let me = this;                
-                var url = 'api/cliente?page=' + page + '&buscar=' + buscar + '&criterio=' + criterio;
-                axios.get(url).then(data => {
-                    var response = data.data;
-                    me.clientes = response.clientes.data;
-                    me.pagination = response.pagination;
+            fCargar_Clientes(lPage, lBuscar, lCriterio) {
+                let lMe = this;                
+                var lUrl = 'api/cliente?page=' + lPage + '&buscar=' + lBuscar + '&criterio=' + lCriterio;
+                axios.get(lUrl).then(data => {
+                    var lResponse = data.data;
+                    lMe.oClientes = lResponse.clientes.data;
+                    lMe.pagination = lResponse.pagination;
                 }).catch((error) => {
-                    if (error.response.status == 401) {
+                    if (error.lResponse.status == 401) {
                         swal('Error!', 'La sesion ha caducado.', 'warning');
-			                  me.$router.push('/login');
                     }
                 });
             },
-            cargarTD() {
-                let me = this;                
-                var url = 'api/cliente/cargaTD';
-                axios.get(url).then(data => {
-                    var response = data.data;
-                    me.tiposDocumento = response.tiposDocumento;
+            fCargar_TD() {
+                let lMe = this;                
+                var lUrl = 'api/cliente/cargaTD';
+                axios.get(lUrl).then(data => {
+                    var lResponse = data.data;
+                    lMe.oTipos_Documento = lResponse.tiposDocumento;
                 }).catch((error) => {
-                    if (error.response.status == 401) {
+                    if (error.lResponse.status == 401) {
                         swal('Error!', 'La sesion ha caducado.', 'warning');
-			                  me.$router.push('/login');
                     }
                 });
             },
-            actualizaCliente() {
+            fActualiza_Cliente() {
                 this.$Progress.start();
                 
                 this.form.put('api/cliente/'+this.form.id)
                 .then(() => {
                     Fire.$emit('AfterAction');
-                    this.cerrarModal();
+                    this.fCerrar_Modal();
                     toast({
                         type: 'success',
                         title: 'Se actualizaron los datos correctamente!'
@@ -304,13 +302,13 @@
                     this.$Progress.fail();
                 });
             },
-            creaCliente() {
+            fCrea_Cliente() {
                 this.$Progress.start();
                 
                 this.form.post('api/cliente')
                 .then(() => {
                     Fire.$emit('AfterAction');
-                    this.cerrarModal();
+                    this.fCerrar_Modal();
                     toast({
                         type: 'success',
                         title: 'Se creo el producto correctamente!'
@@ -323,7 +321,7 @@
 
                 this.$Progress.finish();
             },
-            activaCliente(id) {
+            fActiva_Cliente(lId) {
                 swal({
                     title: 'Esta seguro?',
                     //text: "Activar Cliente!",
@@ -335,7 +333,7 @@
                     cancelButtonText: 'Cancelar'
                 }).then((result) => {
                     if (result.value) {
-                        this.form.put('api/cliente/activar/'+id)
+                        this.form.put('api/cliente/activar/'+lId)
                         .then(() => {
                             swal(
                                 'ACTIVADO!',
@@ -350,7 +348,7 @@
                     swal('Fallo!', 'Hubo un error al procesar la transaccion.', 'warning');                    
                 });
             },
-            desactivaCliente(id) {
+            fDesactiva_Cliente(lId) {
                 swal({
                     title: 'Esta seguro?',
                     //text: "Desactivar Cliente!",
@@ -362,7 +360,7 @@
                     cancelButtonText: 'Cancelar'
                 }).then((result) => {
                     if (result.value) {
-                        this.form.put('api/cliente/desactivar/'+id)
+                        this.form.put('api/cliente/desactivar/'+lId)
                         .then(() => {
                             swal(
                                 'DESACTIVADO!',
@@ -379,9 +377,9 @@
             }
         },
         created() {
-            this.cargarClientes(1, this.sBuscar, this.sCriterio);
+            this.fCargar_Clientes(1, this.vCadena_a_Buscar, this.vCriterio_Busqueda);
             Fire.$on('AfterAction', () => {
-                this.cargarClientes(1, this.sBuscar, this.sCriterio);
+                this.fCargar_Clientes(1, this.vCadena_a_Buscar, this.vCriterio_Busqueda);
             });
         }
     }
