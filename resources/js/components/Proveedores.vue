@@ -270,7 +270,6 @@
                 }).catch((error) => {
                     if (error.response.status == 401) {
                         swal('Error!', 'La sesion ha caducado.', 'warning');
-			                  me.$router.push('/login');
                     }
                 });
             },
@@ -283,7 +282,6 @@
                 }).catch((error) => {
                     if (error.response.status == 401) {
                         swal('Error!', 'La sesion ha caducado.', 'warning');
-			                  me.$router.push('/login');
                     }
                 });
             },

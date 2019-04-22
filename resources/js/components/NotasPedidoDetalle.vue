@@ -31,8 +31,8 @@
                 </div>
                 <!-- /.col -->
               </div>
-              <!-- info row -->
 
+              <!-- info row -->
               <div class="row invoice-info">
                 <div class="col-sm-2 invoice-col">
                     <div class="form-group">

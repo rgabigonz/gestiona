@@ -12,7 +12,7 @@
                     <div class="row">
                         <div class="col col-md-4">
                             <select class="form-control" v-model="sCriterio">
-                                <option value="ordenes_compras.id">Numero Orden de Compra</option>
+                                <option value="ordenes_compras.id">Numero Nota de Venta</option>
                             </select>
                         </div>
                         <div class="col col-md-8">
@@ -23,7 +23,7 @@
             </div>
             <div class="card border-info mb-3">
               <div class="card-header border-light">
-                <h3 class="card-title">Orden de Compra</h3>
+                <h3 class="card-title">Notas de Venta Proveedor</h3>
                 <div class="card-tools">
                     <router-link :to="{ name: 'ordenescompradetalle', params: { ordenescompraId: 0 } }" class="btn btn-success">
                         <i class="fas fa-plus fa-fw"></i>

@@ -69,7 +69,13 @@ class OrdenCompraController extends Controller
         $orden_compra->tipo = $request->tipo;        
         $orden_compra->total = $request->total_orden;
         $orden_compra->fecha = $fecha_compra->format('Y-m-d');
+        $orden_compra->numero_negocio = $request->numero_negocio;
 
+        //Si es de cliente
+        $orden_compra->cliente_id = $request->codigo_cliente;
+        $orden_compra->vendedor_venta_id = $request->codigo_vendedor_venta;
+        $orden_compra->vendedor_gestion_id = $request->codigo_vendedor_gestion;
+        
         $orden_compra->save();
 
         for($i = 0; $i < $cantidad_items; $i++)
@@ -78,6 +84,13 @@ class OrdenCompraController extends Controller
             $orden_compra_item->producto_id = $request->items[$i]['cod'];
             $orden_compra_item->cantidad = $request->items[$i]['cantidad'];
             $orden_compra_item->precio = $request->items[$i]['precio'];
+            $orden_compra_item->flete = $request->items[$i]['flete'];
+            $orden_compra_item->comision_venta = $request->items[$i]['comision_venta'];
+            $orden_compra_item->comision_gestion = $request->items[$i]['comision_gestion'];
+            $orden_compra_item->precio_total  = ($request->items[$i]['flete'] + 
+                                                 $request->items[$i]['comision_venta'] + 
+                                                 $request->items[$i]['comision_gestion'] + 
+                                                 ($request->items[$i]['precio'] * $request->items[$i]['cantidad']));
             $orden_compra_item->user_id = $user->id;
             $orden_compra->ordenCompraDetalle()->save($orden_compra_item);
         }
@@ -91,6 +104,7 @@ class OrdenCompraController extends Controller
         
         $OrdenCompra = OrdenCompra::findOrFail($id);
         $OrdenCompra->total = $request->total_orden;
+        $OrdenCompra->numero_negocio = $request->numero_negocio;
         $OrdenCompra->update();
 
         $OrdenCompraDetalle = OrdenCompraDetalle::where('orden_compra_id', $id)->delete();
@@ -104,10 +118,16 @@ class OrdenCompraController extends Controller
             $orden_compra_item->producto_id = $request->items[$i]['cod'];
             $orden_compra_item->cantidad = $request->items[$i]['cantidad'];
             $orden_compra_item->precio = $request->items[$i]['precio'];
+            $orden_compra_item->flete = $request->items[$i]['flete'];
+            $orden_compra_item->comision_venta = $request->items[$i]['comision_venta'];
+            $orden_compra_item->comision_gestion = $request->items[$i]['comision_gestion'];
+            $orden_compra_item->precio_total  = ($request->items[$i]['flete'] + 
+                                                 $request->items[$i]['comision_venta'] + 
+                                                 $request->items[$i]['comision_gestion'] + 
+                                                 ($request->items[$i]['precio'] * $request->items[$i]['cantidad']));
             $orden_compra_item->user_id = $user->id;
             $orden_compra_item->save();
         }
-        
         return $request->items;
     } 
 

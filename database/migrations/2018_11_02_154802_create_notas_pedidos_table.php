@@ -17,7 +17,7 @@ class CreateNotasPedidosTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('cliente_id');
             $table->unsignedInteger('user_id');
-            $table->char('estado', 2)->default('PE'); //PE = Pendiente, PR = En proceso, AN = Anulado, FI = Finalizado
+            $table->char('estado', 2)->default('PE'); //PE = Pendiente, AN = Anulado, CO = Confirmado, FI = Finalizado
             $table->decimal('total', 8, 2);
             $table->date('fecha');
             $table->timestamps();

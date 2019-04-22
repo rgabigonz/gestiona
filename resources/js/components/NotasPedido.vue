@@ -157,8 +157,6 @@
                 }).catch((error) => {
                     if (error.response.status == 401) {
                         swal('Error!', 'La sesion ha caducado.', 'warning');
-                        //me.router.push('/login');
-                        //this.$router.push('/salir');
                     }
                 });
             },
@@ -209,7 +207,6 @@
                                 'El PEDIDO a sido CONFIRMADO.',
                                 'success'
                             );
-                            //Fire.$emit('AfterAction');
                             this.cargarNotasPedido(1, this.sBuscar, this.sCriterio);
                         })
                     }

@@ -18,6 +18,10 @@ class CreateOrdenesComprasDetalleTable extends Migration
             $table->unsignedInteger('producto_id');
             $table->decimal('cantidad', 8, 2);
             $table->decimal('precio', 8, 2);
+            $table->decimal('flete', 8, 2)->default(0);
+            $table->decimal('comision_venta', 8, 2)->default(0);
+            $table->decimal('comision_gestion', 8, 2)->default(0);
+            $table->decimal('precio_total', 8, 2);
             $table->unsignedInteger('user_id');            
             $table->timestamps();
 
