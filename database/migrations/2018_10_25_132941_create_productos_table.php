@@ -21,8 +21,11 @@ class CreateProductosTable extends Migration
             $table->decimal('stk_min', 8, 2);
             $table->decimal('stk_max', 8, 2);
             $table->decimal('stk_actual', 8, 2)->default(0);
+            $table->unsignedInteger('tipo_producto');
             $table->char('estado', 1)->default('A');
             $table->timestamps();
+
+            $table->foreign('tipo_producto')->references('id')->on('tipo_productos');
         });
     }
 

@@ -18,7 +18,8 @@ class CreateNotasPedidosDetalleTable extends Migration
             $table->unsignedInteger('producto_id');
             $table->decimal('cantidad', 8, 2);
             $table->decimal('precio', 8, 2);
-            $table->unsignedInteger('user_id');            
+            $table->string('obs')->nullable();
+            $table->unsignedInteger('user_id');
             $table->timestamps();
 
             $table->primary(['nota_pedido_id', 'producto_id']);

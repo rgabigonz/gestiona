@@ -22,6 +22,7 @@ class CreateOrdenesComprasDetalleTable extends Migration
             $table->decimal('comision_venta', 8, 2)->default(0);
             $table->decimal('comision_gestion', 8, 2)->default(0);
             $table->decimal('precio_total', 8, 2);
+            $table->string('obs')->nullable();
             $table->unsignedInteger('user_id');            
             $table->timestamps();
 

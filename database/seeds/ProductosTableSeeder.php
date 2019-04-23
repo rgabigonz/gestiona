@@ -19,6 +19,7 @@ class ProductosTableSeeder extends Seeder
             'stk_min' => 1,
             'stk_max' => 10,
             'stk_actual' => 0,
+            'tipo_producto' => 1
         ]);
 
         //factory('App\Producto', 10)->create();

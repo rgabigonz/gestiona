@@ -20,6 +20,8 @@ class CreateNotasPedidosTable extends Migration
             $table->char('estado', 2)->default('PE'); //PE = Pendiente, AN = Anulado, CO = Confirmado, FI = Finalizado
             $table->decimal('total', 8, 2);
             $table->date('fecha');
+            $table->string('numero_factura')->nullable();
+            $table->string('obs')->nullable();
             $table->timestamps();
 
             $table->foreign('cliente_id')->references('id')->on('clientes');

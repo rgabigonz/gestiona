@@ -19,16 +19,19 @@ class CreateOrdenesComprasTable extends Migration
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('deposito_id');
             $table->unsignedInteger('formapago_id');
+
             // INICIO En caso de que sea para el cliente
             $table->unsignedInteger('cliente_id')->nullable();
             $table->unsignedInteger('vendedor_venta_id')->nullable();
             $table->unsignedInteger('vendedor_gestion_id')->nullable();
             // FIN En caso de que sea para el cliente
+
             $table->char('estado', 2)->default('PE'); //PE = Pendiente, AN = Anulado, CO = Confirmado, FI = Finalizado
             $table->char('tipo', 2)->default('PR'); //PR = Propia, CL = Cliente
             $table->decimal('total', 8, 2);
             $table->date('fecha');
             $table->string('numero_negocio')->nullable();
+            $table->string('obs')->nullable();
             $table->timestamps();
 
             $table->foreign('proveedor_id')->references('id')->on('proveedores');

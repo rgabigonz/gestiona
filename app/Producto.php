@@ -9,7 +9,7 @@ class Producto extends Model
     protected $table = 'productos';
 
     protected $fillable = [
-        'nombre', 'descripcion', 'precio', 'stk_min', 'stk_max'
+        'nombre', 'descripcion', 'precio', 'stk_min', 'stk_max', 'tipo_producto'
     ];
 
     public function quotesitem()
