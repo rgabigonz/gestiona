@@ -18,6 +18,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::middleware('auth:api')->group( function () {
+    // Rutas Tipos Productos
+    Route::get('/tipoproducto/cargaTP', 'Api\TipoProductoController@cargaTP');
+
+    // Rutas Condiciones Pago
+    Route::get('/condicionpago/cargaCP', 'Api\CondicionPagoController@cargaCP');
+
     // Rutas Depositos
     Route::get('/deposito/cargaDepositos', 'Api\DepositoController@cargaDepositos');
 
@@ -29,6 +35,8 @@ Route::middleware('auth:api')->group( function () {
     Route::put('/deposito/activar/{deposito}', 'Api\DepositoController@activar');
 
     // Rutas Vendedores
+    Route::get('/vendedor/cargaVendedores', 'Api\VendedorController@cargaVendedores');
+
     Route::apiResources([
         'vendedor' => 'Api\VendedorController'
     ]);
@@ -65,6 +73,7 @@ Route::middleware('auth:api')->group( function () {
     Route::put('/producto/activar/{producto}', 'Api\ProductoController@activar');
 
     // Rutas Clientes
+    Route::get('/cliente/cargaClientes', 'Api\ClienteController@cargaClientes');
     Route::get('/cliente/cargaTD', 'Api\ClienteController@cargaTD');
     Route::get('/cliente/devuelveDatosCliente/{cliente}', 'Api\ClienteController@devuelveDatosCliente');
 
