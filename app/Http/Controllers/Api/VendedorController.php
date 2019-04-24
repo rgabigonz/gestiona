@@ -110,4 +110,11 @@ class VendedorController extends Controller
         $vendedor->update();
     }
 
+    public function cargaVendedores()
+    {
+        $vendedores = Vendedor::orderBy('nombre', 'asc')->get();
+        return [
+            'vendedores' => $vendedores
+        ];
+    } 
 }

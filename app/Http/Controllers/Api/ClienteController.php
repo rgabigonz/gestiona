@@ -133,4 +133,12 @@ class ClienteController extends Controller
         ];
 
     }
+
+    public function cargaClientes()
+    {
+        $clientes = Cliente::orderBy('nombre', 'asc')->get();
+        return [
+            'clientes' => $clientes
+        ];
+    }     
 }

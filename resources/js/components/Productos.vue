@@ -107,11 +107,19 @@
                                 <has-error :form="form" field="nombre"></has-error>
                             </div>
                             <div class="form-group">
+                                <label class="control-label" for="tipo_producto"><i class="fa fa-bell-o"></i>Tipo de Producto</label>
+                                <select v-model="form.tipo_producto" name="tipo_producto" class="form-control" :class="{ 'is-invalid': form.errors.has('tipo_producto') }">
+                                    <option v-for="ltipo_producto in oTipos_Producto" :key="ltipo_producto.id" :value="ltipo_producto.id">{{ ltipo_producto.descripcion }}</option>
+                                </select>
+                                <has-error :form="form" field="tipo_producto"></has-error>
+                            </div>   
+
+                            <div class="form-group">
                                 <label class="control-label" for="descripcion"><i class="fa fa-bell-o"></i>Descripcion</label>
                                 <textarea v-model="form.descripcion" type="text" name="descripcion" placeholder="Ingrese una descripcion"
                                       class="form-control" :class="{ 'is-invalid': form.errors.has('descripcion') }"></textarea>
                                 <has-error :form="form" field="descripcion"></has-error>
-                            </div>   
+                            </div> 
 
                             <div class="row">
                                 <div class="col col-md-3">
@@ -164,13 +172,15 @@
             return {
                 modoEdicion: false,
                 productos: {},
+                oTipos_Producto: {},
                 form: new Form({
                     id: 0,
                     nombre: '',
                     descripcion: '',
                     precio: 0,
                     stk_min: 0,
-                    stk_max: 0
+                    stk_max: 0,
+                    tipo_producto: 1,
                 }),
                 pagination: {
                     'total': 0,
@@ -219,11 +229,13 @@
                 this.cargarProductos(page, buscar, criterio);
             },
             nuevoModal() {
+                this.fCargar_TP();
                 this.modoEdicion = false;
                 this.form.reset();
                 $('#ventanaModal').modal('show');
             },
             editarModal(producto) {
+                this.fCargar_TP();
                 this.modoEdicion = true;
                 this.form.reset();
                 $('#ventanaModal').modal('show');
@@ -244,6 +256,18 @@
                 }).catch((error) => {
                     //console.log(error.response.status);
                     if (error.response.status == 401) {
+                        swal('Error!', 'La sesion ha caducado.', 'warning');
+                    }
+                });
+            },
+            fCargar_TP() {
+                let lMe = this;                
+                var lUrl = 'api/tipoproducto/cargaTP';
+                axios.get(lUrl).then(data => {
+                    var lResponse = data.data;
+                    lMe.oTipos_Producto = lResponse.tiposProducto;
+                }).catch((error) => {
+                    if (error.lResponse.status == 401) {
                         swal('Error!', 'La sesion ha caducado.', 'warning');
                     }
                 });

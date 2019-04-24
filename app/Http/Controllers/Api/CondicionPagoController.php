@@ -83,4 +83,12 @@ class CondicionPagoController extends Controller
     {
         //
     }
+
+    public function cargaCP()
+    {
+        $condicionesPago = CondicionPago::orderBy('descripcion', 'asc')->get();
+        return [
+            'condicionesPago' => $condicionesPago
+        ];
+    }      
 }

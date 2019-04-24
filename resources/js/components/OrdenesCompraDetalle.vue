@@ -10,7 +10,7 @@
                   <h4>
                     <i class="fa fa-globe"></i> Agro Proyecciones SRL
                   </h4>
-                  <div>Orden de compra {{ orenes_compra_id_edicion }}</div>
+                  <div>Nota de Pedido N° {{ orenes_compra_id_edicion }}</div>
                 </div>
                 <!-- /.col -->
               </div>
@@ -18,7 +18,7 @@
               <br>
               <!-- info row -->
               <div class="card">
-                <div class="card-header border-light bg-secondary">Datos Nota de Venta - Proveedor</div>
+                <div class="card-header border-light bg-secondary">Datos Nota de Pedido - Proveedor</div>
                 <div class="card-body">
                 <div class="row invoice-info">
                     <div class="col-sm-2 invoice-col">
@@ -56,7 +56,7 @@
                     </div>
                     <!-- /.col -->
 
-                    <div class="col-sm-3 invoice-col">
+                    <div class="col-sm-2 invoice-col">
                         <div class="form-group">
                             <div class="input-group input-group-sm">
                                 <select class="form-control" v-model="codigo_deposito">
@@ -68,12 +68,24 @@
                     </div>
                     <!-- /.col -->
 
-                    <div class="col-sm-3 invoice-col">
+                    <div class="col-sm-2 invoice-col">
                         <div class="form-group">
                             <div class="input-group input-group-sm">
                                 <select class="form-control" v-model="codigo_formapago">
                                     <option value=0>Forma Pago...</option>
                                     <option v-for="lformaspago in lformaspagos" :key="lformaspago.id" :value="lformaspago.id">{{ lformaspago.descripcion }}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.col -->
+
+                    <div class="col-sm-2 invoice-col">
+                        <div class="form-group">
+                            <div class="input-group input-group-sm">
+                                <select class="form-control" v-model="codigo_condicionpago">
+                                    <option value=0>Condicion Pago...</option>
+                                    <option v-for="lcondicionespago in lcondicionespagos" :key="lcondicionespago.id" :value="lcondicionespago.id">{{ lcondicionespago.descripcion }}</option>
                                 </select>
                             </div>
                         </div>
@@ -118,75 +130,43 @@
               <div v-if="tipo == 'CL'" class="card">
                 <div class="card-header border-light bg-success">Datos Cliente - Vendedores</div>
                 <div class="card-body">
-                    <div class="row invoice-info">
-                        <div class="col-sm-2 invoice-col">
-                            <div class="form-group">
-                                <div class="input-group input-group-sm">
-                                    <input v-model="codigo_cliente" type="number" name="codigo_cliente" ref="codigo_cliente" placeholder="Cliente (F2)"
-                                        @keydown ="keyMonitor" class="form-control form-control-sm" :disabled="modoEdicion ? true : false">
-                                </div>
+                <div class="row invoice-info">
+                    <div class="col-sm-4 invoice-col">
+                        <div class="form-group">
+                            <div class="input-group input-group-sm">
+                                <select class="form-control" v-model="codigo_cliente">
+                                    <option value=0>Cliente...</option>
+                                    <option v-for="lcliente in lclientes" :key="lcliente.id" :value="lcliente.id">{{ lcliente.nombre }}</option>
+                                </select>
                             </div>
                         </div>
-                        <!-- /.col -->
-                        <div class="col-sm-4 invoice-col">
-                            <div class="form-group">
-                                <input v-model="cliente.nombre" type="text" name="nombre_cliente" class="form-control form-control-sm" disabled>
-                            </div>
-                        </div>
-                        <!-- /.col -->
-                        <div class="col-sm-6 invoice-col">
-                            <div class="form-group">
-                                <input v-model="cliente.direccion" type="text" name="direccion_cliente" class="form-control form-control-sm" disabled>
-                            </div>
-                        </div>
-                        <!-- /.col -->
                     </div>
-                    <div class="row invoice-info">
-                        <div class="col-sm-2 invoice-col">
-                            <div class="form-group">
-                                <div class="input-group input-group-sm">
-                                    <input v-model="codigo_cliente" type="number" name="codigo_vendedor" ref="codigo_vendedor" placeholder="V. Venta (F2)"
-                                        @keydown ="keyMonitor" class="form-control form-control-sm" :disabled="modoEdicion ? true : false">
-                                </div>
+                    <!-- /.col -->
+
+                    <div class="col-sm-4 invoice-col">
+                        <div class="form-group">
+                            <div class="input-group input-group-sm">
+                                <select class="form-control" v-model="codigo_vendedor_gestion">
+                                    <option value=0>Vendedor Gestion...</option>
+                                    <option v-for="lvendedor_gestion in lvendedores_gestion" :key="lvendedor_gestion.id" :value="lvendedor_gestion.id">{{ lvendedor_gestion.nombre }}</option>
+                                </select>
                             </div>
                         </div>
-                        <!-- /.col -->
-                        <div class="col-sm-4 invoice-col">
-                            <div class="form-group">
-                                <input v-model="cliente.nombre" type="text" name="nombre_vendedor" class="form-control form-control-sm" disabled>
-                            </div>
-                        </div>
-                        <!-- /.col -->
-                        <div class="col-sm-6 invoice-col">
-                            <div class="form-group">
-                                <input v-model="cliente.correo_electronico" type="text" name="correo_cliente" class="form-control form-control-sm" disabled>
-                            </div>
-                        </div>
-                        <!-- /.col -->
                     </div>
-                    <div class="row invoice-info">
-                        <div class="col-sm-2 invoice-col">
-                            <div class="form-group">
-                                <div class="input-group input-group-sm">
-                                    <input v-model="codigo_cliente" type="number" name="codigo_cliente" ref="codigo_cliente" placeholder="V. Gestion (F2)"
-                                        @keydown ="keyMonitor" class="form-control form-control-sm" :disabled="modoEdicion ? true : false">
-                                </div>
+                    <!-- /.col -->
+
+                    <div class="col-sm-4 invoice-col">
+                        <div class="form-group">
+                            <div class="input-group input-group-sm">
+                                <select class="form-control" v-model="codigo_vendedor_venta">
+                                    <option value=0>Vendedor Venta...</option>
+                                    <option v-for="lvendedor_gestion in lvendedores_gestion" :key="lvendedor_gestion.id" :value="lvendedor_gestion.id">{{ lvendedor_gestion.nombre }}</option>
+                                </select>
                             </div>
                         </div>
-                        <!-- /.col -->
-                        <div class="col-sm-4 invoice-col">
-                            <div class="form-group">
-                                <input v-model="cliente.nombre" type="text" name="nombre_cliente" class="form-control form-control-sm" disabled>
-                            </div>
-                        </div>
-                        <!-- /.col -->
-                        <div class="col-sm-6 invoice-col">
-                            <div class="form-group">
-                                <input v-model="cliente.correo_electronico" type="text" name="correo_cliente" class="form-control form-control-sm" disabled>
-                            </div>
-                        </div>
-                        <!-- /.col -->
                     </div>
+                    <!-- /.col -->
+                </div>
                 </div>
               </div>
               <!-- /.row -->
@@ -199,25 +179,26 @@
                         <tr>
                             <th>Producto</th>
                             <th>Descripcion</th>
+                            <th>Observacion</th>
                             <th>Flete</th>
-                            <th>C. Venta</th>
-                            <th>C. Gestion</th>
+                            <th>%Venta</th>
+                            <th>%Gestion</th>
                             <th>Cantidad</th>
                             <th>Precio</th>
                             <th>Subtotal</th>
                             <th></th>
                         </tr>
                         <tr>
-                            <td style="width: 10%" class="col-sm-2 invoice-col">
+                            <td style="width: 5.5%" class="col-sm-2 invoice-col">
                                 <div class="form-group">
                                     <div class="input-group input-group-sm">
-                                        <input v-model="codigo_producto" type="number" name="codigo_producto" ref="codigo_producto" placeholder="Producto (F2)"
+                                        <input v-model="codigo_producto" type="number" name="codigo_producto" ref="codigo_producto" placeholder="(F2)"
                                             @keydown ="keyMonitor" class="form-control form-control-sm">
                                     </div>
                                 </div>
                             </td>
                             <!-- /.col -->
-                            <td style="width: 45%" class="col-sm-6 invoice-col">
+                            <td style="width: 35%" class="col-sm-6 invoice-col">
                                 <div class="form-group">
                                     <div class="input-group input-group-sm">
                                         <input v-model="nombre_producto" type="text" name="nombre_producto"
@@ -226,7 +207,16 @@
                                 </div>
                             </td>
                             <!-- /.col -->                            
-                            <td style="width: 7.5%" class="col-sm-1 invoice-col">
+                            <td style="width: 26.5%" class="col-sm-6 invoice-col">
+                                <div class="form-group">
+                                    <div class="input-group input-group-sm">
+                                        <input v-model="obs_producto" type="text" name="obs_producto"
+                                               class="form-control form-control-sm">
+                                    </div>
+                                </div>
+                            </td>
+                            <!-- /.col -->                            
+                            <td style="width: 5.5%" class="col-sm-1 invoice-col">
                                 <div class="form-group">
                                     <div class="input-group input-group-sm">
                                         <input v-model="flete_producto" type="number" name="flete_producto"
@@ -235,7 +225,7 @@
                                 </div>
                             </td>
                             <!-- /.col -->
-                            <td style="width: 7.5%" class="col-sm-1 invoice-col">
+                            <td style="width: 5.5%" class="col-sm-1 invoice-col">
                                 <div class="form-group">
                                     <div class="input-group input-group-sm">
                                         <input v-model="comision_venta_producto" type="number" name="comision_venta_producto"
@@ -244,7 +234,7 @@
                                 </div>
                             </td>
                             <!-- /.col -->
-                            <td style="width: 7.5%" class="col-sm-1 invoice-col">
+                            <td style="width: 5.5%" class="col-sm-1 invoice-col">
                                 <div class="form-group">
                                     <div class="input-group input-group-sm">
                                         <input v-model="comision_gestion_producto" type="number" name="comision_gestion_producto"
@@ -253,7 +243,7 @@
                                 </div>
                             </td>
                             <!-- /.col -->
-                            <td style="width: 7.5%" class="col-sm-1 invoice-col">
+                            <td style="width: 5.5%" class="col-sm-1 invoice-col">
                                 <div class="form-group">
                                     <div class="input-group input-group-sm">
                                         <input v-model="cantidad_producto" type="number" name="cantidad_producto"
@@ -262,7 +252,7 @@
                                 </div>
                             </td>
                             <!-- /.col -->
-                            <td style="width: 7.5%" class="col-sm-1 invoice-col">
+                            <td style="width: 5.5%" class="col-sm-1 invoice-col">
                                 <div class="form-group">
                                     <div class="input-group input-group-sm">
                                         <input v-model="precio_producto" type="number" name="precio_producto"
@@ -271,7 +261,7 @@
                                 </div>
                             </td>
                             <!-- /.col -->
-                            <td style="width: 7.5%" class="col-sm-1 invoice-col">
+                            <td style="width: 5.5%" class="col-sm-1 invoice-col">
                                 <div class="form-group">
                                     <div class="input-group input-group-sm">
                                         <input v-model="subtotal_producto" type="text" name="subtotal_producto" 
@@ -286,6 +276,7 @@
                         <tr class="item" v-for="(item, index) in items" :key="item.cod">
                             <td>{{ item.cod}}</td>
                             <td>{{ item.descripcion}}</td>
+                            <td>{{ item.obs}}</td>
                             <td>${{ item.flete }}</td>
                             <td>${{ item.comision_venta }}</td>
                             <td>${{ item.comision_gestion }}</td>
@@ -309,6 +300,15 @@
                   </table>
                 </div>
                 <!-- /.col -->
+              </div>
+              <!-- /.row -->
+              <div class="row">
+                  <div class="col col-md-12">
+                      <div class="form-group">
+                          <textarea v-model="observacion" type="text" name="descripcion" placeholder="Observacion"
+                              class="form-control"></textarea>
+                      </div>
+                  </div>
               </div>
               <!-- /.row -->
             </div>
@@ -462,26 +462,32 @@
                 formato_fecha_orden_compra: "dd-MM-yyyy",
                 es: es,
                 proveedor: {},
-                cliente: {},
                 ldepositos: {},
                 lformaspagos: {},
+                lcondicionespagos: {},
+                lclientes: {},
+                lvendedores_venta: {},
+                lvendedores_gestion: {},
                 codigo_proveedor: '',
-                codigo_cliente: '',
-                codigo_vendedor_venta: '',
-                codigo_vendedor_gestion: '',
                 tipo: 'SN',
                 codigo_deposito: 0,
                 codigo_formapago: 0,
+                codigo_condicionpago: 0,
+                codigo_cliente: 0,
+                codigo_vendedor_venta: 0,
+                codigo_vendedor_gestion: 0,
                 items: [],
                 producto: {},
                 codigo_producto: '',
                 cantidad_producto: 0,
                 nombre_producto: '',
+                obs_producto: '',
                 precio_producto: 0,
                 flete_producto: 0,
                 comision_venta_producto: 0,
                 comision_gestion_producto: 0,
                 numero_negocio: '',
+                observacion: '',
                 orden_compra: {},
                 orden_compra_detalle: {}
             }
@@ -647,11 +653,49 @@
                     }
                 });
             },
+            cargaCondicionesPago() {
+                let me = this;                
+                var url = 'api/condicionpago/cargaCP';
+                axios.get(url).then(data => {
+                    var response = data.data;
+                    me.lcondicionespagos = response.condicionesPago;
+                }).catch((error) => {
+                    if (error.response.status == 401) {
+                        swal('Error!', 'La sesion ha caducado.', 'warning');
+                    }
+                });
+            },
+            cargaClientes() {
+                let me = this;                
+                var url = 'api/cliente/cargaClientes';
+                axios.get(url).then(data => {
+                    var response = data.data;
+                    me.lclientes = response.clientes;
+                }).catch((error) => {
+                    if (error.response.status == 401) {
+                        swal('Error!', 'La sesion ha caducado.', 'warning');
+                    }
+                });
+            },
+            cargaVendedores() {
+                let me = this;                
+                var url = 'api/vendedor/cargaVendedores';
+                axios.get(url).then(data => {
+                    var response = data.data;
+                    me.lvendedores_venta = response.vendedores;
+                    me.lvendedores_gestion = response.vendedores;
+                }).catch((error) => {
+                    if (error.response.status == 401) {
+                        swal('Error!', 'La sesion ha caducado.', 'warning');
+                    }
+                });
+            },
             agregaProducto() {
                 if (this.cantidad_producto > 0 && this.precio_producto > 0) {
                     if (this.existeProducto(parseInt(this.codigo_producto)) === false) {
                         this.items.push({ cod: parseInt(this.codigo_producto), 
                                         descripcion: this.producto.nombre, 
+                                        obs: this.obs_producto, 
                                         flete: this.flete_producto, 
                                         comision_venta: this.comision_venta_producto, 
                                         comision_gestion: this.comision_gestion_producto, 
@@ -664,6 +708,7 @@
                 this.codigo_producto = '';
                 this.cantidad_producto = 0;
                 this.nombre_producto = '';
+                this.obs_producto = '';
                 this.precio_producto = 0;
                 this.flete_producto = 0;
                 this.comision_venta_producto = 0;
@@ -693,10 +738,12 @@
                     codigo_proveedor: this.codigo_proveedor, 
                     codigo_deposito: this.codigo_deposito, 
                     codigo_forma_pago: this.codigo_formapago, 
+                    codigo_condicion_pago: this.codigo_condicionpago, 
                     fecha_orden_compra: this.fecha_orden_compra,
                     tipo: this.tipo,
                     total_orden: this.total,
                     numero_negocio: this.numero_negocio,
+                    obs: this.observacion,
                     codigo_cliente: this.codigo_formapago, 
                     codigo_vendedor_venta: this.codigo_vendedor_venta, 
                     codigo_vendedor_gestion: this.codigo_vendedor_gestion, 
@@ -722,6 +769,7 @@
                     fecha_orden_compra: this.fecha_orden_compra,
                     total_orden: this.total,
                     numero_negocio: this.numero_negocio,
+                    obs: this.observacion,
                     items: this.items})
                 .then(() => {
                     Fire.$emit('AfterAction');
@@ -749,15 +797,18 @@
                     me.codigo_proveedor = me.orden_compra.proveedor_id;
                     me.codigo_deposito = me.orden_compra.deposito_id;
                     me.codigo_formapago = me.orden_compra.formapago_id;
+                    me.codigo_condicionpago = me.orden_compra.condicionpago_id;
                     me.fecha_orden_compra = new Date(me.orden_compra.fecha);
                     me.fecha_orden_compra = me.fecha_orden_compra.setDate(me.fecha_orden_compra.getDate() + 1);
                     me.numero_negocio = me.orden_compra.numero_negocio;
+                    me.observacion = me.orden_compra.obs;
 
                     me.cargarProveedor(me.codigo_proveedor);
 
                     for (var i = 0; i < me.orden_compra_detalle.length; i++) {
                         me.items.push({ cod: me.orden_compra_detalle[i].producto_id, 
                                           descripcion: me.orden_compra_detalle[i].nombre_producto, 
+                                          obs: me.orden_compra_detalle[i].obs, 
                                           cantidad: me.orden_compra_detalle[i].cantidad, 
                                           precio: me.orden_compra_detalle[i].precio, 
                                           flete: me.orden_compra_detalle[i].flete, 
@@ -787,6 +838,9 @@
         created() {
             this.cargaDepositos();
             this.cargaFormasPago();
+            this.cargaCondicionesPago();
+            this.cargaClientes();
+            this.cargaVendedores();
 
             this.orenes_compra_id_edicion = this.$route.params.ordenescompraId;
 

@@ -71,7 +71,8 @@ class ProductoController extends Controller
             'descripcion' => $request['descripcion'],
             'precio' => $request['precio'],
             'stk_min' => $request['stk_min'],
-            'stk_max' => $request['stk_max'],                                    
+            'stk_max' => $request['stk_max'],
+            'tipo_producto' => $request['tipo_producto']
         ]);
     }
 

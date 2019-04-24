@@ -65,11 +65,13 @@ class OrdenCompraController extends Controller
         $orden_compra->proveedor_id = $request->codigo_proveedor;
         $orden_compra->deposito_id = $request->codigo_deposito;
         $orden_compra->formapago_id = $request->codigo_forma_pago;
+        $orden_compra->condicionpago_id = $request->codigo_condicion_pago;
         $orden_compra->user_id = $user->id;
         $orden_compra->tipo = $request->tipo;        
         $orden_compra->total = $request->total_orden;
         $orden_compra->fecha = $fecha_compra->format('Y-m-d');
         $orden_compra->numero_negocio = $request->numero_negocio;
+        $orden_compra->obs = $request->obs;
 
         //Si es de cliente
         $orden_compra->cliente_id = $request->codigo_cliente;
@@ -85,6 +87,7 @@ class OrdenCompraController extends Controller
             $orden_compra_item->cantidad = $request->items[$i]['cantidad'];
             $orden_compra_item->precio = $request->items[$i]['precio'];
             $orden_compra_item->flete = $request->items[$i]['flete'];
+            $orden_compra_item->obs = $request->items[$i]['obs'];
             $orden_compra_item->comision_venta = $request->items[$i]['comision_venta'];
             $orden_compra_item->comision_gestion = $request->items[$i]['comision_gestion'];
             $orden_compra_item->precio_total  = ($request->items[$i]['flete'] + 
@@ -105,6 +108,7 @@ class OrdenCompraController extends Controller
         $OrdenCompra = OrdenCompra::findOrFail($id);
         $OrdenCompra->total = $request->total_orden;
         $OrdenCompra->numero_negocio = $request->numero_negocio;
+        $OrdenCompra->obs = $request->obs;
         $OrdenCompra->update();
 
         $OrdenCompraDetalle = OrdenCompraDetalle::where('orden_compra_id', $id)->delete();
@@ -119,6 +123,7 @@ class OrdenCompraController extends Controller
             $orden_compra_item->cantidad = $request->items[$i]['cantidad'];
             $orden_compra_item->precio = $request->items[$i]['precio'];
             $orden_compra_item->flete = $request->items[$i]['flete'];
+            $orden_compra_item->obs = $request->items[$i]['obs'];
             $orden_compra_item->comision_venta = $request->items[$i]['comision_venta'];
             $orden_compra_item->comision_gestion = $request->items[$i]['comision_gestion'];
             $orden_compra_item->precio_total  = ($request->items[$i]['flete'] + 

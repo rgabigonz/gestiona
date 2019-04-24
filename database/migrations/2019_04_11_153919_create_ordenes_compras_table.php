@@ -19,6 +19,7 @@ class CreateOrdenesComprasTable extends Migration
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('deposito_id');
             $table->unsignedInteger('formapago_id');
+            $table->unsignedInteger('condicionpago_id');
 
             // INICIO En caso de que sea para el cliente
             $table->unsignedInteger('cliente_id')->nullable();
@@ -38,6 +39,7 @@ class CreateOrdenesComprasTable extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('deposito_id')->references('id')->on('depositos');
             $table->foreign('formapago_id')->references('id')->on('forma_pagos');
+            $table->foreign('condicionpago_id')->references('id')->on('condicion_pagos');
             
             // INICIO En caso de que sea para el cliente
             $table->foreign('cliente_id')->references('id')->on('clientes');
