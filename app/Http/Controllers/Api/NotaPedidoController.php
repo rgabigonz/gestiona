@@ -64,6 +64,7 @@ class NotaPedidoController extends Controller
         $nota_pedido->cliente_id = $request->codigo_cliente;
         $nota_pedido->user_id = $user->id;
         $nota_pedido->total = $request->total_pedido;
+        $nota_pedido->numero_factura = $request->numero_factura;
         $nota_pedido->fecha = $fecha_pedido->format('Y-m-d');
 
         $nota_pedido->save();
@@ -87,6 +88,8 @@ class NotaPedidoController extends Controller
         
         $NotaPedido = NotaPedido::findOrFail($id);
         $NotaPedido->total = $request->total_pedido;
+        $NotaPedido->total = $request->total_pedido;
+        $NotaPedido->numero_factura = $request->numero_factura;
         $NotaPedido->update();
 
         $NotaPedidoDetalle = NotaPedidoDetalle::where('nota_pedido_id', $id)->delete();

@@ -21,7 +21,7 @@
                 <div class="card-header border-light bg-secondary">Datos Nota de Pedido - Proveedor</div>
                 <div class="card-body">
                 <div class="row invoice-info">
-                    <div class="col-sm-2 invoice-col">
+                    <div class="col-sm-4 invoice-col">
                         <div class="form-group">
                             <div class="input-group input-group-sm">
                                 <datepicker :bootstrap-styling="true" v-model="fecha_orden_compra" name="fecha_orden_compra" :language="es" 
@@ -33,7 +33,7 @@
                     </div>
                     <!-- /.col -->
 
-                    <div class="col-sm-2 invoice-col">
+                    <div class="col-sm-4 invoice-col">
                         <div class="form-group">
                             <div class="input-group input-group-sm">
                                 <input v-model="numero_negocio" type="text" name="numero_negocio" placeholder="Numero Negocio"
@@ -43,20 +43,21 @@
                     </div>
                     <!-- /.col -->
 
-                    <div class="col-sm-2 invoice-col">
+                    <div class="col-sm-4 invoice-col">
                         <div class="form-group">
                             <div class="input-group input-group-sm">
-                                <select class="form-control" v-model="tipo">
+                                <select class="form-control" v-model="tipo" :disabled="modoEdicion ? true : false">
                                     <option value="SN">Tipo...</option>
-                                    <option value="PR">Propia</option>
-                                    <option value="CL">Cliente</option>
+                                    <option value="PR">PROPIA</option>
+                                    <option value="CL">CLIENTE</option>
                                 </select>
                             </div>
                         </div>
                     </div>
                     <!-- /.col -->
-
-                    <div class="col-sm-2 invoice-col">
+                </div>
+                <div class="row invoice-info">
+                    <div class="col-sm-4 invoice-col">
                         <div class="form-group">
                             <div class="input-group input-group-sm">
                                 <select class="form-control" v-model="codigo_deposito">
@@ -68,7 +69,7 @@
                     </div>
                     <!-- /.col -->
 
-                    <div class="col-sm-2 invoice-col">
+                    <div class="col-sm-4 invoice-col">
                         <div class="form-group">
                             <div class="input-group input-group-sm">
                                 <select class="form-control" v-model="codigo_formapago">
@@ -80,7 +81,7 @@
                     </div>
                     <!-- /.col -->
 
-                    <div class="col-sm-2 invoice-col">
+                    <div class="col-sm-4 invoice-col">
                         <div class="form-group">
                             <div class="input-group input-group-sm">
                                 <select class="form-control" v-model="codigo_condicionpago">
@@ -91,7 +92,6 @@
                         </div>
                     </div>
                     <!-- /.col -->
-
                 </div>
                 </div>
               </div>
@@ -146,8 +146,8 @@
                     <div class="col-sm-4 invoice-col">
                         <div class="form-group">
                             <div class="input-group input-group-sm">
-                                <select class="form-control" v-model="codigo_vendedor_gestion">
-                                    <option value=0>Vendedor Gestion...</option>
+                                <select class="form-control" v-model="codigo_vendedor_venta">
+                                    <option value=0>Vendedor Venta...</option>
                                     <option v-for="lvendedor_gestion in lvendedores_gestion" :key="lvendedor_gestion.id" :value="lvendedor_gestion.id">{{ lvendedor_gestion.nombre }}</option>
                                 </select>
                             </div>
@@ -158,8 +158,8 @@
                     <div class="col-sm-4 invoice-col">
                         <div class="form-group">
                             <div class="input-group input-group-sm">
-                                <select class="form-control" v-model="codigo_vendedor_venta">
-                                    <option value=0>Vendedor Venta...</option>
+                                <select class="form-control" v-model="codigo_vendedor_gestion">
+                                    <option value=0>Vendedor Gestion...</option>
                                     <option v-for="lvendedor_gestion in lvendedores_gestion" :key="lvendedor_gestion.id" :value="lvendedor_gestion.id">{{ lvendedor_gestion.nombre }}</option>
                                 </select>
                             </div>
@@ -172,135 +172,141 @@
               <!-- /.row -->
 
               <!-- Table row -->
-              <div class="row">
-                <div class="col-12 table-responsive">
-                  <table class="table table-striped table-sm">
-                    <thead>
-                        <tr>
-                            <th>Producto</th>
-                            <th>Descripcion</th>
-                            <th>Observacion</th>
-                            <th>Flete</th>
-                            <th>%Venta</th>
-                            <th>%Gestion</th>
-                            <th>Cantidad</th>
-                            <th>Precio</th>
-                            <th>Subtotal</th>
-                            <th></th>
-                        </tr>
-                        <tr>
-                            <td style="width: 5.5%" class="col-sm-2 invoice-col">
-                                <div class="form-group">
-                                    <div class="input-group input-group-sm">
-                                        <input v-model="codigo_producto" type="number" name="codigo_producto" ref="codigo_producto" placeholder="(F2)"
-                                            @keydown ="keyMonitor" class="form-control form-control-sm">
-                                    </div>
-                                </div>
-                            </td>
-                            <!-- /.col -->
-                            <td style="width: 35%" class="col-sm-6 invoice-col">
-                                <div class="form-group">
-                                    <div class="input-group input-group-sm">
-                                        <input v-model="nombre_producto" type="text" name="nombre_producto"
-                                               class="form-control form-control-sm" disabled>
-                                    </div>
-                                </div>
-                            </td>
-                            <!-- /.col -->                            
-                            <td style="width: 26.5%" class="col-sm-6 invoice-col">
-                                <div class="form-group">
-                                    <div class="input-group input-group-sm">
-                                        <input v-model="obs_producto" type="text" name="obs_producto"
-                                               class="form-control form-control-sm">
-                                    </div>
-                                </div>
-                            </td>
-                            <!-- /.col -->                            
-                            <td style="width: 5.5%" class="col-sm-1 invoice-col">
-                                <div class="form-group">
-                                    <div class="input-group input-group-sm">
-                                        <input v-model="flete_producto" type="number" name="flete_producto"
-                                               @keydown ="keyMonitor" class="form-control form-control-sm" :disabled="tipo != 'CL' ? true : false">
-                                    </div>
-                                </div>
-                            </td>
-                            <!-- /.col -->
-                            <td style="width: 5.5%" class="col-sm-1 invoice-col">
-                                <div class="form-group">
-                                    <div class="input-group input-group-sm">
-                                        <input v-model="comision_venta_producto" type="number" name="comision_venta_producto"
-                                               @keydown ="keyMonitor" class="form-control form-control-sm" :disabled="tipo != 'CL' ? true : false">
-                                    </div>
-                                </div>
-                            </td>
-                            <!-- /.col -->
-                            <td style="width: 5.5%" class="col-sm-1 invoice-col">
-                                <div class="form-group">
-                                    <div class="input-group input-group-sm">
-                                        <input v-model="comision_gestion_producto" type="number" name="comision_gestion_producto"
-                                               @keydown ="keyMonitor" class="form-control form-control-sm" :disabled="tipo != 'CL' ? true : false">
-                                    </div>
-                                </div>
-                            </td>
-                            <!-- /.col -->
-                            <td style="width: 5.5%" class="col-sm-1 invoice-col">
-                                <div class="form-group">
-                                    <div class="input-group input-group-sm">
-                                        <input v-model="cantidad_producto" type="number" name="cantidad_producto"
-                                               class="form-control form-control-sm">
-                                    </div>
-                                </div>
-                            </td>
-                            <!-- /.col -->
-                            <td style="width: 5.5%" class="col-sm-1 invoice-col">
-                                <div class="form-group">
-                                    <div class="input-group input-group-sm">
-                                        <input v-model="precio_producto" type="number" name="precio_producto"
-                                               @keydown ="keyMonitor" class="form-control form-control-sm">
-                                    </div>
-                                </div>
-                            </td>
-                            <!-- /.col -->
-                            <td style="width: 5.5%" class="col-sm-1 invoice-col">
-                                <div class="form-group">
-                                    <div class="input-group input-group-sm">
-                                        <input v-model="subtotal_producto" type="text" name="subtotal_producto" 
-                                               class="form-control form-control-sm" disabled>
-                                    </div>
-                                </div>
-                            </td>                        
-                            <!-- /.col -->
-                        </tr>                            
-                    </thead>
-                    <tbody>
-                        <tr class="item" v-for="(item, index) in items" :key="item.cod">
-                            <td>{{ item.cod}}</td>
-                            <td>{{ item.descripcion}}</td>
-                            <td>{{ item.obs}}</td>
-                            <td>${{ item.flete }}</td>
-                            <td>${{ item.comision_venta }}</td>
-                            <td>${{ item.comision_gestion }}</td>
-                            <td>{{ item.cantidad }}</td>
-                            <td>${{ item.precio }}</td>
-                            <td>${{ ((item.precio * item.cantidad) + parseFloat(item.flete) + parseFloat(item.comision_venta) + parseFloat(item.comision_gestion)) | currency }}</td>
-                            <td>
-                                <a href="#" @click="removerProducto(index)">
-                                    <i class="fa fa-trash-alt red"></i>
-                                </a>                            
-                            </td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>Total:</td>
-                            <td>${{ total | currency }}</td>
-                        </tr>
-                    </tbody>
-                  </table>
+              <div class="card">
+                <div class="card-header border-light bg-dark">Productos</div>
+                <div class="card-body">              
+                    <div class="row">
+                        <div class="col-12 table-responsive">
+                        <table class="table table-striped table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Descripcion</th>
+                                    <th>Observacion</th>
+                                    <th>Flete</th>
+                                    <th>% Ve</th>
+                                    <th>% Ge</th>
+                                    <th>Cant</th>
+                                    <th>Precio</th>
+                                    <th>Subtotal</th>
+                                    <th></th>
+                                </tr>
+                                <tr>
+                                    <td style="width: 5.5%" class="col-sm-2 invoice-col">
+                                        <div class="form-group">
+                                            <div class="input-group input-group-sm">
+                                                <input v-model="codigo_producto" type="number" name="codigo_producto" ref="codigo_producto" placeholder="(F2)"
+                                                    @keydown ="keyMonitor" class="form-control form-control-sm">
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <!-- /.col -->
+                                    <td style="width: 35%" class="col-sm-6 invoice-col">
+                                        <div class="form-group">
+                                            <div class="input-group input-group-sm">
+                                                <input v-model="nombre_producto" type="text" name="nombre_producto"
+                                                    class="form-control form-control-sm" disabled>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <!-- /.col -->                            
+                                    <td style="width: 26.5%" class="col-sm-6 invoice-col">
+                                        <div class="form-group">
+                                            <div class="input-group input-group-sm">
+                                                <input v-model="obs_producto" type="text" name="obs_producto"
+                                                    class="form-control form-control-sm">
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <!-- /.col -->                            
+                                    <td style="width: 5.5%" class="col-sm-1 invoice-col">
+                                        <div class="form-group">
+                                            <div class="input-group input-group-sm">
+                                                <input v-model="flete_producto" type="number" name="flete_producto"
+                                                    @keydown ="keyMonitor" class="form-control form-control-sm" :disabled="tipo != 'CL' ? true : false">
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <!-- /.col -->
+                                    <td style="width: 5.5%" class="col-sm-1 invoice-col">
+                                        <div class="form-group">
+                                            <div class="input-group input-group-sm">
+                                                <input v-model="comision_venta_producto" type="number" name="comision_venta_producto"
+                                                    @keydown ="keyMonitor" class="form-control form-control-sm" :disabled="tipo != 'CL' ? true : false">
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <!-- /.col -->
+                                    <td style="width: 5.5%" class="col-sm-1 invoice-col">
+                                        <div class="form-group">
+                                            <div class="input-group input-group-sm">
+                                                <input v-model="comision_gestion_producto" type="number" name="comision_gestion_producto"
+                                                    @keydown ="keyMonitor" class="form-control form-control-sm" :disabled="tipo != 'CL' ? true : false">
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <!-- /.col -->
+                                    <td style="width: 5.5%" class="col-sm-1 invoice-col">
+                                        <div class="form-group">
+                                            <div class="input-group input-group-sm">
+                                                <input v-model="cantidad_producto" type="number" name="cantidad_producto"
+                                                    class="form-control form-control-sm">
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <!-- /.col -->
+                                    <td style="width: 5.5%" class="col-sm-1 invoice-col">
+                                        <div class="form-group">
+                                            <div class="input-group input-group-sm">
+                                                <input v-model="precio_producto" type="number" name="precio_producto"
+                                                    @keydown ="keyMonitor" class="form-control form-control-sm">
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <!-- /.col -->
+                                    <td style="width: 5.5%" class="col-sm-1 invoice-col">
+                                        <div class="form-group">
+                                            <div class="input-group input-group-sm">
+                                                <input v-model="subtotal_producto" type="text" name="subtotal_producto" 
+                                                    class="form-control form-control-sm" disabled>
+                                            </div>
+                                        </div>
+                                    </td>                        
+                                    <!-- /.col -->
+                                </tr>                            
+                            </thead>
+                            <tbody>
+                                <tr class="item" v-for="(item, index) in items" :key="item.cod">
+                                    <td>{{ item.cod}}</td>
+                                    <td>{{ item.descripcion}}</td>
+                                    <td>{{ item.obs}}</td>
+                                    <td>${{ item.flete }}</td>
+                                    <td>${{ item.comision_venta }}</td>
+                                    <td>${{ item.comision_gestion }}</td>
+                                    <td>{{ item.cantidad }}</td>
+                                    <td>${{ item.precio }}</td>
+                                    <td>${{ ((item.precio * item.cantidad) + parseFloat(item.flete) + parseFloat(item.comision_venta) + parseFloat(item.comision_gestion)) | currency }}</td>
+                                    <td>
+                                        <a href="#" @click="removerProducto(index)">
+                                            <i class="fa fa-trash-alt red"></i>
+                                        </a>                            
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>Total:</td>
+                                    <td>${{ total | currency }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        </div>
+                        <!-- /.col -->
+                    </div>
                 </div>
-                <!-- /.col -->
               </div>
+
               <!-- /.row -->
               <div class="row">
                   <div class="col col-md-12">
@@ -744,7 +750,7 @@
                     total_orden: this.total,
                     numero_negocio: this.numero_negocio,
                     obs: this.observacion,
-                    codigo_cliente: this.codigo_formapago, 
+                    codigo_cliente: this.codigo_cliente, 
                     codigo_vendedor_venta: this.codigo_vendedor_venta, 
                     codigo_vendedor_gestion: this.codigo_vendedor_gestion, 
                     items: this.items})
@@ -767,9 +773,13 @@
                 axios.put('api/ordenCompra/'+this.orenes_compra_id_edicion, {
                     codigo_proveedor: this.codigo_proveedor, 
                     fecha_orden_compra: this.fecha_orden_compra,
+                    tipo: this.tipo,
                     total_orden: this.total,
                     numero_negocio: this.numero_negocio,
                     obs: this.observacion,
+                    codigo_cliente: this.codigo_cliente, 
+                    codigo_vendedor_venta: this.codigo_vendedor_venta, 
+                    codigo_vendedor_gestion: this.codigo_vendedor_gestion, 
                     items: this.items})
                 .then(() => {
                     Fire.$emit('AfterAction');
@@ -797,6 +807,9 @@
                     me.codigo_proveedor = me.orden_compra.proveedor_id;
                     me.codigo_deposito = me.orden_compra.deposito_id;
                     me.codigo_formapago = me.orden_compra.formapago_id;
+                    me.codigo_cliente = me.orden_compra.cliente_id;
+                    me.codigo_vendedor_venta = me.orden_compra.vendedor_venta_id;
+                    me.codigo_vendedor_gestion = me.orden_compra.vendedor_gestion_id;
                     me.codigo_condicionpago = me.orden_compra.condicionpago_id;
                     me.fecha_orden_compra = new Date(me.orden_compra.fecha);
                     me.fecha_orden_compra = me.fecha_orden_compra.setDate(me.fecha_orden_compra.getDate() + 1);

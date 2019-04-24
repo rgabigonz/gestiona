@@ -30,6 +30,16 @@
                     </div>
                 </div>
                 <!-- /.col -->
+
+                <div class="col-sm-4 invoice-col">
+                    <div class="form-group">
+                        <div class="input-group input-group-sm">
+                            <input v-model="numero_factura" type="text" name="numero_factura" placeholder="Numero Factura"
+                                class="form-control form-control-sm">
+                        </div>
+                    </div>
+                </div>
+                <!-- /.col -->
               </div>
 
               <!-- info row -->
@@ -43,35 +53,15 @@
                     </div>
                 </div>
                 <!-- /.col -->
-                <div class="col-sm-6 invoice-col">
+                <div class="col-sm-4 invoice-col">
                     <div class="form-group">
                         <input v-model="cliente.nombre" type="text" name="nombre_cliente" class="form-control form-control-sm" disabled>
                     </div>
                 </div>
                 <!-- /.col -->
-                <div class="col-sm-4 invoice-col">
-                    <div class="form-group">
-                        <input v-model="cliente.correo_electronico" type="text" name="correo_cliente" class="form-control form-control-sm" disabled>
-                    </div>
-                </div>
-                <!-- /.col -->
-              </div>
-              <!-- /.row -->
-
-              <!-- info row -->
-              <div class="row invoice-info">
-                <div class="col-sm-2 invoice-col">
-                </div>
-                <!-- /.col -->
                 <div class="col-sm-6 invoice-col">
                     <div class="form-group">
                         <input v-model="cliente.direccion" type="text" name="direccion_cliente" class="form-control form-control-sm" disabled>
-                    </div>
-                </div>
-                <!-- /.col -->
-                <div class="col-sm-4 invoice-col">
-                    <div class="form-group">
-                        <input v-model="cliente.telefono" type="text" name="telefono_cliente" class="form-control form-control-sm" disabled>
                     </div>
                 </div>
                 <!-- /.col -->
@@ -322,6 +312,7 @@
                 cantidad_producto: 0,
                 nombre_producto: '',
                 precio_producto: 0,
+                numero_factura: '',
                 nota_pedido: {},
                 nota_pedido_detalle: {}
             }
@@ -513,6 +504,7 @@
                 axios.post('api/notaPedido', {
                     codigo_cliente: this.codigo_cliente, 
                     fecha_nota_pedido: this.fecha_nota_pedido,
+                    numero_factura: this.numero_factura,
                     total_pedido: this.total,
                     items: this.items})
                 .then(() => {
@@ -534,6 +526,7 @@
                 axios.put('api/notaPedido/'+this.notas_pedido_id_edicion, {
                     codigo_cliente: this.codigo_cliente, 
                     fecha_nota_pedido: this.fecha_nota_pedido,
+                    numero_factura: this.numero_factura,
                     total_pedido: this.total,
                     items: this.items})
                 .then(() => {
@@ -561,6 +554,7 @@
                     me.codigo_cliente = me.nota_pedido.cliente_id;
                     me.fecha_nota_pedido = new Date(me.nota_pedido.fecha);
                     me.fecha_nota_pedido = me.fecha_nota_pedido.setDate(me.fecha_nota_pedido.getDate() + 1);
+                    me.numero_factura = me.nota_pedido.numero_factura;
 
                     me.cargarCliente(me.codigo_cliente);
 

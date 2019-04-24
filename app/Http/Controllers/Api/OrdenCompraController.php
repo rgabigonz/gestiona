@@ -74,10 +74,12 @@ class OrdenCompraController extends Controller
         $orden_compra->obs = $request->obs;
 
         //Si es de cliente
-        $orden_compra->cliente_id = $request->codigo_cliente;
-        $orden_compra->vendedor_venta_id = $request->codigo_vendedor_venta;
-        $orden_compra->vendedor_gestion_id = $request->codigo_vendedor_gestion;
-        
+        if ($request->tipo == 'CL') {
+            $orden_compra->cliente_id = $request->codigo_cliente;
+            $orden_compra->vendedor_venta_id = $request->codigo_vendedor_venta;
+            $orden_compra->vendedor_gestion_id = $request->codigo_vendedor_gestion;
+        }
+
         $orden_compra->save();
 
         for($i = 0; $i < $cantidad_items; $i++)
@@ -109,6 +111,14 @@ class OrdenCompraController extends Controller
         $OrdenCompra->total = $request->total_orden;
         $OrdenCompra->numero_negocio = $request->numero_negocio;
         $OrdenCompra->obs = $request->obs;
+
+        //Si es de cliente
+        if ($request->tipo == 'CL') {
+            $OrdenCompra->cliente_id = $request->codigo_cliente;
+            $OrdenCompra->vendedor_venta_id = $request->codigo_vendedor_venta;
+            $OrdenCompra->vendedor_gestion_id = $request->codigo_vendedor_gestion;
+        }
+
         $OrdenCompra->update();
 
         $OrdenCompraDetalle = OrdenCompraDetalle::where('orden_compra_id', $id)->delete();
