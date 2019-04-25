@@ -4,7 +4,7 @@
           <div class="col-12">
             <!-- Main content -->
             <div class="invoice p-3 mb-3">
-              <!-- title row -->
+              <!-- Titulo row -->
               <div class="row">
                 <div class="col-12">
                   <h4>
@@ -13,10 +13,12 @@
                   <div>Nota de Pedido N° {{ orenes_compra_id_edicion }}</div>
                 </div>
                 <!-- /.col -->
+
               </div>
+              <!-- /.row -->
 
               <br>
-              <!-- info row -->
+              <!-- Datos NP row -->
               <div class="card">
                 <div class="card-header border-light bg-secondary">Datos Nota de Pedido - Proveedor</div>
                 <div class="card-body">
@@ -92,6 +94,7 @@
                         </div>
                     </div>
                     <!-- /.col -->
+
                 </div>
                 </div>
               </div>
@@ -110,6 +113,7 @@
                             </div>
                         </div>
                         <!-- /.col -->
+
                         <div class="col-sm-4 invoice-col">
                             <div class="form-group">
                                 <input v-model="proveedor.nombre" type="text" name="nombre_proveedor" class="form-control form-control-sm" disabled>
@@ -121,8 +125,10 @@
                             </div>
                         </div>
                         <!-- /.col -->
+
                     </div>
                     <!-- /.row -->
+
                 </div>
               </div>
 
@@ -133,6 +139,7 @@
                 <div class="row invoice-info">
                     <div class="col-sm-4 invoice-col">
                         <div class="form-group">
+                            <!-- <label class="control-label">Cliente</label> -->
                             <div class="input-group input-group-sm">
                                 <select class="form-control" v-model="codigo_cliente">
                                     <option value=0>Cliente...</option>
@@ -166,12 +173,13 @@
                         </div>
                     </div>
                     <!-- /.col -->
+
                 </div>
                 </div>
               </div>
               <!-- /.row -->
 
-              <!-- Table row -->
+              <!-- Tabla de productos row -->
               <div class="card">
                 <div class="card-header border-light bg-dark">Productos</div>
                 <div class="card-body">              
@@ -182,17 +190,17 @@
                                 <tr>
                                     <th>Producto</th>
                                     <th>Descripcion</th>
-                                    <th>Observacion</th>
+                                    <!--<th>Observacion</th>-->
                                     <th>Flete</th>
-                                    <th>% Ve</th>
-                                    <th>% Ge</th>
-                                    <th>Cant</th>
+                                    <th>% Venta</th>
+                                    <th>% Gestion</th>
+                                    <th>Cantidad</th>
                                     <th>Precio</th>
                                     <th>Subtotal</th>
                                     <th></th>
                                 </tr>
                                 <tr>
-                                    <td style="width: 5.5%" class="col-sm-2 invoice-col">
+                                    <td style="width: 10%" class="col-sm-2 invoice-col">
                                         <div class="form-group">
                                             <div class="input-group input-group-sm">
                                                 <input v-model="codigo_producto" type="number" name="codigo_producto" ref="codigo_producto" placeholder="(F2)"
@@ -201,7 +209,8 @@
                                         </div>
                                     </td>
                                     <!-- /.col -->
-                                    <td style="width: 35%" class="col-sm-6 invoice-col">
+
+                                    <td style="width: 30%" class="col-sm-6 invoice-col">
                                         <div class="form-group">
                                             <div class="input-group input-group-sm">
                                                 <input v-model="nombre_producto" type="text" name="nombre_producto"
@@ -209,17 +218,19 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <!-- /.col -->                            
-                                    <td style="width: 26.5%" class="col-sm-6 invoice-col">
+                                    <!-- /.col -->
+
+                                    <!--<td style="width: 26.5%" class="col-sm-6 invoice-col">
                                         <div class="form-group">
                                             <div class="input-group input-group-sm">
                                                 <input v-model="obs_producto" type="text" name="obs_producto"
                                                     class="form-control form-control-sm">
                                             </div>
                                         </div>
-                                    </td>
-                                    <!-- /.col -->                            
-                                    <td style="width: 5.5%" class="col-sm-1 invoice-col">
+                                    </td>-->
+                                    <!-- /.col -->
+
+                                    <td style="width: 10%" class="col-sm-1 invoice-col">
                                         <div class="form-group">
                                             <div class="input-group input-group-sm">
                                                 <input v-model="flete_producto" type="number" name="flete_producto"
@@ -228,7 +239,8 @@
                                         </div>
                                     </td>
                                     <!-- /.col -->
-                                    <td style="width: 5.5%" class="col-sm-1 invoice-col">
+
+                                    <td style="width: 10%" class="col-sm-1 invoice-col">
                                         <div class="form-group">
                                             <div class="input-group input-group-sm">
                                                 <input v-model="comision_venta_producto" type="number" name="comision_venta_producto"
@@ -237,7 +249,8 @@
                                         </div>
                                     </td>
                                     <!-- /.col -->
-                                    <td style="width: 5.5%" class="col-sm-1 invoice-col">
+
+                                    <td style="width: 10%" class="col-sm-1 invoice-col">
                                         <div class="form-group">
                                             <div class="input-group input-group-sm">
                                                 <input v-model="comision_gestion_producto" type="number" name="comision_gestion_producto"
@@ -246,7 +259,8 @@
                                         </div>
                                     </td>
                                     <!-- /.col -->
-                                    <td style="width: 5.5%" class="col-sm-1 invoice-col">
+
+                                    <td style="width: 10%" class="col-sm-1 invoice-col">
                                         <div class="form-group">
                                             <div class="input-group input-group-sm">
                                                 <input v-model="cantidad_producto" type="number" name="cantidad_producto"
@@ -255,7 +269,8 @@
                                         </div>
                                     </td>
                                     <!-- /.col -->
-                                    <td style="width: 5.5%" class="col-sm-1 invoice-col">
+
+                                    <td style="width: 10%" class="col-sm-1 invoice-col">
                                         <div class="form-group">
                                             <div class="input-group input-group-sm">
                                                 <input v-model="precio_producto" type="number" name="precio_producto"
@@ -264,7 +279,8 @@
                                         </div>
                                     </td>
                                     <!-- /.col -->
-                                    <td style="width: 5.5%" class="col-sm-1 invoice-col">
+
+                                    <td style="width: 10%" class="col-sm-1 invoice-col">
                                         <div class="form-group">
                                             <div class="input-group input-group-sm">
                                                 <input v-model="subtotal_producto" type="text" name="subtotal_producto" 
@@ -273,6 +289,7 @@
                                         </div>
                                     </td>                        
                                     <!-- /.col -->
+
                                 </tr>                            
                             </thead>
                             <tbody>
@@ -303,11 +320,13 @@
                         </table>
                         </div>
                         <!-- /.col -->
+
                     </div>
                 </div>
               </div>
-
               <!-- /.row -->
+
+              <!-- Observaciones row -->
               <div class="row">
                   <div class="col col-md-12">
                       <div class="form-group">
@@ -317,12 +336,17 @@
                   </div>
               </div>
               <!-- /.row -->
+
             </div>
             <!-- /.invoice -->
-          </div><!-- /.col -->
-        </div><!-- /.row -->
 
-        <!-- this row will not appear when printing -->
+          </div>
+          <!-- /.col -->
+
+        </div>
+        <!-- /.row -->
+
+        <!-- Botones row - this row will not appear when printing -->
         <div class="row no-print">
             <div class="col-12">
                 <button v-if="!modoEdicion" type="button" class="btn btn-success float-right" @click="creaOrdenCompra()">
@@ -499,6 +523,7 @@
             }
         },
         methods: {
+            // Monitor de teclas
             keyMonitor(event) {
                 let origenInput = event.target.name;
                 let origenKey = event.key || String.fromCharCode(event.keyCode);
@@ -545,7 +570,7 @@
                 } 
             },
 
-            //INICIO Lista de Seleccion proveedores
+            //Lista de Seleccion proveedores
             mostrarLProveedores() {
                 this.cargarProveedores(1, this.sBuscar, this.sCriterio);
                 $('#ventanaLProveedores').modal('show');
@@ -571,9 +596,8 @@
                 this.cargarProveedor(proveedor);
                 this.cerrarLProveedores();
             },
-            //FIN Lista de Seleccion proveedores
 
-            //INICIO Lista de Seleccion productos
+            //Lista de Seleccion productos
             mostrarLProductos() {
                 this.cargarProductos(1, this.sBuscar, this.sCriterio);
                 $('#ventanaLProductos').modal('show');
@@ -599,8 +623,8 @@
                 this.cargarProducto(producto);
                 this.cerrarLProductos();
             },
-            //FIN Lista de Seleccion productos
 
+            // Cargas de datos de listas
             cargarProveedor(cCod) {
                 let me = this;                
                 var url = 'api/proveedor/devuelveDatosProveedor/'+cCod;
@@ -696,6 +720,8 @@
                     }
                 });
             },
+
+            // Operaciones con productos
             agregaProducto() {
                 if (this.cantidad_producto > 0 && this.precio_producto > 0) {
                     if (this.existeProducto(parseInt(this.codigo_producto)) === false) {
@@ -737,6 +763,8 @@
                 }
                 return false;
             },
+
+            // Operaciones con NP Proveedores (OC)
             creaOrdenCompra() {
                 this.$Progress.start();
                 
