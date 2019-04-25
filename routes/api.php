@@ -85,6 +85,7 @@ Route::middleware('auth:api')->group( function () {
     Route::put('/cliente/activar/{cliente}', 'Api\ClienteController@activar');
 
     // Rutas Proveedores
+    Route::get('/proveedor/cargaProveedores', 'Api\ProveedorController@cargaProveedores');
     Route::get('/proveedor/cargaTD', 'Api\ProveedorController@cargaTD');
     Route::get('/proveedor/devuelveDatosProveedor/{proveedor}', 'Api\ProveedorController@devuelveDatosProveedor');
 

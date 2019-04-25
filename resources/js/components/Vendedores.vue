@@ -24,7 +24,7 @@
             </div>
             <div class="card border-info mb-3">
               <div class="card-header border-light">
-                <h3 class="card-title">Lista de Vendedores</h3>
+                <h3 class="card-title">Lista de Distribuidores</h3>
                 <div class="card-tools">
                     <button class="btn btn-success" @click="nuevoModal()"><i class="fas fa-plus fa-fw"></i></button>
                 </div>
@@ -92,8 +92,8 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 v-show="!modoEdicion" class="modal-title" id="ventanaModalLabel">Agregar Vendedor</h5>
-                        <h5 v-show="modoEdicion" class="modal-title" id="ventanaModalLabel">Editar Vendedor</h5>
+                        <h5 v-show="!modoEdicion" class="modal-title" id="ventanaModalLabel">Agregar Distribuidor</h5>
+                        <h5 v-show="modoEdicion" class="modal-title" id="ventanaModalLabel">Editar Distribuidor</h5>
                         <button type="button" class="close" @click="cerrarModal()" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>

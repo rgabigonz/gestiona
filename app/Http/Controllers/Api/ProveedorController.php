@@ -135,4 +135,12 @@ class ProveedorController extends Controller
         ];
 
     }    
+
+    public function cargaProveedores()
+    {
+        $proveedores = Proveedor::orderBy('nombre', 'asc')->get();
+        return [
+            'proveedores' => $proveedores
+        ];
+    }     
 }

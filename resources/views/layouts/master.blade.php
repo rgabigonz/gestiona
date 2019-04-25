@@ -103,7 +103,25 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <i class="fas fa-cart-arrow-down nav-icon"></i>
                   <p>Formas de Venta</p>
                 </router-link>
-              </li>              
+              </li>      
+              <li class="nav-item">
+                <router-link to="/proveedores" class="nav-link">
+                  <i class="fas fa-user-alt nav-icon"></i>
+                  <p>Proveedores</p>
+                </router-link>
+              </li>    
+              <li class="nav-item">
+                <router-link to="/clientes" class="nav-link">
+                  <i class="fas fa-user-alt nav-icon"></i>
+                  <p>Clientes</p>
+                </router-link>
+              </li>
+              <li class="nav-item">
+                <router-link to="/vendedores" class="nav-link">
+                  <i class="fas fa-user-alt nav-icon"></i>
+                  <p>Distribuidores</p>
+                </router-link>
+              </li>                                
             </ul>
           </li>
           <li class="nav-item has-treeview">
@@ -115,12 +133,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </p>
             </a>
             <ul class="nav nav-treeview">
-            <li class="nav-item">
-                <router-link to="/proveedores" class="nav-link">
-                  <i class="fas fa-user-alt nav-icon"></i>
-                  <p>Proveedores</p>
-                </router-link>
-              </li>
               <li class="nav-item">
                 <router-link to="/ordenescompra" class="nav-link">
                   <i class="fas fa-file-invoice nav-icon"></i>
@@ -138,18 +150,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </p>
             </a>
             <ul class="nav nav-treeview">
-            <li class="nav-item">
-                <router-link to="/clientes" class="nav-link">
-                  <i class="fas fa-user-alt nav-icon"></i>
-                  <p>Clientes</p>
-                </router-link>
-              </li>
-              <li class="nav-item">
-                <router-link to="/vendedores" class="nav-link">
-                  <i class="fas fa-user-alt nav-icon"></i>
-                  <p>Vendedores</p>
-                </router-link>
-              </li>
               <li class="nav-item">
                 <router-link to="/notaspedido" class="nav-link">
                   <i class="fas fa-file-invoice nav-icon"></i>
