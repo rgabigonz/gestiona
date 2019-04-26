@@ -54,6 +54,16 @@ Route::middleware('auth:api')->group( function () {
     Route::put('/formapago/desactivar/{formapago}', 'Api\FormaPagoController@desactivar');
     Route::put('/formapago/activar/{formapago}', 'Api\FormaPagoController@activar');
 
+    // Rutas Condiciones Pago
+    Route::get('/condicionpago/cargaCondicionesPago', 'Api\CondicionPagoController@cargaCondicionesPago');
+
+    Route::apiResources([
+        'condicionpago' => 'Api\CondicionPagoController'
+    ]);
+
+    Route::put('/condicionpago/desactivar/{condicionpago}', 'Api\CondicionPagoController@desactivar');
+    Route::put('/condicionpago/activar/{condicionpago}', 'Api\CondicionPagoController@activar');
+
     // Rutas Formas Venta
     Route::apiResources([
         'formaventa' => 'Api\FormaVentaController'
@@ -63,6 +73,7 @@ Route::middleware('auth:api')->group( function () {
     Route::put('/formaventa/activar/{formaventa}', 'Api\FormaVentaController@activar');
 
     // Rutas Productos
+    Route::get('/producto/cargaProductos', 'Api\ProductoController@cargaProductos');
     Route::get('/producto/devuelveDatosProducto/{producto}', 'Api\ProductoController@devuelveDatosProducto');
 
     Route::apiResources([

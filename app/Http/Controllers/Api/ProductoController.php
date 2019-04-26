@@ -128,4 +128,12 @@ class ProductoController extends Controller
             'datoProducto' => $datoProducto
         ];
     }    
+
+    public function cargaProductos()
+    {
+        $productos = Producto::orderBy('nombre', 'asc')->get();
+        return [
+            'productos' => $productos
+        ];
+    }       
 }

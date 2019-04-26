@@ -197,7 +197,7 @@
                             <thead>
                                 <tr>
                                     <th>Producto</th>
-                                    <th>Descripcion</th>
+                                    <!-- <th>Descripcion</th> -->
                                     <!--<th>Observacion</th>-->
                                     <th>Cantidad</th>
                                     <th>Importe</th>
@@ -208,24 +208,28 @@
                                     <th></th>
                                 </tr>
                                 <tr>
-                                    <td style="width: 10%" class="col-sm-2 invoice-col">
+                                    <td style="width: 40%" class="col-sm-4 invoice-col">
                                         <div class="form-group">
                                             <div class="input-group input-group-sm">
-                                                <input v-model="codigo_producto" type="number" name="codigo_producto" ref="codigo_producto" placeholder="(F2)"
-                                                    @keydown ="keyMonitor" class="form-control form-control-sm">
+                                                <!-- <input v-model="codigo_producto" type="number" name="codigo_producto" ref="codigo_producto" placeholder="(F2)"
+                                                    @keydown ="keyMonitor" class="form-control form-control-sm"> -->
+                                                <select class="form-control" v-model="codigo_producto" ref="codigo_producto" @change="cargarProducto(codigo_producto)">
+                                                    <option value=0>Producto...</option>
+                                                    <option v-for="lproducto in lproductos" :key="lproducto.id" :value="lproducto.id">{{ lproducto.nombre }}</option>
+                                                </select>                                                    
                                             </div>
                                         </div>
                                     </td>
                                     <!-- /.col -->
 
-                                    <td style="width: 30%" class="col-sm-6 invoice-col">
+                                    <!-- <td style="width: 30%" class="col-sm-6 invoice-col">
                                         <div class="form-group">
                                             <div class="input-group input-group-sm">
                                                 <input v-model="nombre_producto" type="text" name="nombre_producto"
                                                     class="form-control form-control-sm" disabled>
                                             </div>
                                         </div>
-                                    </td>
+                                    </td> -->
                                     <!-- /.col -->
 
                                     <!--<td style="width: 26.5%" class="col-sm-6 invoice-col">
@@ -302,7 +306,7 @@
                             </thead>
                             <tbody>
                                 <tr class="item" v-for="(item, index) in items" :key="item.cod">
-                                    <td>{{ item.cod}}</td>
+                                    <!-- <td>{{ item.cod}}</td> -->
                                     <td>{{ item.descripcion}}</td>
                                     <!-- <td>{{ item.obs}}</td> -->
                                     <td>{{ item.cantidad }}</td>
@@ -505,6 +509,7 @@
                 lcondicionespagos: {},
                 lclientes: {},
                 lproveedores: {},
+                lproductos: {},
                 lvendedores_venta: {},
                 lvendedores_gestion: {},
                 codigo_proveedor: 0,
@@ -517,7 +522,7 @@
                 codigo_vendedor_gestion: 0,
                 items: [],
                 producto: {},
-                codigo_producto: '',
+                codigo_producto: 0,
                 cantidad_producto: 0,
                 nombre_producto: '',
                 obs_producto: '',
@@ -558,7 +563,7 @@
                                 this.mostrarLProductos();
                                 break;
                             case 'Tab':    
-                                this.cargarProducto(this.codigo_producto);
+                                //this.cargarProducto(this.codigo_producto);
                                 break;
                             default:
                                 //code block
@@ -663,7 +668,7 @@
                 });
             },
             cargarProducto(pCod) {
-                let me = this;                
+                let me = this;
                 var url = 'api/producto/devuelveDatosProducto/'+pCod;
                 axios.get(url).then(data => {
                     var response = data.data;
@@ -671,7 +676,7 @@
                     me.nombre_producto = me.producto.nombre;
                 }).catch((error) => {
                     me.producto = {};
-                    me.codigo_producto = '';
+                    me.codigo_producto = 0;
                     me.nombre_producto = '';
 
                     //Levo el foco al codigo de producto
@@ -753,13 +758,25 @@
                     }
                 });
             },
+            cargaProductos() {
+                let me = this;                
+                var url = 'api/producto/cargaProductos';
+                axios.get(url).then(data => {
+                    var response = data.data;
+                    me.lproductos = response.productos;
+                }).catch((error) => {
+                    if (error.response.status == 401) {
+                        swal('Error!', 'La sesion ha caducado.', 'warning');
+                    }
+                });
+            },
 
             // Operaciones con productos
             agregaProducto() {
                 if (this.cantidad_producto > 0 && this.precio_producto > 0) {
                     if (this.existeProducto(parseInt(this.codigo_producto)) === false) {
                         this.items.push({ cod: parseInt(this.codigo_producto), 
-                                        descripcion: this.producto.nombre, 
+                                        descripcion: this.nombre_producto, 
                                         obs: this.obs_producto, 
                                         flete: this.flete_producto, 
                                         comision_venta: this.comision_venta_producto, 
@@ -770,7 +787,7 @@
                     }
                 }
 
-                this.codigo_producto = '';
+                this.codigo_producto = 0;
                 this.cantidad_producto = 0;
                 this.nombre_producto = '';
                 this.obs_producto = '';
@@ -916,6 +933,7 @@
             this.cargaClientes();
             this.cargaVendedores();
             this.cargaProveedores();
+            this.cargaProductos();
 
             this.orenes_compra_id_edicion = this.$route.params.ordenescompraId;
 

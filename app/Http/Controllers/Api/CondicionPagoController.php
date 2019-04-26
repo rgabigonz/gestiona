@@ -13,19 +13,31 @@ class CondicionPagoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
-    }
+        $sBuscar = $request->buscar;
+        $sCriterio = $request->criterio;
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        if(empty($sBuscar)) {
+            $condiciones_pago = CondicionPago::orderBy('descripcion', 'asc')->paginate(15);//where('state', '=', 'A')
+        } 
+        else {
+            $condiciones_pago = CondicionPago::where($sCriterio, 'like', '%' . $sBuscar . '%')//where('state', '=', 'A')
+            ->orderBy('descripcion', 'asc')
+            ->paginate(15);
+        }
+
+        return [
+            'pagination' => [
+                'total'         => $condiciones_pago->total(),
+                'current_page'  => $condiciones_pago->currentPage(),
+                'per_page'      => $condiciones_pago->perPage(),
+                'last_page'     => $condiciones_pago->lastPage(),
+                'from'          => $condiciones_pago->firstItem(),
+                'to'            => $condiciones_pago->lastItem(),
+            ],
+            'condiciones_pago' => $condiciones_pago
+        ];
     }
 
     /**
@@ -36,29 +48,15 @@ class CondicionPagoController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        $this->validate($request, [
+            'descripcion' => 'required|string'
+        ], [
+            'descripcion.required' => 'La descripcion es requerida'
+        ]);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\CondicionPago  $condicionPago
-     * @return \Illuminate\Http\Response
-     */
-    public function show(CondicionPago $condicionPago)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\CondicionPago  $condicionPago
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(CondicionPago $condicionPago)
-    {
-        //
+        return CondicionPago::create([
+            'descripcion' => $request['descripcion']
+        ]);
     }
 
     /**
@@ -68,20 +66,31 @@ class CondicionPagoController extends Controller
      * @param  \App\CondicionPago  $condicionPago
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, CondicionPago $condicionPago)
+    public function update(Request $request, $id)
     {
-        //
+        $condicion_pago = CondicionPago::findOrFail($id);
+
+        $this->validate($request, [
+            'descripcion' => 'required|string'
+        ], [
+            'descripcion.required' => 'La descripcion es requerida'
+        ]);
+
+        $condicion_pago->update($request->all());
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\CondicionPago  $condicionPago
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(CondicionPago $condicionPago)
+    public function desactivar(Request $request, $id)
     {
-        //
+        $condicion_pago = CondicionPago::findOrFail($id);
+        $condicion_pago->estado = 'D';
+        $condicion_pago->update();
+    }
+
+    public function activar(Request $request, $id)
+    {
+        $condicion_pago = CondicionPago::findOrFail($id);
+        $condicion_pago->estado = 'A';
+        $condicion_pago->update();
     }
 
     public function cargaCP()
