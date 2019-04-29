@@ -67,7 +67,10 @@ class OrdenCompraController extends Controller
         $orden_compra->formapago_id = $request->codigo_forma_pago;
         $orden_compra->condicionpago_id = $request->codigo_condicion_pago;
         $orden_compra->user_id = $user->id;
-        $orden_compra->tipo = $request->tipo;        
+
+        if (!empty($request->tipo))
+            $orden_compra->tipo = $request->tipo;
+        
         $orden_compra->total = $request->total_orden;
         $orden_compra->fecha = $fecha_compra->format('Y-m-d');
         $orden_compra->numero_negocio = $request->numero_negocio;
@@ -111,6 +114,21 @@ class OrdenCompraController extends Controller
         $OrdenCompra->total = $request->total_orden;
         $OrdenCompra->numero_negocio = $request->numero_negocio;
         $OrdenCompra->obs = $request->obs;
+
+        if (!empty($request->codigo_deposito))
+            $OrdenCompra->deposito_id = $request->codigo_deposito;
+        else
+            $OrdenCompra->deposito_id = null;
+
+        if (!empty($request->codigo_forma_pago))            
+            $OrdenCompra->formapago_id = $request->codigo_forma_pago;
+        else
+            $OrdenCompra->formapago_id = null;
+
+        if (!empty($request->codigo_condicion_pago))            
+            $OrdenCompra->condicionpago_id = $request->codigo_condicion_pago;
+        else
+            $OrdenCompra->condicionpago_id = null;
 
         //Si es de cliente
         if ($request->tipo == 'CL') {

@@ -53,14 +53,12 @@ class ClienteController extends Controller
             'nombre' => 'required|string|max:100',
             'direccion' => 'required|string',
             'correo_electronico' => 'required|string|email|max:255|unique:clientes',
-            'telefono' => 'required',
-            'numero_documento' => 'required',
+            'numero_documento' => 'required'
         ], [
             'nombre.required' => 'El nombre es requerido',
             'direccion.required' => 'La direccion es requerida',
             'correo_electronico.required' => 'El correo electronico es requerido',
             'correo_electronico.unique' => 'El correo electronico ya esta registrado',
-            'telefono.required' => 'El numero de telefono es requerido',
             'numero_documento.required' => 'El numero de documento es requerido'
         ]);
 
@@ -89,14 +87,12 @@ class ClienteController extends Controller
             'nombre' => 'required|string|max:100',
             'direccion' => 'required|string',
             'correo_electronico' => 'required|string|email|max:255||unique:clientes,correo_electronico,'.$cliente->id,
-            'telefono' => 'required',
-            'numero_documento' => 'required',
+            'numero_documento' => 'required'
         ], [
             'nombre.required' => 'El nombre es requerido',
             'direccion.required' => 'La direccion es requerida',
             'correo_electronico.required' => 'El correo electronico es requerido',
             'correo_electronico.unique' => 'El correo electronico ya esta registrado',
-            'telefono.required' => 'El numero de telefono es requerido',
             'numero_documento.required' => 'El numero de documento es requerido'
         ]);
 

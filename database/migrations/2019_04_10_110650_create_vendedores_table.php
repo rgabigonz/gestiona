@@ -18,7 +18,7 @@ class CreateVendedoresTable extends Migration
             $table->string('nombre', 100);
             $table->mediumText('direccion');
             $table->string('correo_electronico')->unique();
-            $table->string('telefono', 50);
+            $table->string('telefono', 50)->nullable();
             $table->char('estado', 1)->default('A');
             $table->timestamps();
         });

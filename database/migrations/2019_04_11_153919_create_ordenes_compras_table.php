@@ -17,9 +17,9 @@ class CreateOrdenesComprasTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('proveedor_id');
             $table->unsignedInteger('user_id');
-            $table->unsignedInteger('deposito_id');
-            $table->unsignedInteger('formapago_id');
-            $table->unsignedInteger('condicionpago_id');
+            $table->unsignedInteger('deposito_id')->nullable();
+            $table->unsignedInteger('formapago_id')->nullable();
+            $table->unsignedInteger('condicionpago_id')->nullable();
 
             // INICIO En caso de que sea para el cliente
             $table->unsignedInteger('cliente_id')->nullable();

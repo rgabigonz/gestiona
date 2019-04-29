@@ -17,137 +17,154 @@
 
               <br>
               <!-- Datos NV row -->
-
-              <div class="row invoice-info">
-                <div class="col-sm-4 invoice-col">
-                    <div class="form-group">
-                        <div class="input-group input-group-sm">
-                            <datepicker :bootstrap-styling="true" v-model="fecha_nota_pedido" name="fecha_nota_pedido" :language="es" 
-                                :format="formato_fecha_nota_pedido" inputClass="form-control form-control-sm" placeholder="Fecha" 
-                                :disabled="modoEdicion ? true : false">
-                            </datepicker>
+              <div class="card">
+                <div class="card-header border-light bg-secondary">Datos Nota de Venta</div>
+                <div class="card-body">
+                    <div class="row invoice-info">
+                        <div class="col-sm-4 invoice-col">
+                            <div class="form-group">
+                                <div class="input-group input-group-sm">
+                                    <datepicker :bootstrap-styling="true" v-model="fecha_nota_pedido" name="fecha_nota_pedido" :language="es" 
+                                        :format="formato_fecha_nota_pedido" inputClass="form-control form-control-sm" placeholder="Fecha" 
+                                        :disabled="modoEdicion ? true : false">
+                                    </datepicker>
+                                </div>
+                            </div>
                         </div>
+                        <!-- /.col -->
+
+                        <div class="col-sm-8 invoice-col">
+                            <div class="form-group">
+                                <div class="input-group input-group-sm">
+                                    <input v-model="numero_factura" type="text" name="numero_factura" placeholder="Numero Factura"
+                                        class="form-control form-control-sm">
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.col -->
                     </div>
                 </div>
-                <!-- /.col -->
-
-                <div class="col-sm-8 invoice-col">
-                    <div class="form-group">
-                        <div class="input-group input-group-sm">
-                            <input v-model="numero_factura" type="text" name="numero_factura" placeholder="Numero Factura"
-                                class="form-control form-control-sm">
-                        </div>
-                    </div>
-                </div>
-                <!-- /.col -->
               </div>
 
               <!-- Cliente row -->
-              <div class="row invoice-info">
-                  <div class="col-sm-4 invoice-col">
-                      <div class="form-group">
-                          <div class="input-group input-group-sm">
-                              <select class="form-control" v-model="codigo_cliente" @change="cargarCliente(codigo_cliente)">
-                                  <option value=0>Cliente...</option>
-                                  <option v-for="lcliente in lclientes" :key="lcliente.id" :value="lcliente.id">{{ lcliente.nombre }}</option>
-                              </select>
-                          </div>
-                      </div>
-                  </div>
-                  <!-- /.col -->
+              <div class="card">
+                <div class="card-header border-light bg-success">Datos Cliente - Distribuidores</div>
+                <div class="card-body">
+                    <div class="row invoice-info">
+                        <div class="col-sm-4 invoice-col">
+                            <div class="form-group">
+                                <div class="input-group input-group-sm">
+                                    <select class="form-control" v-model="codigo_cliente" @change="cargarCliente(codigo_cliente)">
+                                        <option value=0>Cliente...</option>
+                                        <option v-for="lcliente in lclientes" :key="lcliente.id" :value="lcliente.id">{{ lcliente.nombre }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.col -->
 
-                  <div class="col-sm-8 invoice-col">
-                      <div class="form-group">
-                          <input v-model="cliente.direccion" type="text" name="direccion_cliente" class="form-control form-control-sm" disabled>
-                      </div>
-                  </div>
-                  <!-- /.col -->
+                        <div class="col-sm-8 invoice-col">
+                            <div class="form-group">
+                                <div class="input-group input-group-sm">
+                                    <input v-model="cliente.direccion" type="text" name="direccion_cliente" class="form-control form-control-sm" disabled>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                </div>
 
               </div>
               <!-- /.row -->
 
               <!-- Productos row -->
-              <div class="row">
-                <div class="col-12 table-responsive">
-                  <table class="table table-striped table-sm">
-                    <thead>
-                        <tr>
-                            <th>Producto</th>
-                            <th>Cantidad</th>
-                            <th>Precio</th>
-                            <th>Subtotal</th>
-                            <th></th>
-                        </tr>
-                        <tr>
-                            <td style="width: 40%" class="col-sm-2 invoice-col">
-                                <div class="form-group">
-                                    <div class="input-group input-group-sm">
-                                        <select class="form-control" v-model="codigo_producto" ref="codigo_producto" @change="cargarProducto(codigo_producto)">
-                                            <option value=0>Producto...</option>
-                                            <option v-for="lproducto in lproductos" :key="lproducto.id" :value="lproducto.id">{{ lproducto.nombre }}</option>
-                                        </select>                                                    
-                                    </div>
-                                </div>
-                            </td>
-                            <!-- /.col -->
-                            
-                            <td style="width: 20%" class="col-sm-1 invoice-col">
-                                <div class="form-group">
-                                    <div class="input-group input-group-sm">
-                                        <input v-model="cantidad_producto" type="number" name="cantidad_producto"
-                                               class="form-control form-control-sm">
-                                    </div>
-                                </div>
-                            </td>
-                            <!-- /.col -->
+              <div class="card">
+                <div class="card-header border-light bg-dark">Productos</div>
+                <div class="card-body">              
+                    <div class="row invoice-info">
+                        <div class="col-12 invoice-col">
+                        <table class="table table-striped table-sm table-responsive">
+                            <thead>
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Cantidad</th>
+                                    <th>Precio</th>
+                                    <th>Subtotal</th>
+                                    <th></th>
+                                </tr>
+                                <tr>
+                                    <td class="col-sm-4 invoice-col">
+                                        <div class="form-group">
+                                            <div class="input-group input-group-sm">
+                                                <select class="form-control" v-model="codigo_producto" ref="codigo_producto" @change="cargarProducto(codigo_producto)">
+                                                    <option value=0>Producto...</option>
+                                                    <option v-for="lproducto in lproductos" :key="lproducto.id" :value="lproducto.id">{{ lproducto.nombre }}</option>
+                                                </select>                                                    
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <!-- /.col -->
+                                    
+                                    <td class="col-sm-2 invoice-col">
+                                        <div class="form-group">
+                                            <div class="input-group input-group-sm">
+                                                <input v-model="cantidad_producto" type="number" name="cantidad_producto"
+                                                    class="form-control form-control-sm">
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <!-- /.col -->
 
-                            <td style="width: 20%" class="col-sm-1 invoice-col">
-                                <div class="form-group">
-                                    <div class="input-group input-group-sm">
-                                        <input v-model="precio_producto" type="number" name="precio_producto"
-                                               @keydown ="keyMonitor" class="form-control form-control-sm">
-                                    </div>
-                                </div>
-                            </td>
-                            <!-- /.col -->
+                                    <td class="col-sm-3 invoice-col">
+                                        <div class="form-group">
+                                            <div class="input-group input-group-sm">
+                                                <input v-model="precio_producto" type="number" name="precio_producto"
+                                                    @keydown ="keyMonitor" class="form-control form-control-sm">
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <!-- /.col -->
 
-                            <td style="width: 20%" class="col-sm-1 invoice-col">
-                                <div class="form-group">
-                                    <div class="input-group input-group-sm">
-                                        <input v-model="subtotal_producto" type="text" name="subtotal_producto" 
-                                               class="form-control form-control-sm" disabled>
-                                    </div>
-                                </div>
-                            </td>                        
-                            <!-- /.col -->
+                                    <td class="col-sm-3 invoice-col">
+                                        <div class="form-group">
+                                            <div class="input-group input-group-sm">
+                                                <input v-model="subtotal_producto" type="text" name="subtotal_producto" 
+                                                    class="form-control form-control-sm" disabled>
+                                            </div>
+                                        </div>
+                                    </td>                        
+                                    <!-- /.col -->
 
-                        </tr>                            
-                    </thead>
-                    <tbody>
-                        <tr class="item" v-for="(item, index) in items" :key="item.cod">
-                            <td>{{ item.descripcion}}</td>
-                            <td>{{ item.cantidad }}</td>
-                            <td>${{ item.precio }}</td>
-                            <td>${{ item.precio * item.cantidad | currency }}</td>
-                            <td>
-                                <a href="#" @click="removerProducto(index)">
-                                    <i class="fa fa-trash-alt red"></i>
-                                </a>                            
-                            </td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>Total:</td>
-                            <td>${{ total | currency }}</td>
-                        </tr>
-                    </tbody>
-                  </table>
+                                </tr>                            
+                            </thead>
+                            <tbody>
+                                <tr class="item" v-for="(item, index) in items" :key="item.cod">
+                                    <td>{{ item.descripcion}}</td>
+                                    <td>{{ item.cantidad }}</td>
+                                    <td>${{ item.precio }}</td>
+                                    <td>${{ item.precio * item.cantidad | currency }}</td>
+                                    <td>
+                                        <a href="#" @click="removerProducto(index)">
+                                            <i class="fa fa-trash-alt red"></i>
+                                        </a>                            
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>Total:</td>
+                                    <td>${{ total | currency }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
                 </div>
-                <!-- /.col -->
               </div>
-              <!-- /.row -->
+
             </div>
             <!-- /.invoice -->
 

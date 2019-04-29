@@ -54,14 +54,12 @@ class ProveedorController extends Controller
             'nombre' => 'required|string|max:100',
             'direccion' => 'required|string',
             'correo_electronico' => 'required|string|email|max:255|unique:proveedores',
-            'telefono' => 'required',
-            'numero_documento' => 'required',
+            'numero_documento' => 'required'
         ], [
             'nombre.required' => 'El nombre es requerido',
             'direccion.required' => 'La direccion es requerida',
             'correo_electronico.required' => 'El correo electronico es requerido',
             'correo_electronico.unique' => 'El correo electronico ya esta registrado',
-            'telefono.required' => 'El numero de telefono es requerido',
             'numero_documento.required' => 'El numero de documento es requerido'
         ]);
 
@@ -90,14 +88,12 @@ class ProveedorController extends Controller
             'nombre' => 'required|string|max:100',
             'direccion' => 'required|string',
             'correo_electronico' => 'required|string|email|max:255||unique:proveedores,correo_electronico,'.$proveedor->id,
-            'telefono' => 'required',
-            'numero_documento' => 'required',
+            'numero_documento' => 'required'
         ], [
             'nombre.required' => 'El nombre es requerido',
             'direccion.required' => 'La direccion es requerida',
             'correo_electronico.required' => 'El correo electronico es requerido',
             'correo_electronico.unique' => 'El correo electronico ya esta registrado',
-            'telefono.required' => 'El numero de telefono es requerido',
             'numero_documento.required' => 'El numero de documento es requerido'
         ]);
 

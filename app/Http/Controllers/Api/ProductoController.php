@@ -50,20 +50,9 @@ class ProductoController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'nombre' => 'required|string|max:100',
-            'descripcion' => 'required|string',
-            'precio' => 'required|numeric|min:0.01',
-            'stk_min' => 'required|numeric|min:0.01',
-            'stk_max' => 'required|numeric|min:0.01',
+            'nombre' => 'required|string|max:100'
         ], [
-            'nombre.required' => 'El nombre es requerido',
-            'descripcion.required' => 'La descripcion es requerida',
-            'precio.required' => 'El precio es requerido',
-            'precio.min' => 'El precio debe ser mayor a 0',
-            'stk_min.required' => 'El stock minimo es requerido',
-            'stk_min.min' => 'El stock minimo debe ser mayor a 0',
-            'stk_max.required' => 'El stock maximo es requerido',
-            'stk_max.min' => 'El stock maximo ser mayor a 0',
+            'nombre.required' => 'El nombre es requerido'
         ]);
 
         return Producto::create([
@@ -88,20 +77,9 @@ class ProductoController extends Controller
         $producto = Producto::findOrFail($id);
 
         $this->validate($request, [
-            'nombre' => 'required|string|max:100',
-            'descripcion' => 'required|string',
-            'precio' => 'required|numeric|min:0.01',
-            'stk_min' => 'required|numeric|min:0.01',
-            'stk_max' => 'required|numeric|min:0.01',
+            'nombre' => 'required|string|max:100'
         ], [
-            'nombre.required' => 'El nombre es requerido',
-            'descripcion.required' => 'La descripcion es requerida',
-            'precio.required' => 'El precio es requerido',
-            'precio.min' => 'El precio debe ser mayor a 0',
-            'stk_min.required' => 'El stock minimo es requerido',
-            'stk_min.min' => 'El stock minimo debe ser mayor a 0',
-            'stk_max.required' => 'El stock maximo es requerido',
-            'stk_max.min' => 'El stock maximo ser mayor a 0',
+            'nombre.required' => 'El nombre es requerido'
         ]);
 
         $producto->update($request->all());

@@ -18,7 +18,7 @@ class CreateClientesTable extends Migration
             $table->string('nombre', 100);
             $table->mediumText('direccion');
             $table->string('correo_electronico')->unique();
-            $table->string('telefono', 50);
+            $table->string('telefono', 50)->nullable();
             $table->unsignedInteger('tipo_documento');
             $table->string('numero_documento', 50)->unique();
             $table->char('estado', 1)->default('A');

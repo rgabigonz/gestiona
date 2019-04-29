@@ -16,10 +16,10 @@ class CreateProductosTable extends Migration
         Schema::create('productos', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nombre', 100);
-            $table->mediumText('descripcion');
-            $table->decimal('precio', 8, 2);
-            $table->decimal('stk_min', 8, 2);
-            $table->decimal('stk_max', 8, 2);
+            $table->mediumText('descripcion')->nullable();
+            $table->decimal('precio', 8, 2)->default(0);
+            $table->decimal('stk_min', 8, 2)->default(0);
+            $table->decimal('stk_max', 8, 2)->default(0);
             $table->decimal('stk_actual', 8, 2)->default(0);
             $table->unsignedInteger('tipo_producto');
             $table->char('estado', 1)->default('A');

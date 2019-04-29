@@ -51,14 +51,12 @@ class VendedorController extends Controller
         $this->validate($request, [
             'nombre' => 'required|string|max:100',
             'direccion' => 'required|string',
-            'correo_electronico' => 'required|string|email|max:255|unique:vendedores',
-            'telefono' => 'required'
+            'correo_electronico' => 'required|string|email|max:255|unique:vendedores'
         ], [
             'nombre.required' => 'El nombre es requerido',
             'direccion.required' => 'La direccion es requerida',
             'correo_electronico.required' => 'El correo electronico es requerido',
-            'correo_electronico.unique' => 'El correo electronico ya esta registrado',
-            'telefono.required' => 'El numero de telefono es requerido'
+            'correo_electronico.unique' => 'El correo electronico ya esta registrado'
         ]);
 
         return Vendedor::create([
@@ -83,14 +81,12 @@ class VendedorController extends Controller
         $this->validate($request, [
             'nombre' => 'required|string|max:100',
             'direccion' => 'required|string',
-            'correo_electronico' => 'required|string|email|max:255||unique:vendedores,correo_electronico,'.$vendedor->id,
-            'telefono' => 'required'
+            'correo_electronico' => 'required|string|email|max:255||unique:vendedores,correo_electronico,'.$vendedor->id
         ], [
             'nombre.required' => 'El nombre es requerido',
             'direccion.required' => 'La direccion es requerida',
             'correo_electronico.required' => 'El correo electronico es requerido',
-            'correo_electronico.unique' => 'El correo electronico ya esta registrado',
-            'telefono.required' => 'El numero de telefono es requerido'
+            'correo_electronico.unique' => 'El correo electronico ya esta registrado'
         ]);
 
         $vendedor->update($request->all());

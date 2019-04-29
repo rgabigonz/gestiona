@@ -16,8 +16,8 @@ class CreateTipoProductosTable extends Migration
         Schema::create('tipo_productos', function (Blueprint $table) {
             $table->increments('id');
             $table->mediumText('descripcion');
-            $table->decimal('iva', 8, 2);
-            $table->char('estado', 1)->default('A');              
+            $table->decimal('iva', 8, 2)->default(21);
+            $table->char('estado', 1)->default('A');
             $table->timestamps();
         });
     }

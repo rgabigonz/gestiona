@@ -49,7 +49,7 @@
                         <div class="form-group">
                             <div class="input-group input-group-sm">
                                 <select class="form-control" v-model="tipo" :disabled="modoEdicion ? true : false">
-                                    <option value="SN">Tipo...</option>
+                                    <option value="">Tipo...</option>
                                     <option value="PR">PROPIA</option>
                                     <option value="CL">CLIENTE</option>
                                 </select>
@@ -63,7 +63,7 @@
                         <div class="form-group">
                             <div class="input-group input-group-sm">
                                 <select class="form-control" v-model="codigo_deposito">
-                                    <option value=0>Deposito...</option>
+                                    <option value="">Deposito...</option>
                                     <option v-for="ldeposito in ldepositos" :key="ldeposito.id" :value="ldeposito.id">{{ ldeposito.descripcion }}</option>
                                 </select>
                             </div>
@@ -75,7 +75,7 @@
                         <div class="form-group">
                             <div class="input-group input-group-sm">
                                 <select class="form-control" v-model="codigo_formapago">
-                                    <option value=0>Forma Pago...</option>
+                                    <option value="">Forma Pago...</option>
                                     <option v-for="lformaspago in lformaspagos" :key="lformaspago.id" :value="lformaspago.id">{{ lformaspago.descripcion }}</option>
                                 </select>
                             </div>
@@ -87,7 +87,7 @@
                         <div class="form-group">
                             <div class="input-group input-group-sm">
                                 <select class="form-control" v-model="codigo_condicionpago">
-                                    <option value=0>Condicion Pago...</option>
+                                    <option value="">Condicion Pago...</option>
                                     <option v-for="lcondicionespago in lcondicionespagos" :key="lcondicionespago.id" :value="lcondicionespago.id">{{ lcondicionespago.descripcion }}</option>
                                 </select>
                             </div>
@@ -182,9 +182,9 @@
               <div class="card">
                 <div class="card-header border-light bg-dark">Productos</div>
                 <div class="card-body">              
-                    <div class="row">
-                        <div class="col-12 table-responsive">
-                        <table class="table table-striped table-sm">
+                    <div class="row invoice-info">
+                        <div class="col-12 invoice-col">
+                        <table class="table table-striped table-sm table-responsive">
                             <thead>
                                 <tr>
                                     <th>Producto</th>
@@ -197,7 +197,7 @@
                                     <th></th>
                                 </tr>
                                 <tr>
-                                    <td style="width: 40%" class="col-sm-4 invoice-col">
+                                    <td class="col-sm-6 invoice-col">
                                         <div class="form-group">
                                             <div class="input-group input-group-sm">
                                                 <select class="form-control" v-model="codigo_producto" ref="codigo_producto" @change="cargarProducto(codigo_producto)">
@@ -209,7 +209,7 @@
                                     </td>
                                     <!-- /.col -->
 
-                                    <td style="width: 10%" class="col-sm-1 invoice-col">
+                                    <td class="col-sm-1 invoice-col">
                                         <div class="form-group">
                                             <div class="input-group input-group-sm">
                                                 <input v-model="cantidad_producto" type="number" name="cantidad_producto"
@@ -219,7 +219,7 @@
                                     </td>
                                     <!-- /.col -->
 
-                                    <td style="width: 10%" class="col-sm-1 invoice-col">
+                                    <td class="col-sm-1 invoice-col">
                                         <div class="form-group">
                                             <div class="input-group input-group-sm">
                                                 <input v-model="precio_producto" type="number" name="precio_producto"
@@ -229,7 +229,7 @@
                                     </td>
                                     <!-- /.col -->
 
-                                    <td style="width: 10%" class="col-sm-1 invoice-col">
+                                    <td class="col-sm-1 invoice-col">
                                         <div class="form-group">
                                             <div class="input-group input-group-sm">
                                                 <input v-model="flete_producto" type="number" name="flete_producto"
@@ -239,7 +239,7 @@
                                     </td>
                                     <!-- /.col -->
 
-                                    <td style="width: 10%" class="col-sm-1 invoice-col">
+                                    <td class="col-sm-1 invoice-col">
                                         <div class="form-group">
                                             <div class="input-group input-group-sm">
                                                 <input v-model="comision_venta_producto" type="number" name="comision_venta_producto"
@@ -249,7 +249,7 @@
                                     </td>
                                     <!-- /.col -->
 
-                                    <td style="width: 10%" class="col-sm-1 invoice-col">
+                                    <td class="col-sm-1 invoice-col">
                                         <div class="form-group">
                                             <div class="input-group input-group-sm">
                                                 <input v-model="comision_gestion_producto" type="number" name="comision_gestion_producto"
@@ -259,7 +259,7 @@
                                     </td>
                                     <!-- /.col -->
 
-                                    <td style="width: 10%" class="col-sm-1 invoice-col">
+                                    <td class="col-sm-1 invoice-col">
                                         <div class="form-group">
                                             <div class="input-group input-group-sm">
                                                 <input v-model="subtotal_producto" type="text" name="subtotal_producto" 
@@ -382,10 +382,10 @@
                 // Variables contenedoras de datos
                 modoEdicion: false,
                 orenes_compra_id_edicion: 0,
-                tipo: 'SN',
-                codigo_deposito: 0,
-                codigo_formapago: 0,
-                codigo_condicionpago: 0,
+                tipo: '',
+                codigo_deposito: '',
+                codigo_formapago: '',
+                codigo_condicionpago: '',
                 codigo_cliente: 0,
                 codigo_vendedor_venta: 0,
                 codigo_vendedor_gestion: 0,
@@ -643,6 +643,9 @@
                 
                 axios.put('api/ordenCompra/'+this.orenes_compra_id_edicion, {
                     codigo_proveedor: this.codigo_proveedor, 
+                    codigo_deposito: this.codigo_deposito, 
+                    codigo_forma_pago: this.codigo_formapago, 
+                    codigo_condicion_pago: this.codigo_condicionpago, 
                     fecha_orden_compra: this.fecha_orden_compra,
                     tipo: this.tipo,
                     total_orden: this.total,
@@ -676,16 +679,30 @@
                     //Datos Orden Compra
                     me.tipo = me.orden_compra.tipo;
                     me.codigo_proveedor = me.orden_compra.proveedor_id;
-                    me.codigo_deposito = me.orden_compra.deposito_id;
-                    me.codigo_formapago = me.orden_compra.formapago_id;
-                    me.codigo_cliente = me.orden_compra.cliente_id;
-                    me.codigo_vendedor_venta = me.orden_compra.vendedor_venta_id;
-                    me.codigo_vendedor_gestion = me.orden_compra.vendedor_gestion_id;
-                    me.codigo_condicionpago = me.orden_compra.condicionpago_id;
                     me.fecha_orden_compra = new Date(me.orden_compra.fecha);
                     me.fecha_orden_compra = me.fecha_orden_compra.setDate(me.fecha_orden_compra.getDate() + 1);
                     me.numero_negocio = me.orden_compra.numero_negocio;
                     me.observacion = me.orden_compra.obs;
+                    
+                    // Carcar valores nulos
+                    if (!me.orden_compra.condicionpago_id) 
+                        me.codigo_condicionpago = '';
+                    else
+                        me.codigo_condicionpago = me.orden_compra.condicionpago_id;
+
+                    if (!me.orden_compra.deposito_id) 
+                        me.codigo_deposito = '';
+                    else
+                        me.codigo_deposito = me.orden_compra.deposito_id;
+
+                    if (!me.orden_compra.formapago_id) 
+                        me.codigo_formapago = '';
+                    else
+                        me.codigo_formapago = me.orden_compra.formapago_id;
+
+                    me.codigo_cliente = me.orden_compra.cliente_id;
+                    me.codigo_vendedor_venta = me.orden_compra.vendedor_venta_id;
+                    me.codigo_vendedor_gestion = me.orden_compra.vendedor_gestion_id;
 
                     me.cargarProveedor(me.codigo_proveedor);
 
