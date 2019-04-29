@@ -106,10 +106,6 @@
                     <div class="row invoice-info">
                         <div class="col-sm-4 invoice-col">
                             <div class="form-group">
-                                <!-- <div class="input-group input-group-sm">
-                                    <input v-model="codigo_proveedor" type="number" name="codigo_proveedor" ref="codigo_proveedor" placeholder="Proveedor (F2)"
-                                        @keydown ="keyMonitor" class="form-control form-control-sm" :disabled="modoEdicion ? true : false">
-                                </div> -->
                                 <div class="input-group input-group-sm">
                                     <select class="form-control" v-model="codigo_proveedor" @change="cargarProveedor(codigo_proveedor)">
                                         <option value=0>Proveedor...</option>
@@ -120,11 +116,6 @@
                         </div>
                         <!-- /.col -->
 
-                        <!-- <div class="col-sm-4 invoice-col">
-                            <div class="form-group">
-                                <input v-model="proveedor.nombre" type="text" name="nombre_proveedor" class="form-control form-control-sm" disabled>
-                            </div>
-                        </div> -->
                         <div class="col-sm-8 invoice-col">
                             <div class="form-group">
                                 <input v-model="proveedor.direccion" type="text" name="direccion_proveedor" class="form-control form-control-sm" disabled>
@@ -197,8 +188,6 @@
                             <thead>
                                 <tr>
                                     <th>Producto</th>
-                                    <!-- <th>Descripcion</th> -->
-                                    <!--<th>Observacion</th>-->
                                     <th>Cantidad</th>
                                     <th>Importe</th>
                                     <th>Flete</th>
@@ -211,8 +200,6 @@
                                     <td style="width: 40%" class="col-sm-4 invoice-col">
                                         <div class="form-group">
                                             <div class="input-group input-group-sm">
-                                                <!-- <input v-model="codigo_producto" type="number" name="codigo_producto" ref="codigo_producto" placeholder="(F2)"
-                                                    @keydown ="keyMonitor" class="form-control form-control-sm"> -->
                                                 <select class="form-control" v-model="codigo_producto" ref="codigo_producto" @change="cargarProducto(codigo_producto)">
                                                     <option value=0>Producto...</option>
                                                     <option v-for="lproducto in lproductos" :key="lproducto.id" :value="lproducto.id">{{ lproducto.nombre }}</option>
@@ -220,26 +207,6 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <!-- /.col -->
-
-                                    <!-- <td style="width: 30%" class="col-sm-6 invoice-col">
-                                        <div class="form-group">
-                                            <div class="input-group input-group-sm">
-                                                <input v-model="nombre_producto" type="text" name="nombre_producto"
-                                                    class="form-control form-control-sm" disabled>
-                                            </div>
-                                        </div>
-                                    </td> -->
-                                    <!-- /.col -->
-
-                                    <!--<td style="width: 26.5%" class="col-sm-6 invoice-col">
-                                        <div class="form-group">
-                                            <div class="input-group input-group-sm">
-                                                <input v-model="obs_producto" type="text" name="obs_producto"
-                                                    class="form-control form-control-sm">
-                                            </div>
-                                        </div>
-                                    </td>-->
                                     <!-- /.col -->
 
                                     <td style="width: 10%" class="col-sm-1 invoice-col">
@@ -306,9 +273,7 @@
                             </thead>
                             <tbody>
                                 <tr class="item" v-for="(item, index) in items" :key="item.cod">
-                                    <!-- <td>{{ item.cod}}</td> -->
                                     <td>{{ item.descripcion}}</td>
-                                    <!-- <td>{{ item.obs}}</td> -->
                                     <td>{{ item.cantidad }}</td>
                                     <td>${{ item.precio }}</td>
                                     <td>${{ item.flete }}</td>
@@ -372,103 +337,6 @@
                 </router-link>                
             </div>
         </div>   
-
-        <!-- Modal Seleccion de Proveedores-->
-        <div class="modal fade" id="ventanaLProveedores" tabindex="-1" role="dialog" aria-labelledby="ventanaLProveedoresLabel" aria-hidden="true">
-            <div style="min-width: 45%" class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="ventanaLProveedoresLabel">Lista de Proveedores</h5>
-                        <button type="button" class="close" @click="cerrarLProveedores()" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col col-md-4">
-                                <select class="form-control" v-model="sCriterio">
-                                    <option value="nombre">Nombre</option>
-                                </select>
-                            </div>
-                            <div class="col col-md-8">
-                                <input v-model="sBuscar" @keyup.enter="cargarProveedores(1, sBuscar, sCriterio)" type="text" class="form-control" placeholder="Dato a buscar...">
-                            </div>
-                        </div>
-                        <table class="table table-hover">
-                            <tbody>
-                                <tr>
-                                    <th style="width: 8%">#</th>
-                                    <th style="width: 82%">Nombre</th>
-                                    <th style="width: 10%"></th>
-                                </tr>
-                                <tr v-for="proveedor in proveedores" :key="proveedor.id">
-                                    <td>{{ proveedor.id }}</td>
-                                    <td>{{ proveedor.nombre }}</td>
-                                    <td>
-                                        <a href="#" @click="seleccionaProveedor(proveedor.id)">
-                                            <i class="fas fa-check-square green"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" @click="cerrarLProveedores()">Cerrar</button>
-                    </div> 
-                </div>
-            </div>
-        </div>
-        <!-- Modal Seleccion de Proveedores-->
-
-        <!-- Modal Seleccion de Productos-->
-        <div class="modal fade" id="ventanaLProductos" tabindex="-1" role="dialog" aria-labelledby="ventanaLProductosLabel" aria-hidden="true">
-            <div style="min-width: 45%" class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="ventanaLProductosLabel">Lista de Productos</h5>
-                        <button type="button" class="close" @click="cerrarLProductos()" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col col-md-4">
-                                <select class="form-control" v-model="sCriterio">
-                                    <option value="nombre">Nombre</option>
-                                </select>
-                            </div>
-                            <div class="col col-md-8">
-                                <input v-model="sBuscar" @keyup.enter="cargarProductos(1, sBuscar, sCriterio)" type="text" class="form-control" placeholder="Dato a buscar...">
-                            </div>
-                        </div>
-                        <table class="table table-hover">
-                            <tbody>
-                                <tr>
-                                    <th style="width: 8%">#</th>
-                                    <th style="width: 82%">Nombre</th>
-                                    <th style="width: 10%"></th>
-                                </tr>
-                                <tr v-for="producto in productos" :key="producto.id">
-                                    <td>{{ producto.id }}</td>
-                                    <td>{{ producto.nombre }}</td>
-                                    <td>
-                                        <a href="#" @click="seleccionaProducto(producto.id)">
-                                            <i class="fas fa-check-square green"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" @click="cerrarLProductos()">Cerrar</button>
-                    </div> 
-                </div>
-            </div>
-        </div>
-        <!-- Modal Seleccion de Productos-->
-
       </div>
 </template>
 
@@ -482,9 +350,7 @@
         },        
         data() {
             return {
-                //Lista de Seleccion proveedores y productos
-                proveedores: {},
-                productos: {},
+                // Paginacion
                 pagination: {
                     'total': 0,
                     'current_page': 0,
@@ -496,14 +362,13 @@
                 offset: 3,
                 sCriterio: 'nombre',
                 sBuscar: '',
-                //Lista de Seleccion proveedores y productos
 
-                modoEdicion: false,
-                orenes_compra_id_edicion: 0,
+                // Otros
                 fecha_orden_compra: new Date(),
                 formato_fecha_orden_compra: "dd-MM-yyyy",
                 es: es,
-                proveedor: {},
+
+                // Objetos de lista de seleccion
                 ldepositos: {},
                 lformaspagos: {},
                 lcondicionespagos: {},
@@ -513,6 +378,10 @@
                 lvendedores_venta: {},
                 lvendedores_gestion: {},
                 codigo_proveedor: 0,
+                
+                // Variables contenedoras de datos
+                modoEdicion: false,
+                orenes_compra_id_edicion: 0,
                 tipo: 'SN',
                 codigo_deposito: 0,
                 codigo_formapago: 0,
@@ -520,8 +389,6 @@
                 codigo_cliente: 0,
                 codigo_vendedor_venta: 0,
                 codigo_vendedor_gestion: 0,
-                items: [],
-                producto: {},
                 codigo_producto: 0,
                 cantidad_producto: 0,
                 nombre_producto: '',
@@ -532,6 +399,11 @@
                 comision_gestion_producto: 0,
                 numero_negocio: '',
                 observacion: '',
+
+                // Objetos de datos
+                proveedor: {},
+                items: [],
+                producto: {},
                 orden_compra: {},
                 orden_compra_detalle: {}
             }
@@ -543,35 +415,8 @@
                 let origenKey = event.key || String.fromCharCode(event.keyCode);
 
                 switch(origenInput) {
-                    case 'codigo_proveedor':
-                        switch(origenKey) {
-                            case 'Enter':
-                            case 'F2':
-                                this.mostrarLProveedores();
-                                break;
-                            case 'Tab':  
-                                this.cargarProveedor(this.codigo_proveedor);
-                                break;
-                            default:
-                                //code block
-                        } 
-                        break;
-                    case 'codigo_producto':
-                        switch(origenKey) {
-                            case 'Enter':
-                            case 'F2':
-                                this.mostrarLProductos();
-                                break;
-                            case 'Tab':    
-                                //this.cargarProducto(this.codigo_producto);
-                                break;
-                            default:
-                                //code block
-                        } 
-                        break;
                     case 'precio_producto':
                         switch(origenKey) {
-                            //case 'Enter':
                             case 'Tab':  
                                 if (this.tipo != 'CL')  
                                     this.agregaProducto();
@@ -582,7 +427,6 @@
                         break;
                     case 'comision_gestion_producto':
                         switch(origenKey) {
-                            //case 'Enter':
                             case 'Tab':  
                                 if (this.tipo == 'CL')  
                                     this.agregaProducto();
@@ -596,61 +440,7 @@
                 } 
             },
 
-            //Lista de Seleccion proveedores
-            mostrarLProveedores() {
-                this.cargarProveedores(1, this.sBuscar, this.sCriterio);
-                $('#ventanaLProveedores').modal('show');
-            },
-            cerrarLProveedores() {
-                $('#ventanaLProveedores').modal('hide');
-            },
-            cargarProveedores(page, buscar, criterio) {
-                let me = this;                
-                var url = 'api/proveedor?page=' + page + '&buscar=' + buscar + '&criterio=' + criterio;
-                axios.get(url).then(data => {
-                    var response = data.data;
-                    me.proveedores = response.proveedores.data;
-                    me.pagination = response.pagination;
-                }).catch((error) => {
-                    if (error.response.status == 401) {
-                        swal('Error!', 'La sesion ha caducado.', 'warning');
-                    }
-                });
-            },
-            seleccionaProveedor(proveedor) {
-                this.codigo_proveedor = proveedor;
-                this.cargarProveedor(proveedor);
-                this.cerrarLProveedores();
-            },
-
-            //Lista de Seleccion productos
-            mostrarLProductos() {
-                this.cargarProductos(1, this.sBuscar, this.sCriterio);
-                $('#ventanaLProductos').modal('show');
-            },
-            cerrarLProductos() {
-                $('#ventanaLProductos').modal('hide');
-            },
-            cargarProductos(page, buscar, criterio) {
-                let me = this;                
-                var url = 'api/producto?page=' + page + '&buscar=' + buscar + '&criterio=' + criterio;
-                axios.get(url).then(data => {
-                    var response = data.data;
-                    me.productos = response.productos.data;
-                    me.pagination = response.pagination;
-                }).catch((error) => {
-                    if (error.response.status == 401) {
-                        swal('Error!', 'La sesion ha caducado.', 'warning');
-                    }
-                });
-            },
-            seleccionaProducto(producto) {
-                this.codigo_producto = producto;
-                this.cargarProducto(producto);
-                this.cerrarLProductos();
-            },
-
-            // Cargas de datos de listas
+            // Cargar detalles seleccionados
             cargarProveedor(cCod) {
                 let me = this;                
                 var url = 'api/proveedor/devuelveDatosProveedor/'+cCod;
@@ -669,6 +459,7 @@
             },
             cargarProducto(pCod) {
                 let me = this;
+
                 var url = 'api/producto/devuelveDatosProducto/'+pCod;
                 axios.get(url).then(data => {
                     var response = data.data;
@@ -685,6 +476,8 @@
                     });
                 });
             },
+
+            // Cargas de datos de listas            
             cargaDepositos() {
                 let me = this;                
                 var url = 'api/deposito/cargaDepositos';
