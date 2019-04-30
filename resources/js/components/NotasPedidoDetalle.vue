@@ -86,14 +86,14 @@
                         <table class="table table-striped table-sm table-responsive">
                             <thead>
                                 <tr>
-                                    <th>Producto</th>
-                                    <th>Cantidad</th>
-                                    <th>Precio</th>
-                                    <th>Subtotal</th>
-                                    <th></th>
+                                    <th style="width:47%">Producto</th>
+                                    <th style="width:10%">Cantidad</th>
+                                    <th style="width:20%">Precio</th>
+                                    <th style="width:20%">Subtotal</th>
+                                    <th style="width:3%"></th>
                                 </tr>
                                 <tr>
-                                    <td class="col-sm-4 invoice-col">
+                                    <td class="invoice-col">
                                         <div class="form-group">
                                             <div class="input-group input-group-sm">
                                                 <select class="form-control" v-model="codigo_producto" ref="codigo_producto" @change="cargarProducto(codigo_producto)">
@@ -105,7 +105,7 @@
                                     </td>
                                     <!-- /.col -->
                                     
-                                    <td class="col-sm-2 invoice-col">
+                                    <td class="invoice-col">
                                         <div class="form-group">
                                             <div class="input-group input-group-sm">
                                                 <input v-model="cantidad_producto" type="number" name="cantidad_producto"
@@ -115,7 +115,7 @@
                                     </td>
                                     <!-- /.col -->
 
-                                    <td class="col-sm-3 invoice-col">
+                                    <td class="invoice-col">
                                         <div class="form-group">
                                             <div class="input-group input-group-sm">
                                                 <input v-model="precio_producto" type="number" name="precio_producto"
@@ -125,7 +125,7 @@
                                     </td>
                                     <!-- /.col -->
 
-                                    <td class="col-sm-3 invoice-col">
+                                    <td class="invoice-col">
                                         <div class="form-group">
                                             <div class="input-group input-group-sm">
                                                 <input v-model="subtotal_producto" type="text" name="subtotal_producto" 
