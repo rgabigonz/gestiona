@@ -7,6 +7,7 @@ use App\NotaPedidoDetalle;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
+use PDF;
 
 class NotaPedidoController extends Controller
 {
@@ -59,6 +60,9 @@ class NotaPedidoController extends Controller
         
         $cantidad_items = count($request->items);
 
+        $anio_actual = \Carbon\Carbon::now();
+        $anio_id = NotaPedido::where('anio_actual', $anio_actual)->max('anio_id') + 1;
+
         $nota_pedido = new NotaPedido();
 
         $nota_pedido->cliente_id = $request->codigo_cliente;
@@ -66,6 +70,10 @@ class NotaPedidoController extends Controller
         $nota_pedido->total = $request->total_pedido;
         $nota_pedido->numero_factura = $request->numero_factura;
         $nota_pedido->fecha = $fecha_pedido->format('Y-m-d');
+
+        // ID Segun anio
+        $nota_pedido->anio_id = $anio_id;
+        $nota_pedido->anio_actual = $anio_actual->year;
 
         $nota_pedido->save();
 
@@ -136,5 +144,33 @@ class NotaPedidoController extends Controller
         $NotaPedido = NotaPedido::findOrFail($id);
         $NotaPedido->estado = 'AN';
         $NotaPedido->update();
+    }
+
+    public function NotaPedidoPDF()
+    {
+        
+        //$pdf = \PDF::loadView('reportesPDF.notapedido', compact('data', 'date', 'notapedido'));
+        
+        $data = $this->getData();
+        $date = date('Y-m-d');
+        $notapedido = "2222";
+        $pdf = \PDF::loadView('reportesPDF.notapedido', compact('data', 'date', 'notapedido'));
+
+        /*$view =  \View::make('reportesPDF.notapedido', compact('data', 'date', 'notapedido'))->render();
+        $pdf = \App::make('dompdf.wrapper');
+        $pdf->loadHTML($view);*/
+
+        return $pdf->download('notapedido.pdf');
+    }
+
+    public function getData() 
+    {
+        $data =  [
+            'quantity'      => '1' ,
+            'description'   => 'some ramdom text',
+            'price'   => '500',
+            'total'     => '500'
+        ];
+        return $data;
     }    
 }

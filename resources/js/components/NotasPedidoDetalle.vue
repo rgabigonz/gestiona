@@ -10,7 +10,7 @@
                   <h4>
                     <i class="fa fa-globe"></i> Agro Proyecciones SRL
                   </h4>
-                  <div>Pedido {{ notas_pedido_id_edicion }}</div>
+                  <div>Nota de Venta N° {{ anio_id }} - {{ anio_actual }}</div>
                 </div>
                 <!-- /.col -->
               </div>
@@ -180,7 +180,7 @@
                 <button v-if="!modoEdicion" type="button" class="btn btn-success float-right" @click="creaNotaPedido()">
                     <i class="fa fa-save fa-fw"></i> Guardar
                 </button>
-                <button v-if="modoEdicion" type="button" class="btn btn-success float-right" @click="actualizaNotaPedido()">
+                <button v-if="modoEdicion && estado == 'PE'" type="button" class="btn btn-success float-right" @click="actualizaNotaPedido()">
                     <i class="fa fa-save fa-fw"></i> Modificar
                 </button>
                 <router-link to="/notaspedido" class="btn btn-primary float-right" style="margin-right: 5px;">
@@ -219,12 +219,15 @@
                 //Lista de Seleccion clientes y productos   
 
                 modoEdicion: false,
+                estado: '',
                 notas_pedido_id_edicion: 0,
                 fecha_nota_pedido: new Date(),
                 formato_fecha_nota_pedido: "dd-MM-yyyy",
                 es: es,
                 cliente: {},
                 codigo_cliente: 0,
+                anio_id: 0,
+                anio_actual: 0,
                 items: [],
                 producto: {},
                 codigo_producto: 0,
@@ -420,6 +423,11 @@
                     me.fecha_nota_pedido = new Date(me.nota_pedido.fecha);
                     me.fecha_nota_pedido = me.fecha_nota_pedido.setDate(me.fecha_nota_pedido.getDate() + 1);
                     me.numero_factura = me.nota_pedido.numero_factura;
+                    me.estado = me.nota_pedido.estado;
+
+                    //Datos Orden Compra
+                    me.anio_id = this.nota_pedido.anio_id;
+                    me.anio_actual = this.nota_pedido.anio_actual;
 
                     me.cargarCliente(me.codigo_cliente);
 

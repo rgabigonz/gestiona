@@ -15,6 +15,8 @@ class CreateNotasPedidosTable extends Migration
     {
         Schema::create('notas_pedidos', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('anio_id'); // Ultimo Codigo por anio
+            $table->unsignedInteger('anio_actual'); // Anio del codigo            
             $table->unsignedInteger('cliente_id');
             $table->unsignedInteger('user_id');
             $table->char('estado', 2)->default('PE'); //PE = Pendiente, AN = Anulado, CO = Confirmado, FI = Finalizado

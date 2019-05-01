@@ -10,7 +10,7 @@
                   <h4>
                     <i class="fa fa-globe"></i> Agro Proyecciones SRL
                   </h4>
-                  <div>Nota de Pedido N° {{ orenes_compra_id_edicion }}</div>
+                  <div>Nota de Pedido N° {{ anio_id }} - {{ anio_actual }}</div>
                 </div>
                 <!-- /.col -->
 
@@ -187,17 +187,17 @@
                         <table class="table table-striped table-sm table-responsive">
                             <thead>
                                 <tr>
-                                    <th>Producto</th>
-                                    <th>Cantidad</th>
-                                    <th>Importe</th>
-                                    <th>Flete</th>
-                                    <th>C. Venta</th>
-                                    <th>C. Gestion</th>
-                                    <th>Subtotal</th>
+                                    <th style="width:30%">Producto</th>
+                                    <th style="width:10%">Cantidad</th>
+                                    <th style="width:12%">Importe</th>
+                                    <th style="width:12%">Flete</th>
+                                    <th style="width:12%">C. Venta</th>
+                                    <th style="width:12%">C. Gestion</th>
+                                    <th style="width:12%">Subtotal</th>
                                     <th></th>
                                 </tr>
                                 <tr>
-                                    <td class="col-sm-6 invoice-col">
+                                    <td class="invoice-col">
                                         <div class="form-group">
                                             <div class="input-group input-group-sm">
                                                 <select class="form-control" v-model="codigo_producto" ref="codigo_producto" @change="cargarProducto(codigo_producto)">
@@ -209,7 +209,7 @@
                                     </td>
                                     <!-- /.col -->
 
-                                    <td class="col-sm-1 invoice-col">
+                                    <td class="invoice-col">
                                         <div class="form-group">
                                             <div class="input-group input-group-sm">
                                                 <input v-model="cantidad_producto" type="number" name="cantidad_producto"
@@ -219,7 +219,7 @@
                                     </td>
                                     <!-- /.col -->
 
-                                    <td class="col-sm-1 invoice-col">
+                                    <td class="invoice-col">
                                         <div class="form-group">
                                             <div class="input-group input-group-sm">
                                                 <input v-model="precio_producto" type="number" name="precio_producto"
@@ -229,7 +229,7 @@
                                     </td>
                                     <!-- /.col -->
 
-                                    <td class="col-sm-1 invoice-col">
+                                    <td class="invoice-col">
                                         <div class="form-group">
                                             <div class="input-group input-group-sm">
                                                 <input v-model="flete_producto" type="number" name="flete_producto"
@@ -239,7 +239,7 @@
                                     </td>
                                     <!-- /.col -->
 
-                                    <td class="col-sm-1 invoice-col">
+                                    <td class="invoice-col">
                                         <div class="form-group">
                                             <div class="input-group input-group-sm">
                                                 <input v-model="comision_venta_producto" type="number" name="comision_venta_producto"
@@ -249,7 +249,7 @@
                                     </td>
                                     <!-- /.col -->
 
-                                    <td class="col-sm-1 invoice-col">
+                                    <td class="invoice-col">
                                         <div class="form-group">
                                             <div class="input-group input-group-sm">
                                                 <input v-model="comision_gestion_producto" type="number" name="comision_gestion_producto"
@@ -259,7 +259,7 @@
                                     </td>
                                     <!-- /.col -->
 
-                                    <td class="col-sm-1 invoice-col">
+                                    <td class="invoice-col">
                                         <div class="form-group">
                                             <div class="input-group input-group-sm">
                                                 <input v-model="subtotal_producto" type="text" name="subtotal_producto" 
@@ -329,7 +329,7 @@
                 <button v-if="!modoEdicion" type="button" class="btn btn-success float-right" @click="creaOrdenCompra()">
                     <i class="fa fa-save fa-fw"></i> Guardar
                 </button>
-                <button v-if="modoEdicion" type="button" class="btn btn-success float-right" @click="actualizaOrdenCompra()">
+                <button v-if="modoEdicion && estado == 'PE'" type="button" class="btn btn-success float-right" @click="actualizaOrdenCompra()">
                     <i class="fa fa-save fa-fw"></i> Modificar
                 </button>
                 <router-link to="/ordenescompra" class="btn btn-primary float-right" style="margin-right: 5px;">
@@ -383,12 +383,15 @@
                 modoEdicion: false,
                 orenes_compra_id_edicion: 0,
                 tipo: '',
+                estado: '',
                 codigo_deposito: '',
                 codigo_formapago: '',
                 codigo_condicionpago: '',
                 codigo_cliente: 0,
                 codigo_vendedor_venta: 0,
                 codigo_vendedor_gestion: 0,
+                anio_id: 0,
+                anio_actual: 0,
                 codigo_producto: 0,
                 cantidad_producto: 0,
                 nombre_producto: '',
@@ -677,7 +680,11 @@
                     me.orden_compra_detalle = response.datoOrdenCompraD;
 
                     //Datos Orden Compra
+                    me.anio_id = this.orden_compra.anio_id;
+                    me.anio_actual = this.orden_compra.anio_actual;
+
                     me.tipo = me.orden_compra.tipo;
+                    me.estado = me.orden_compra.estado;
                     me.codigo_proveedor = me.orden_compra.proveedor_id;
                     me.fecha_orden_compra = new Date(me.orden_compra.fecha);
                     me.fecha_orden_compra = me.fecha_orden_compra.setDate(me.fecha_orden_compra.getDate() + 1);

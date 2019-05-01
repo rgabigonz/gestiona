@@ -60,6 +60,9 @@ class OrdenCompraController extends Controller
         
         $cantidad_items = count($request->items);
 
+        $anio_actual = \Carbon\Carbon::now();
+        $anio_id = OrdenCompra::where('anio_actual', $anio_actual)->max('anio_id') + 1;
+
         $orden_compra = new OrdenCompra();
 
         $orden_compra->proveedor_id = $request->codigo_proveedor;
@@ -67,6 +70,10 @@ class OrdenCompraController extends Controller
         $orden_compra->formapago_id = $request->codigo_forma_pago;
         $orden_compra->condicionpago_id = $request->codigo_condicion_pago;
         $orden_compra->user_id = $user->id;
+
+        // ID Segun anio
+        $orden_compra->anio_id = $anio_id;
+        $orden_compra->anio_actual = $anio_actual->year;
 
         if (!empty($request->tipo))
             $orden_compra->tipo = $request->tipo;

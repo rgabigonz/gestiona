@@ -63,10 +63,13 @@
                                     <i class="fa fa-check green"></i>
                                 </a>
                                 <a href="#" v-if="orden_compra.estado == 'PE'" @click="anulaOrdenCompra(orden_compra.id)">
-                                    <i class="fa fa-trash-alt red"></i>
+                                    <i class="fa fa-trash-alt yellow"></i>
                                 </a>
                                 <router-link :to="{ name: 'ordenescompradetalle', params: { ordenescompraId: orden_compra.id } }">
                                     <i class="fa fa-table indigo"></i>
+                                </router-link>      
+                                <router-link :to="{ name: 'ordenescompradetalle', params: { ordenescompraId: orden_compra.id } }">
+                                    <i class="fa fa-file-pdf red"></i>
                                 </router-link>                                
                             </td>
                         </tr>

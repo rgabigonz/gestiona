@@ -15,6 +15,8 @@ class CreateOrdenesComprasTable extends Migration
     {
         Schema::create('ordenes_compras', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('anio_id'); // Ultimo Codigo por anio
+            $table->unsignedInteger('anio_actual'); // Anio del codigo
             $table->unsignedInteger('proveedor_id');
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('deposito_id')->nullable();

@@ -63,11 +63,17 @@
                                     <i class="fa fa-check green"></i>
                                 </a>
                                 <a href="#" v-if="nota_pedido.estado == 'PE'" @click="anulaPresupuesto(nota_pedido.id)">
-                                    <i class="fa fa-trash-alt red"></i>
+                                    <i class="fa fa-trash-alt yellow"></i>
                                 </a>
                                 <router-link :to="{ name: 'notaspedidodetalle', params: { notaspedidoId: nota_pedido.id } }">
                                     <i class="fa fa-table indigo"></i>
-                                </router-link>                                
+                                </router-link>
+                                <a href="#" @click.prevent="generaNotaPedidoPDF()">
+                                    <i class="fa fa-file-pdf red"></i>
+                                </a>                                
+                                <!-- <router-link :to="{ name: 'notaspedidodetalle', params: { notaspedidoId: nota_pedido.id } }">
+                                    <i class="fa fa-file-pdf red"></i>
+                                </router-link>                                 -->
                             </td>
                         </tr>
                     </tbody>
@@ -213,6 +219,17 @@
                 })
                 .catch(() => {
                     swal('Fallo!', 'Hubo un error al procesar la transaccion.', 'warning');                    
+                });
+            },
+            generaNotaPedidoPDF() {
+                axios.get('api/notaPedido/NotaPedidoPDF/', {
+                    responseType: 'blob'}).then((response) => {
+                    const url = window.URL.createObjectURL(new Blob([response.data]));
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.setAttribute('download', 'file.pdf'); //or any other extension
+                    document.body.appendChild(link);
+                    link.click();
                 });
             }
         },
