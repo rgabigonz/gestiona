@@ -68,7 +68,7 @@
                                 <router-link :to="{ name: 'notaspedidodetalle', params: { notaspedidoId: nota_pedido.id } }">
                                     <i class="fa fa-table indigo"></i>
                                 </router-link>
-                                <a href="#" @click.prevent="generaNotaPedidoPDF()">
+                                <a href="#" @click="generaNotaPedidoPDF(nota_pedido.id)">
                                     <i class="fa fa-file-pdf red"></i>
                                 </a>                                
                                 <!-- <router-link :to="{ name: 'notaspedidodetalle', params: { notaspedidoId: nota_pedido.id } }">
@@ -221,8 +221,9 @@
                     swal('Fallo!', 'Hubo un error al procesar la transaccion.', 'warning');                    
                 });
             },
-            generaNotaPedidoPDF() {
-                axios.get('api/notaPedido/NotaPedidoPDF/', {
+            generaNotaPedidoPDF(id) {
+                var urlBE = 'api/notaPedido/NotaPedidoPDF/'+id;
+                axios.get(urlBE, {
                     responseType: 'blob'}).then((response) => {
                     const url = window.URL.createObjectURL(new Blob([response.data]));
                     const link = document.createElement('a');

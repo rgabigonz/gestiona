@@ -146,31 +146,20 @@ class NotaPedidoController extends Controller
         $NotaPedido->update();
     }
 
-    public function NotaPedidoPDF()
+    public function NotaPedidoPDF(Request $request, $id)
     {
-        
-        //$pdf = \PDF::loadView('reportesPDF.notapedido', compact('data', 'date', 'notapedido'));
-        
-        $data = $this->getData();
-        $date = date('Y-m-d');
-        $notapedido = "2222";
-        $pdf = \PDF::loadView('reportesPDF.notapedido', compact('data', 'date', 'notapedido'));
+        //$datoNotaPedido = NotaPedido::findOrFail($id);
 
-        /*$view =  \View::make('reportesPDF.notapedido', compact('data', 'date', 'notapedido'))->render();
-        $pdf = \App::make('dompdf.wrapper');
-        $pdf->loadHTML($view);*/
+        $datoNotaPedido = NotaPedido::leftjoin('clientes', 'notas_pedidos.cliente_id', '=', 'clientes.id')
+        ->select('notas_pedidos.*', 'clientes.nombre as nombre_cliente', 'clientes.direccion as direccion_cliente', 'clientes.telefono as telefono_cliente', 'clientes.correo_electronico as email_cliente')
+        ->where('notas_pedidos.id', '=', $id)->get();
+
+        $datoNotaPedidoD = NotaPedidoDetalle::join('productos', 'notas_pedidos_detalle.producto_id', '=', 'productos.id')
+        ->select('notas_pedidos_detalle.*', 'productos.nombre as nombre_producto')
+        ->where('notas_pedidos_detalle.nota_pedido_id', '=', $id)->get();
+        
+        $pdf = \PDF::loadView('reportesPDF.notapedido', ['datoNotaPedido'=>$datoNotaPedido, 'datoNotaPedidoD'=>$datoNotaPedidoD]);
 
         return $pdf->download('notapedido.pdf');
     }
-
-    public function getData() 
-    {
-        $data =  [
-            'quantity'      => '1' ,
-            'description'   => 'some ramdom text',
-            'price'   => '500',
-            'total'     => '500'
-        ];
-        return $data;
-    }    
 }
