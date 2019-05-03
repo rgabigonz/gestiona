@@ -202,11 +202,18 @@ class OrdenCompraController extends Controller
     public function NotaPedidoProveedorPDF(Request $request, $id)
     {
         $datoOrdenCompra = OrdenCompra::leftjoin('clientes', 'ordenes_compras.cliente_id', '=', 'clientes.id')
+        ->leftjoin('depositos', 'ordenes_compras.deposito_id', '=', 'depositos.id')
+        ->leftjoin('forma_pagos', 'ordenes_compras.formapago_id', '=', 'forma_pagos.id')
+        ->leftjoin('condicion_pagos', 'ordenes_compras.condicionpago_id', '=', 'condicion_pagos.id')
+        ->leftjoin('vendedores as vv', 'ordenes_compras.vendedor_venta_id', '=', 'vv.id')
+        ->leftjoin('vendedores as vg', 'ordenes_compras.vendedor_gestion_id', '=', 'vg.id')
         ->join('proveedores', 'ordenes_compras.proveedor_id', '=', 'proveedores.id')
         ->select('ordenes_compras.*', 'clientes.nombre as nombre_cliente', 'clientes.direccion as direccion_cliente', 
                  'clientes.telefono as telefono_cliente', 'clientes.correo_electronico as email_cliente', 'proveedores.nombre as nombre_proveedor', 
                  'proveedores.direccion as direccion_proveedor', 'proveedores.telefono as telefono_proveedor', 
-                 'proveedores.correo_electronico as email_proveedor')
+                 'proveedores.correo_electronico as email_proveedor', 'vv.nombre as nombre_vendedor_venta', 'vg.nombre as nombre_vendedor_gestion',
+                 'depositos.descripcion as descripcion_deposito', 'forma_pagos.descripcion as descripcion_forma_pago', 
+                 'condicion_pagos.descripcion as descripcion_condicion_pago')
         ->where('ordenes_compras.id', '=', $id)->get();
 
         $datoOrdenCompraD = OrdenCompraDetalle::join('productos', 'ordenes_compras_detalle.producto_id', '=', 'productos.id')

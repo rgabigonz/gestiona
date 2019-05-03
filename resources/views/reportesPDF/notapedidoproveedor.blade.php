@@ -11,7 +11,7 @@
 				/*color: #555555;*/
 				/*background: #FFFFFF; */
 				font-family: Arial, sans-serif; 
-				font-size: 14px;
+				font-size: 15px;
 				/*font-family: SourceSansPro;*/
 			}
 
@@ -42,71 +42,71 @@
 			}
 
 			#nven{
-			/*position: relative;*/
-			float: right;
-			margin-top: 2%;
-			margin-left: 2%;
-			margin-right: 2%;
-			font-size: 20px;
+				/*position: relative;*/
+				float: right;
+				margin-top: 2%;
+				margin-left: 2%;
+				margin-right: 2%;
+				font-size: 15px;
 			}
 
 			section{
-			clear: left;
+				clear: left;
 			}
 
 			#cliente{
-			text-align: left;
+				text-align: left;
 			}
 
 			#nvcliente{
-			width: 40%;
-			border-collapse: collapse;
-			border-spacing: 0;
-			margin-bottom: 15px;
+				width: 100%;
+				border-collapse: collapse;
+				border-spacing: 0;
+				margin-bottom: 15px;
 			}
 
 			#fac, #fv, #nv{
-			color: #FFFFFF;
-			font-size: 15px;
+				color: #FFFFFF;
+				font-size: 15px;
 			}
 
 			#nvcliente thead{
-			padding: 20px;
-			background: #2183E3;
-			text-align: left;
-			border-bottom: 1px solid #FFFFFF;  
+				padding: 50px;
+				background: #2183E3;
+				text-align: left;
+				border-bottom: 1px solid #FFFFFF;  
 			}
 
 			#facvendedor{
-			width: 100%;
-			border-collapse: collapse;
-			border-spacing: 0;
-			margin-bottom: 15px;
+				width: 100%;
+				border-collapse: collapse;
+				border-spacing: 0;
+				margin-bottom: 15px;
 			}
 
 			#facvendedor thead{
-			padding: 20px;
-			background: #2183E3;
-			text-align: center;
-			border-bottom: 1px solid #FFFFFF;  
+				padding: 20px;
+				background: #2183E3;
+				text-align: center;
+				border-bottom: 1px solid #FFFFFF;  
 			}
 
 			#nvarticulo{
-			width: 100%;
-			border-collapse: collapse;
-			border-spacing: 0;
-			margin-bottom: 15px;
+				width: 100%;
+				border-collapse: collapse;
+				border-spacing: 0;
+				margin-bottom: 15px;
 			}
 
 			#nvarticulo thead{
-			padding: 20px;
-			background: #2183E3;
-			/* text-align: center; */
-			border-bottom: 1px solid #FFFFFF;  
+				padding: 20px;
+				background: #2183E3;
+				/* text-align: center; */
+				border-bottom: 1px solid #FFFFFF;  
 			}
 
 			#gracias{
-			text-align: center; 
+				text-align: center; 
 			}
 	</style>		
 	</head>
@@ -139,7 +139,7 @@
                     <tbody>
                         <tr>
                             <th>
-								<p id="cliente">Sr(a). {{ $datoOrdenCompra[0]['nombre_proveedor'] }}<br>
+								<p id="cliente">{{ $datoOrdenCompra[0]['nombre_proveedor'] }}<br>
                             					Dirección: {{ $datoOrdenCompra[0]['direccion_proveedor'] }}<br>
                             					Teléfono: {{ $datoOrdenCompra[0]['telefono_proveedor'] }}<br>
                             					Email: {{ $datoOrdenCompra[0]['email_proveedor'] }}
@@ -149,26 +149,69 @@
                     </tbody>
                 </table>
             </div>
-            <div>
-                <table id="nvcliente">
-                    <thead>                        
-                        <tr>
-                            <th id="nv">Cliente</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th>
-								<p id="cliente">Sr(a). {{ $datoOrdenCompra[0]['nombre_cliente'] }}<br>
-                            					Dirección: {{ $datoOrdenCompra[0]['direccion_cliente'] }}<br>
-                            					Teléfono: {{ $datoOrdenCompra[0]['telefono_cliente'] }}<br>
-                            					Email: {{ $datoOrdenCompra[0]['email_cliente'] }}
-								</p>
-							</th>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>            
+			@if ($datoOrdenCompra[0]['tipo'] == 'CL')
+            	<div>
+					<table id="nvcliente">
+						<thead>                        
+							<tr>
+								<th id="nv">Cliente</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<th>
+									<p id="cliente">{{ $datoOrdenCompra[0]['nombre_cliente'] }}<br>
+													Dirección: {{ $datoOrdenCompra[0]['direccion_cliente'] }}<br>
+													Teléfono: {{ $datoOrdenCompra[0]['telefono_cliente'] }}<br>
+													Email: {{ $datoOrdenCompra[0]['email_cliente'] }}
+									</p>
+								</th>
+							</tr>
+						</tbody>
+					</table>
+					<table id="nvcliente">
+						<thead>                        
+							<tr>
+								<th id="nv">Deposito</th>
+								<th id="nv">Forma de Pago</th>
+								<th id="nv">Condicion de Pago</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<th>
+									<p id="cliente">{{ $datoOrdenCompra[0]['descripcion_deposito'] }}<br></p>
+								</th>
+								<th>
+									<p id="cliente">{{ $datoOrdenCompra[0]['descripcion_forma_pago'] }}<br></p>
+								</th>
+								<th>
+									<p id="cliente">{{ $datoOrdenCompra[0]['descripcion_condicion_pago'] }}<br></p>
+								</th>
+							</tr>
+						</tbody>
+					</table>
+					<table id="nvcliente">
+						<thead>                        
+							<tr>
+								<th id="nv">Comision de Venta</th>
+								<th id="nv">Comision de Gestion</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<th>
+									<p id="cliente">{{ $datoOrdenCompra[0]['nombre_vendedor_venta'] }}<br></p>
+								</th>
+								<th>
+									<p id="cliente">{{ $datoOrdenCompra[0]['nombre_vendedor_gestion'] }}<br></p>
+								</th>
+							</tr>
+						</tbody>
+					</table>
+				</div>					
+			@endif
+            
         </section>		
 		<br>
         <section>
@@ -176,12 +219,14 @@
                 <table id="nvarticulo">
                     <thead>
                         <tr id="nv">
-                            <th>DESCRIPCION</th>
-                            <th>CANT</th>							
-                            <th>PRECIO</th>
-                            <th>Flete</th>
-                            <th>C. Venta</th>
-                            <th>C. Gestion</th>
+                            <th>Producto</th>
+                            <th>Cantidad</th>							
+                            <th>Precio</th>
+							@if ($datoOrdenCompra[0]['tipo'] == 'CL')
+								<th>Flete</th>
+								<th>C. Venta</th>
+								<th>C. Gestion</th>
+							@endif
                             <th>SUBTOTAL</th>
                         </tr>
                     </thead>
@@ -190,11 +235,13 @@
                         <tr>
                             <td>{{ $det->nombre_producto }}</td>
                             <td>{{ $det->cantidad }}</td>							
-                            <td>{{ $det->precio }}</td>
-                            <td>{{ $det->flete }}</td>
-                            <td>{{ $det->comision_venta }}</td>
-                            <td>{{ $det->comision_gestion }}</td>
-                            <td>{{ $det->flete + $det->comision_venta + $det->comision_gestion + ($det->cantidad * $det->precio) }}</td>
+                            <td>$ {{ $det->precio }}</td>
+							@if ($datoOrdenCompra[0]['tipo'] == 'CL')
+								<td>$ {{ $det->flete }}</td>
+								<td>$ {{ $det->comision_venta }}</td>
+								<td>$ {{ $det->comision_gestion }}</td>
+							@endif
+                            <td>$ {{ $det->flete + $det->comision_venta + $det->comision_gestion + ($det->cantidad * $det->precio) }}</td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -202,9 +249,11 @@
                         <tr>
                             <th></th>
                             <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
+							@if ($datoOrdenCompra[0]['tipo'] == 'CL')
+								<th></th>
+								<th></th>
+								<th></th>
+							@endif
                             <th>TOTAL</th>
                             <td>$ {{ $datoOrdenCompra[0]['total'] }}</td>
                         </tr>
