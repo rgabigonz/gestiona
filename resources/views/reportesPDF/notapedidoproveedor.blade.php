@@ -203,6 +203,8 @@
                             <th></th>
                             <th></th>
                             <th></th>
+                            <th></th>
+                            <th></th>
                             <th>TOTAL</th>
                             <td>$ {{ $datoOrdenCompra[0]['total'] }}</td>
                         </tr>
@@ -212,10 +214,10 @@
         </section>
         <br>
         <br>
-        <footer>
+        <!-- <footer>
             <div id="gracias">
                 <p><b>Gracias por su compra!</b></p>
             </div>
-        </footer>		
+        </footer>		 -->
 	</body>
 </html>

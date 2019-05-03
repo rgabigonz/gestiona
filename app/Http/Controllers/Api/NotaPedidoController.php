@@ -149,7 +149,8 @@ class NotaPedidoController extends Controller
     public function NotaPedidoPDF(Request $request, $id)
     {
         $datoNotaPedido = NotaPedido::join('clientes', 'notas_pedidos.cliente_id', '=', 'clientes.id')
-        ->select('notas_pedidos.*', 'clientes.nombre as nombre_cliente', 'clientes.direccion as direccion_cliente', 'clientes.telefono as telefono_cliente', 'clientes.correo_electronico as email_cliente')
+        ->select('notas_pedidos.*', 'clientes.nombre as nombre_cliente', 'clientes.direccion as direccion_cliente', 
+                 'clientes.telefono as telefono_cliente', 'clientes.correo_electronico as email_cliente')
         ->where('notas_pedidos.id', '=', $id)->get();
 
         $datoNotaPedidoD = NotaPedidoDetalle::join('productos', 'notas_pedidos_detalle.producto_id', '=', 'productos.id')

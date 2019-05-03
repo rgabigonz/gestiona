@@ -203,7 +203,10 @@ class OrdenCompraController extends Controller
     {
         $datoOrdenCompra = OrdenCompra::leftjoin('clientes', 'ordenes_compras.cliente_id', '=', 'clientes.id')
         ->join('proveedores', 'ordenes_compras.proveedor_id', '=', 'proveedores.id')
-        ->select('ordenes_compras.*', 'clientes.nombre as nombre_cliente', 'clientes.direccion as direccion_cliente', 'clientes.telefono as telefono_cliente', 'clientes.correo_electronico as email_cliente', 'proveedores.nombre as nombre_proveedor', 'proveedores.direccion as direccion_proveedor', 'proveedores.telefono as telefono_proveedor', 'proveedores.correo_electronico as email_proveedor')
+        ->select('ordenes_compras.*', 'clientes.nombre as nombre_cliente', 'clientes.direccion as direccion_cliente', 
+                 'clientes.telefono as telefono_cliente', 'clientes.correo_electronico as email_cliente', 'proveedores.nombre as nombre_proveedor', 
+                 'proveedores.direccion as direccion_proveedor', 'proveedores.telefono as telefono_proveedor', 
+                 'proveedores.correo_electronico as email_proveedor')
         ->where('ordenes_compras.id', '=', $id)->get();
 
         $datoOrdenCompraD = OrdenCompraDetalle::join('productos', 'ordenes_compras_detalle.producto_id', '=', 'productos.id')
