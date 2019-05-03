@@ -118,6 +118,7 @@ Route::middleware('auth:api')->group( function () {
     ]);
 
     //Rutas Ordenes Compra
+    Route::get('/ordenCompra/NotaPedidoProveedorPDF/{orden_compra}','Api\OrdenCompraController@NotaPedidoProveedorPDF');
     Route::get('/ordenCompra/devuelveOrdenCompra/{orden_compra}', 'Api\OrdenCompraController@devuelveOrdenCompra');
     Route::put('/ordenCompra/anulaOrdenCompra/{orden_compra}', 'Api\OrdenCompraController@anulaOrdenCompra');
     Route::put('/ordenCompra/confirmaOrdenCompra/{orden_compra}', 'Api\OrdenCompraController@confirmaOrdenCompra');

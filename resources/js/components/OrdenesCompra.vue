@@ -68,9 +68,9 @@
                                 <router-link :to="{ name: 'ordenescompradetalle', params: { ordenescompraId: orden_compra.id } }">
                                     <i class="fa fa-table indigo"></i>
                                 </router-link>      
-                                <router-link :to="{ name: 'ordenescompradetalle', params: { ordenescompraId: orden_compra.id } }">
+                                <a href="#" @click="NotaPedidoProveedorPDF(orden_compra.id, orden_compra.anio_id, orden_compra.anio_actual)">
                                     <i class="fa fa-file-pdf red"></i>
-                                </router-link>                                
+                                </a>  
                             </td>
                         </tr>
                     </tbody>
@@ -216,6 +216,18 @@
                 })
                 .catch(() => {
                     swal('Fallo!', 'Hubo un error al procesar la transaccion.', 'warning');                    
+                });
+            },
+            NotaPedidoProveedorPDF(id, anio_id, anio_actual) {
+                var urlBE = 'api/ordenCompra/NotaPedidoProveedorPDF/'+id;
+                axios.get(urlBE, {
+                    responseType: 'blob'}).then((response) => {
+                    const url = window.URL.createObjectURL(new Blob([response.data]));
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.setAttribute('download', 'NP' + anio_id + '-' + anio_actual + '.pdf'); //or any other extension
+                    document.body.appendChild(link);
+                    link.click();
                 });
             }
         },

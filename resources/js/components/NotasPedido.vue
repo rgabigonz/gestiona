@@ -12,7 +12,7 @@
                     <div class="row">
                         <div class="col col-md-4">
                             <select class="form-control" v-model="sCriterio">
-                                <option value="notas_pedidos.id">Numero Pedido</option>
+                                <option value="notas_pedidos.id">Numero Nota de Venta</option>
                             </select>
                         </div>
                         <div class="col col-md-8">
@@ -23,7 +23,7 @@
             </div>
             <div class="card border-info mb-3">
               <div class="card-header border-light">
-                <h3 class="card-title">Notas de Pedido</h3>
+                <h3 class="card-title">Notas de Venta</h3>
                 <div class="card-tools">
                     <router-link :to="{ name: 'notaspedidodetalle', params: { notaspedidoId: 0 } }" class="btn btn-success">
                         <i class="fas fa-plus fa-fw"></i>
@@ -68,12 +68,9 @@
                                 <router-link :to="{ name: 'notaspedidodetalle', params: { notaspedidoId: nota_pedido.id } }">
                                     <i class="fa fa-table indigo"></i>
                                 </router-link>
-                                <a href="#" @click="generaNotaPedidoPDF(nota_pedido.id)">
+                                <a href="#" @click="generaNotaPedidoPDF(nota_pedido.id, nota_pedido.anio_id, nota_pedido.anio_actual)">
                                     <i class="fa fa-file-pdf red"></i>
                                 </a>                                
-                                <!-- <router-link :to="{ name: 'notaspedidodetalle', params: { notaspedidoId: nota_pedido.id } }">
-                                    <i class="fa fa-file-pdf red"></i>
-                                </router-link>                                 -->
                             </td>
                         </tr>
                     </tbody>
@@ -221,14 +218,14 @@
                     swal('Fallo!', 'Hubo un error al procesar la transaccion.', 'warning');                    
                 });
             },
-            generaNotaPedidoPDF(id) {
+            generaNotaPedidoPDF(id, anio_id, anio_actual) {
                 var urlBE = 'api/notaPedido/NotaPedidoPDF/'+id;
                 axios.get(urlBE, {
                     responseType: 'blob'}).then((response) => {
                     const url = window.URL.createObjectURL(new Blob([response.data]));
                     const link = document.createElement('a');
                     link.href = url;
-                    link.setAttribute('download', 'file.pdf'); //or any other extension
+                    link.setAttribute('download', 'NV' + anio_id + '-' + anio_actual + '.pdf'); //or any other extension
                     document.body.appendChild(link);
                     link.click();
                 });

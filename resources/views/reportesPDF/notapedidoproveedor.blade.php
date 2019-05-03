@@ -124,11 +124,31 @@
                 </p>
             </div>
             <div id="nven">
-                <p>Nota de Venta N° {{ $datoNotaPedido[0]['anio_id'] }} - {{ $datoNotaPedido[0]['anio_actual'] }}</p>
+                <p>Nota de Pedido N° {{ $datoOrdenCompra[0]['anio_id'] }} - {{ $datoOrdenCompra[0]['anio_actual'] }}</p>
             </div>
         </header>
         <br>
         <section>
+            <div>
+                <table id="nvcliente">
+                    <thead>                        
+                        <tr>
+                            <th id="nv">Proveedor</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>
+								<p id="cliente">Sr(a). {{ $datoOrdenCompra[0]['nombre_proveedor'] }}<br>
+                            					Dirección: {{ $datoOrdenCompra[0]['direccion_proveedor'] }}<br>
+                            					Teléfono: {{ $datoOrdenCompra[0]['telefono_proveedor'] }}<br>
+                            					Email: {{ $datoOrdenCompra[0]['email_proveedor'] }}
+								</p>
+							</th>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
             <div>
                 <table id="nvcliente">
                     <thead>                        
@@ -139,16 +159,16 @@
                     <tbody>
                         <tr>
                             <th>
-								<p id="cliente">Sr(a). {{ $datoNotaPedido[0]['nombre_cliente'] }}<br>
-                            					Dirección: {{ $datoNotaPedido[0]['direccion_cliente'] }}<br>
-                            					Teléfono: {{ $datoNotaPedido[0]['telefono_cliente'] }}<br>
-                            					Email: {{ $datoNotaPedido[0]['email_cliente'] }}
+								<p id="cliente">Sr(a). {{ $datoOrdenCompra[0]['nombre_cliente'] }}<br>
+                            					Dirección: {{ $datoOrdenCompra[0]['direccion_cliente'] }}<br>
+                            					Teléfono: {{ $datoOrdenCompra[0]['telefono_cliente'] }}<br>
+                            					Email: {{ $datoOrdenCompra[0]['email_cliente'] }}
 								</p>
 							</th>
                         </tr>
                     </tbody>
                 </table>
-            </div>
+            </div>            
         </section>		
 		<br>
         <section>
@@ -158,17 +178,23 @@
                         <tr id="nv">
                             <th>DESCRIPCION</th>
                             <th>CANT</th>							
-                            <th>PRECIO UNIT</th>
-                            <th>PRECIO TOTAL</th>
+                            <th>PRECIO</th>
+                            <th>Flete</th>
+                            <th>C. Venta</th>
+                            <th>C. Gestion</th>
+                            <th>SUBTOTAL</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($datoNotaPedidoD as $det)
+                        @foreach ($datoOrdenCompraD as $det)
                         <tr>
                             <td>{{ $det->nombre_producto }}</td>
                             <td>{{ $det->cantidad }}</td>							
                             <td>{{ $det->precio }}</td>
-                            <td>{{ $det->cantidad * $det->precio }}</td>
+                            <td>{{ $det->flete }}</td>
+                            <td>{{ $det->comision_venta }}</td>
+                            <td>{{ $det->comision_gestion }}</td>
+                            <td>{{ $det->flete + $det->comision_venta + $det->comision_gestion + ($det->cantidad * $det->precio) }}</td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -178,7 +204,7 @@
                             <th></th>
                             <th></th>
                             <th>TOTAL</th>
-                            <td>$ {{ $datoNotaPedido[0]['total'] }}</td>
+                            <td>$ {{ $datoOrdenCompra[0]['total'] }}</td>
                         </tr>
                     </tfoot>
                 </table>
