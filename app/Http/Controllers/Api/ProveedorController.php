@@ -114,15 +114,6 @@ class ProveedorController extends Controller
         $proveedor->update();
     }
 
-    public function cargaTD()
-    {
-        $tiposDocumento = TipoDocumento::orderBy('descripcion', 'asc')->get();
-        return [
-            'tiposDocumento' => $tiposDocumento
-        ];
-
-    }
-
     public function devuelveDatosProveedor(Request $request, $id)
     {
         $datoProveedor = Proveedor::findOrFail($id);

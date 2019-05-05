@@ -18,6 +18,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::middleware('auth:api')->group( function () {
+    // Ruta Dashboard
+    Route::get('/dashboard', 'Api\DashboardController');
+    
+    // Rutas Tipos Documentos
+    Route::get('/tipodocumento/cargaTD', 'Api\TipoDocumentoController@cargaTD');
+
     // Rutas Tipos Productos
     Route::get('/tipoproducto/cargaTP', 'Api\TipoProductoController@cargaTP');
 
@@ -85,7 +91,6 @@ Route::middleware('auth:api')->group( function () {
 
     // Rutas Clientes
     Route::get('/cliente/cargaClientes', 'Api\ClienteController@cargaClientes');
-    Route::get('/cliente/cargaTD', 'Api\ClienteController@cargaTD');
     Route::get('/cliente/devuelveDatosCliente/{cliente}', 'Api\ClienteController@devuelveDatosCliente');
 
     Route::apiResources([
@@ -97,7 +102,6 @@ Route::middleware('auth:api')->group( function () {
 
     // Rutas Proveedores
     Route::get('/proveedor/cargaProveedores', 'Api\ProveedorController@cargaProveedores');
-    Route::get('/proveedor/cargaTD', 'Api\ProveedorController@cargaTD');
     Route::get('/proveedor/devuelveDatosProveedor/{proveedor}', 'Api\ProveedorController@devuelveDatosProveedor');
 
     Route::apiResources([

@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\TipoDocumento;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class TipoDocumentoController extends Controller
 {
@@ -72,14 +73,12 @@ class TipoDocumentoController extends Controller
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\TipoDocumento  $tipodocumento
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(TipoDocumento $tipodocumento)
+    public function cargaTD()
     {
-        //
+        $tiposDocumento = TipoDocumento::orderBy('descripcion', 'asc')->get();
+        return [
+            'tiposDocumento' => $tiposDocumento
+        ];
     }
+
 }

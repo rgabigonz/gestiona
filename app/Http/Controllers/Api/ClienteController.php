@@ -113,14 +113,6 @@ class ClienteController extends Controller
         $cliente->update();
     }
 
-    public function cargaTD()
-    {
-        $tiposDocumento = TipoDocumento::orderBy('descripcion', 'asc')->get();
-        return [
-            'tiposDocumento' => $tiposDocumento
-        ];
-    }
-
     public function devuelveDatosCliente(Request $request, $id)
     {
         $datoCliente = Cliente::findOrFail($id);

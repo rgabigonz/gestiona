@@ -275,7 +275,7 @@
             },
             cargarTD() {
                 let me = this;                
-                var url = 'api/proveedor/cargaTD';
+                var url = 'api/tipodocumento/cargaTD';
                 axios.get(url).then(data => {
                     var response = data.data;
                     me.tiposDocumento = response.tiposDocumento;

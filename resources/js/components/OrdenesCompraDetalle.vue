@@ -611,33 +611,58 @@
             },
 
             // Operaciones con NP Proveedores (OC)
+            validaNP() {
+                var resultado = true;
+
+                if (this.tipo != 'CL') {
+                    if (this.codigo_proveedor == 0 || this.items.length == 0) {
+                        resultado = false;
+                    }
+                }
+                else {
+                    if (this.codigo_proveedor == 0 || this.items.length == 0 || 
+                        this.codigo_cliente == 0 || this.codigo_vendedor_venta == 0 || this.codigo_vendedor_gestion == 0) {
+                        resultado = false;
+                    }
+                }
+
+                return resultado;
+            },
             creaOrdenCompra() {
                 this.$Progress.start();
                 
-                axios.post('api/ordenCompra', {
-                    codigo_proveedor: this.codigo_proveedor, 
-                    codigo_deposito: this.codigo_deposito, 
-                    codigo_forma_pago: this.codigo_formapago, 
-                    codigo_condicion_pago: this.codigo_condicionpago, 
-                    fecha_orden_compra: this.fecha_orden_compra,
-                    tipo: this.tipo,
-                    total_orden: this.total,
-                    numero_negocio: this.numero_negocio,
-                    obs: this.observacion,
-                    codigo_cliente: this.codigo_cliente, 
-                    codigo_vendedor_venta: this.codigo_vendedor_venta, 
-                    codigo_vendedor_gestion: this.codigo_vendedor_gestion, 
-                    items: this.items})
-                .then(() => {
-                    Fire.$emit('AfterAction');
-                    toast({
-                        type: 'success',
-                        title: 'Se genero la orden de compra correctamente!'
+                if (this.validaNP()) {
+                    axios.post('api/ordenCompra', {
+                        codigo_proveedor: this.codigo_proveedor, 
+                        codigo_deposito: this.codigo_deposito, 
+                        codigo_forma_pago: this.codigo_formapago, 
+                        codigo_condicion_pago: this.codigo_condicionpago, 
+                        fecha_orden_compra: this.fecha_orden_compra,
+                        tipo: this.tipo,
+                        total_orden: this.total,
+                        numero_negocio: this.numero_negocio,
+                        obs: this.observacion,
+                        codigo_cliente: this.codigo_cliente, 
+                        codigo_vendedor_venta: this.codigo_vendedor_venta, 
+                        codigo_vendedor_gestion: this.codigo_vendedor_gestion, 
+                        items: this.items})
+                    .then(() => {
+                        Fire.$emit('AfterAction');
+                        toast({
+                            type: 'success',
+                            title: 'Se genero la orden de compra correctamente!'
+                        });
+                    })
+                    .catch(() => {
+                        this.$Progress.fail();
                     });
-                })
-                .catch(() => {
-                    this.$Progress.fail();
-                });
+                }
+                else {
+                    if (this.tipo != 'CL') 
+                        swal('Error!', 'Debe ingresar un proveedor y al menos un producto', 'error');
+                    else  
+                        swal('Error!', 'Debe ingresar un proveedor, al menos un producto, el cliente y los vendedores', 'error');                    
+                }
 
                 this.$Progress.finish();
             },

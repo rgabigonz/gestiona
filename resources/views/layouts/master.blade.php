@@ -12,12 +12,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
   <!-- CSRF Token -->
   <meta name="csrf-token" content="{{ csrf_token() }}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
 
   <title>.: Gestiona :.</title>
   
   <link rel="stylesheet" href="/css/app.css">
 </head>
-<body class="hold-transition sidebar-mini sidebar-collapse">
+<body class="hold-transition sidebar-mini"> <!--sidebar-collapse">-->
 <div class="wrapper" id="app">
 
   <!-- Navbar -->
@@ -36,7 +37,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="index3.html" class="brand-link">
+    <a href="#" class="brand-link">
       <img src="./img/logo.png" alt="rt Logo" class="brand-image img-circle elevation-3"
            style="opacity: .8">
       <span class="brand-text font-weight-light">Sistema de Gestion</span>
@@ -92,6 +93,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <p>Depositos</p>
                 </router-link>
               </li>
+              <hr>
+              <li class="nav-item">
+                <router-link to="/proveedores" class="nav-link">
+                  <i class="fas fa-user-alt nav-icon"></i>
+                  <p>Proveedores</p>
+                </router-link>
+              </li>    
               <li class="nav-item">
                 <router-link to="/formaspago" class="nav-link">
                   <i class="fas fa-dollar-sign nav-icon"></i>
@@ -104,18 +112,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <p>Condiciones de Pago</p>
                 </router-link>
               </li>
-              <li class="nav-item">
-                <router-link to="/formasventa" class="nav-link">
-                <i class="fas fa-cart-arrow-down nav-icon"></i>
-                  <p>Formas de Venta</p>
-                </router-link>
-              </li>      
-              <li class="nav-item">
-                <router-link to="/proveedores" class="nav-link">
-                  <i class="fas fa-user-alt nav-icon"></i>
-                  <p>Proveedores</p>
-                </router-link>
-              </li>    
+              <hr>
               <li class="nav-item">
                 <router-link to="/clientes" class="nav-link">
                   <i class="fas fa-user-alt nav-icon"></i>
@@ -127,7 +124,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <i class="fas fa-user-alt nav-icon"></i>
                   <p>Distribuidores</p>
                 </router-link>
-              </li>                                
+              </li>    
+              <li class="nav-item">
+                <router-link to="/formasventa" class="nav-link">
+                <i class="fas fa-cart-arrow-down nav-icon"></i>
+                  <p>Formas de Venta</p>
+                </router-link>
+              </li>      
             </ul>
           </li>
           <li class="nav-item has-treeview">

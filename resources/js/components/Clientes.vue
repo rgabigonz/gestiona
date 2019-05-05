@@ -275,7 +275,7 @@
             },
             fCargar_TD() {
                 let lMe = this;                
-                var lUrl = 'api/cliente/cargaTD';
+                var lUrl = 'api/tipodocumento/cargaTD';
                 axios.get(lUrl).then(data => {
                     var lResponse = data.data;
                     lMe.oTipos_Documento = lResponse.tiposDocumento;
