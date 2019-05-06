@@ -1,43 +1,53 @@
 <template>
 <main class="main">
     <div class="container-fluid">
-        <div class="card">
+        <div class="card card-info">
             <!-- <div class="card-header">
                 
             </div> -->
             <div class="car-body">
                 <div class="row">
                     <div class="col-md-6">
-                        <div class="card card-chart">
+                        <!-- BAR CHART -->
+                        <div class="card card-success">
+
                             <div class="card-header">
-                                <h4>Compras</h4>
-                            </div>
-                            <div class="card-content">
-                                <div class="ct-chart">
-                                    <canvas id="compras">                                                
-                                    </canvas>
+                                <h3 class="card-title">Compras</h3>
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                    <button type="button" class="btn btn-tool" data-widget="remove"><i class="fa fa-times"></i></button>
                                 </div>
                             </div>
-                            <!-- <div class="card-footer">
-                                <p>Compras de los últimos meses.</p>
-                            </div> -->
+                            <div class="card-body">
+                                <div class="chart">
+                                    <canvas id="compras" style="height: 352px; width: 605px;" width="605" height="352"></canvas>
+                                </div>
+                            </div>
+                            <!-- /.card-body -->
+
                         </div>
+                        <!-- /.card -->   
                     </div>
                     <div class="col-md-6">
-                        <div class="card card-chart">
+                        <!-- BAR CHART -->
+                        <div class="card card-success">
+
                             <div class="card-header">
-                                <h4>Ventas</h4>
-                            </div>
-                            <div class="card-content">
-                                <div class="ct-chart">
-                                    <canvas id="ventas">                                                
-                                    </canvas>
+                                <h3 class="card-title">Ventas</h3>
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                    <button type="button" class="btn btn-tool" data-widget="remove"><i class="fa fa-times"></i></button>
                                 </div>
                             </div>
-                            <!-- <div class="card-footer">
-                                <p>Ventas de los últimos meses.</p>
-                            </div> -->
+                            <div class="card-body">
+                                <div class="chart">
+                                    <canvas id="ventas" style="height: 352px; width: 605px;" width="605" height="352"></canvas>
+                                </div>
+                            </div>
+                            <!-- /.card-body -->
+
                         </div>
+                        <!-- /.card -->                            
                     </div>
                 </div>
             </div>
@@ -50,14 +60,14 @@
     export default {
         data (){
             return {
-                varCompra:null,
-                charCompra:null,
+                varCompra: null,
+                charCompra: null,
                 compras:[],
                 varTotalCompra:[],
                 varMesCompra:[], 
                 
-                varVenta:null,
-                charVenta:null,
+                varVenta: null,
+                charVenta: null,
                 ventas:[],
                 varTotalVenta:[],
                 varMesVenta:[],
@@ -65,10 +75,10 @@
         },
         methods : {
             getCompras(){
-                let me=this;
-                var url= 'api/dashboard';
+                let me = this;
+                var url = 'api/dashboard';
                 axios.get(url).then(function (response) {
-                    var respuesta= response.data;
+                    var respuesta = response.data;
                     me.compras = respuesta.compras;
                     //cargamos los datos del chart
                     me.loadCompras();
@@ -78,10 +88,10 @@
                 });
             },
             getVentas(){
-                let me=this;
-                var url= 'api/dashboard';
+                let me = this;
+                var url = 'api/dashboard';
                 axios.get(url).then(function (response) {
-                    var respuesta= response.data;
+                    var respuesta = response.data;
                     me.ventas = respuesta.ventas;
                     //cargamos los datos del chart
                     me.loadVentas();
@@ -91,19 +101,19 @@
                 });
             },
             loadCompras(){
-                let me=this;
+                let me = this;
                 me.compras.map(function(x){
                     me.varMesCompra.push(x.mes);
                     me.varTotalCompra.push(x.total);
                 });
-                me.varCompra=document.getElementById('compras').getContext('2d');
+                me.varCompra = document.getElementById('compras').getContext('2d');
 
                 me.charCompra = new Chart(me.varCompra, {
                     type: 'bar',
                     data: {
                         labels: me.varMesCompra,
                         datasets: [{
-                            label: 'Compras',
+                            label: 'Compras x mes',
                             data: me.varTotalCompra,
                             backgroundColor: 'rgba(255, 99, 132, 0.2)',
                             borderColor: 'rgba(255, 99, 132, 0.2)',
@@ -122,19 +132,19 @@
                 });
             },
             loadVentas(){
-                let me=this;
+                let me = this;
                 me.ventas.map(function(x){
                     me.varMesVenta.push(x.mes);
                     me.varTotalVenta.push(x.total);
                 });
-                me.varVenta=document.getElementById('ventas').getContext('2d');
+                me.varVenta = document.getElementById('ventas').getContext('2d');
 
                 me.charVenta = new Chart(me.varVenta, {
                     type: 'bar',
                     data: {
                         labels: me.varMesVenta,
                         datasets: [{
-                            label: 'Ventas',
+                            label: 'Ventas x mes',
                             data: me.varTotalVenta,
                             backgroundColor: 'rgba(54, 162, 235, 0.2)',
                             borderColor: 'rgba(54, 162, 235, 0.2)',

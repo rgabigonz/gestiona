@@ -16,6 +16,16 @@
               </div>
 
               <br>
+
+              <div v-if="errors.length" class="alert alert-danger" role="alert">
+                <b>Se produjeron los siguientes errores:</b>
+                <ul>
+                    <li v-for="error in errors" :key="error.id">{{ error }}</li>
+                </ul>
+              </div>
+              
+              <br>              
+
               <!-- Datos NV row -->
               <div class="card">
                 <div class="card-header border-light bg-secondary">Datos Nota de Venta</div>
@@ -218,6 +228,9 @@
                 sBuscar: '',
                 //Lista de Seleccion clientes y productos   
 
+                // Errores
+                errors: [],
+
                 modoEdicion: false,
                 estado: '',
                 notas_pedido_id_edicion: 0,
@@ -365,28 +378,57 @@
                 return false;
             },
 
+            // Operaciones con NP Proveedores (OC)
+            validaNV() {
+                var resultado = false;
+
+                if (this.codigo_cliente && this.items.length) {
+                    resultado = true;
+                }
+
+                this.errors = [];
+
+                if (this.codigo_cliente == 0) {
+                    this.errors.push('Debe ingresar un cliente');
+                }
+                if (this.items.length == 0) {
+                    this.errors.push('Debe ingresar al menos un producto');
+                }
+
+                return resultado;
+            },
+
             // Operaciones con NV
             creaNotaPedido() {
                 this.$Progress.start();
                 
-                axios.post('api/notaPedido', {
-                    codigo_cliente: this.codigo_cliente, 
-                    fecha_nota_pedido: this.fecha_nota_pedido,
-                    numero_factura: this.numero_factura,
-                    total_pedido: this.total,
-                    items: this.items})
-                .then(() => {
-                    Fire.$emit('AfterAction');
-                    toast({
-                        type: 'success',
-                        title: 'Se genero el pedido correctamente!'
+                if (this.validaNV()) {
+                    axios.post('api/notaPedido', {
+                        codigo_cliente: this.codigo_cliente, 
+                        fecha_nota_pedido: this.fecha_nota_pedido,
+                        numero_factura: this.numero_factura,
+                        total_pedido: this.total,
+                        items: this.items})
+                    .then(() => {
+                        Fire.$emit('AfterAction');
+                        toast({
+                            type: 'success',
+                            title: 'Se genero el pedido correctamente!'
+                        });
+                    })
+                    .catch(() => {
+                        this.$Progress.fail();
                     });
-                })
-                .catch(() => {
-                    this.$Progress.fail();
-                });
 
+                } else {
+                    toast({
+                        type: 'error',
+                        title: 'Verificar errores'
+                    });
+                }
+                
                 this.$Progress.finish();
+                
             },
             actualizaNotaPedido() {
                 this.$Progress.start();

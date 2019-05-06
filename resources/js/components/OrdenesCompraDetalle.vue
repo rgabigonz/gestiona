@@ -18,6 +18,15 @@
               <!-- /.row -->
 
               <br>
+
+              <div v-if="errors.length" class="alert alert-danger" role="alert">
+                <b>Se produjeron los siguientes errores:</b>
+                <ul>
+                    <li v-for="error in errors" :key="error.id">{{ error }}</li>
+                </ul>
+              </div>
+              
+              <br>              
               <!-- Datos NP row -->
               <div class="card">
                 <div class="card-header border-light bg-secondary">Datos Nota de Pedido - Proveedor</div>
@@ -363,6 +372,9 @@
                 sCriterio: 'nombre',
                 sBuscar: '',
 
+                // Errores
+                errors: [],
+                
                 // Otros
                 fecha_orden_compra: new Date(),
                 formato_fecha_orden_compra: "dd-MM-yyyy",
@@ -612,17 +624,43 @@
 
             // Operaciones con NP Proveedores (OC)
             validaNP() {
-                var resultado = true;
+                var resultado = false;
 
                 if (this.tipo != 'CL') {
-                    if (this.codigo_proveedor == 0 || this.items.length == 0) {
-                        resultado = false;
+                    if (this.codigo_proveedor && this.items.length) {
+                        resultado = true;
                     }
-                }
-                else {
-                    if (this.codigo_proveedor == 0 || this.items.length == 0 || 
-                        this.codigo_cliente == 0 || this.codigo_vendedor_venta == 0 || this.codigo_vendedor_gestion == 0) {
-                        resultado = false;
+
+                    this.errors = [];
+
+                    if (this.codigo_proveedor == 0) {
+                        this.errors.push('Debe ingresar un proveedor');
+                    }
+                    if (this.items.length == 0) {
+                        this.errors.push('Debe ingresar al menos un producto');
+                    }
+                } else {
+                    if (this.codigo_proveedor && this.codigo_cliente && this.codigo_vendedor_venta && 
+                        this.codigo_vendedor_gestion && this.items.length) {
+                        resultado = true;
+                    }
+
+                    this.errors = [];
+
+                    if (this.codigo_proveedor == 0) {
+                        this.errors.push('Debe ingresar un proveedor');
+                    }
+                    if (this.codigo_cliente == 0) {
+                        this.errors.push('Debe ingresar un cliente');
+                    }
+                    if (this.codigo_vendedor_venta == 0) {
+                        this.errors.push('Debe ingresar un distribuidor de comision de venta');
+                    }
+                    if (this.codigo_vendedor_gestion == 0) {
+                        this.errors.push('Debe ingresar un distribuidor de comision de gestion');
+                    }
+                    if (this.items.length == 0) {
+                        this.errors.push('Debe ingresar al menos un producto');
                     }
                 }
 
@@ -658,10 +696,10 @@
                     });
                 }
                 else {
-                    if (this.tipo != 'CL') 
-                        swal('Error!', 'Debe ingresar un proveedor y al menos un producto', 'error');
-                    else  
-                        swal('Error!', 'Debe ingresar un proveedor, al menos un producto, el cliente y los vendedores', 'error');                    
+                    toast({
+                        type: 'error',
+                        title: 'Verificar errores'
+                    });
                 }
 
                 this.$Progress.finish();

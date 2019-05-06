@@ -12,7 +12,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
   <!-- CSRF Token -->
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script> -->
 
   <title>.: Gestiona :.</title>
   
@@ -71,6 +71,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </p>
             </router-link>
           </li>
+
+          <!-- <li class="nav-item">
+            <router-link to="/calendario" class="nav-link">
+              <i class="nav-icon fas fa-tachometer-alt blue"></i>
+              <p>
+                Calendario
+              </p>
+            </router-link>
+          </li> -->
 
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
@@ -222,5 +231,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- ./wrapper -->
 
 <script src="/js/app.js"></script>
+<script src="/js/Chart.min.js"></script>
 </body>
 </html>
