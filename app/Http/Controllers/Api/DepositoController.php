@@ -49,11 +49,9 @@ class DepositoController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'descripcion' => 'required|string',
-            'direccion' => 'required|string'
+            'descripcion' => 'required|string'
         ], [
-            'descripcion.required' => 'La descripcion es requerida',
-            'direccion.required' => 'La direccion es requerida'
+            'descripcion.required' => 'La descripcion es requerida'
         ]);
 
         return Deposito::create([
@@ -74,11 +72,9 @@ class DepositoController extends Controller
         $deposito = Deposito::findOrFail($id);
 
         $this->validate($request, [
-            'descripcion' => 'required|string',
-            'direccion' => 'required|string'
+            'descripcion' => 'required|string'
         ], [
-            'descripcion.required' => 'La descripcion es requerida',
-            'direccion.required' => 'La direccion es requerida'
+            'descripcion.required' => 'La descripcion es requerida'
         ]);
 
         $deposito->update($request->all());

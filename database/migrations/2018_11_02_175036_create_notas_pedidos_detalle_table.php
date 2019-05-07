@@ -18,6 +18,8 @@ class CreateNotasPedidosDetalleTable extends Migration
             $table->unsignedInteger('producto_id');
             $table->decimal('cantidad', 8, 2);
             $table->decimal('precio', 8, 2);
+            $table->decimal('flete', 8, 2)->default(0);
+            $table->decimal('comision_venta', 8, 2)->default(0);
             $table->string('obs')->nullable();
             $table->unsignedInteger('user_id');
             $table->timestamps();

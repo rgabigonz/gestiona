@@ -22,13 +22,21 @@ class OrdenCompraController extends Controller
 
         if(empty($sBuscar)) {
             $ordenes_compras = OrdenCompra::join('proveedores', 'ordenes_compras.proveedor_id', '=', 'proveedores.id')
-            ->select('ordenes_compras.*', 'proveedores.nombre as nombre_proveedor')
+            ->leftjoin('clientes', 'ordenes_compras.cliente_id', '=', 'clientes.id')
+            ->leftjoin('vendedores', 'ordenes_compras.vendedor_venta_id', '=', 'vendedores.id')
+            ->select('ordenes_compras.*', 'proveedores.nombre as nombre_proveedor', 
+                     'clientes.nombre as nombre_cliente',
+                     'vendedores.nombre as nombre_vendedor')
             ->orderBy('created_at', 'asc')
             ->paginate(15);//where('state', '=', 'A')
         } 
         else {
             $ordenes_compras = OrdenCompra::join('proveedores', 'ordenes_compras.proveedor_id', '=', 'proveedores.id')
-            ->select('ordenes_compras.*', 'proveedores.nombre as nombre_proveedor')
+            ->leftjoin('clientes', 'ordenes_compras.cliente_id', '=', 'clientes.id')
+            ->leftjoin('vendedores', 'ordenes_compras.vendedor_venta_id', '=', 'vendedores.id')
+            ->select('ordenes_compras.*', 'proveedores.nombre as nombre_proveedor', 
+                     'clientes.nombre as nombre_cliente',
+                     'vendedores.nombre as nombre_vendedor')
             ->where($sCriterio, 'like', '%' . $sBuscar . '%')
             ->orderBy('created_at', 'asc')
             ->paginate(15);//where('state', '=', 'A')
@@ -81,6 +89,7 @@ class OrdenCompraController extends Controller
         $orden_compra->total = $request->total_orden;
         $orden_compra->fecha = $fecha_compra->format('Y-m-d');
         $orden_compra->numero_negocio = $request->numero_negocio;
+        $orden_compra->lugar_entrega = $request->lugar_entrega;
         $orden_compra->obs = $request->obs;
 
         //Si es de cliente
@@ -120,6 +129,7 @@ class OrdenCompraController extends Controller
         $OrdenCompra = OrdenCompra::findOrFail($id);
         $OrdenCompra->total = $request->total_orden;
         $OrdenCompra->numero_negocio = $request->numero_negocio;
+        $OrdenCompra->lugar_entrega = $request->lugar_entrega;
         $OrdenCompra->obs = $request->obs;
 
         if (!empty($request->codigo_deposito))
@@ -209,7 +219,7 @@ class OrdenCompraController extends Controller
         ->leftjoin('vendedores as vg', 'ordenes_compras.vendedor_gestion_id', '=', 'vg.id')
         ->join('proveedores', 'ordenes_compras.proveedor_id', '=', 'proveedores.id')
         ->select('ordenes_compras.*', 'clientes.nombre as nombre_cliente', 'clientes.direccion as direccion_cliente', 
-                 'clientes.telefono as telefono_cliente', 'clientes.correo_electronico as email_cliente', 'proveedores.nombre as nombre_proveedor', 
+                 'clientes.numero_documento as numero_documento', 'clientes.correo_electronico as email_cliente', 'proveedores.nombre as nombre_proveedor', 
                  'proveedores.direccion as direccion_proveedor', 'proveedores.telefono as telefono_proveedor', 
                  'proveedores.correo_electronico as email_proveedor', 'vv.nombre as nombre_vendedor_venta', 'vg.nombre as nombre_vendedor_gestion',
                  'depositos.descripcion as descripcion_deposito', 'forma_pagos.descripcion as descripcion_forma_pago', 

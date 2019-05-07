@@ -66,6 +66,7 @@
                         </div>
                     </div>
                     <!-- /.col -->
+
                 </div>
                 <div class="row invoice-info">
                     <div class="col-sm-4 invoice-col">
@@ -99,6 +100,19 @@
                                     <option value="">Condicion Pago...</option>
                                     <option v-for="lcondicionespago in lcondicionespagos" :key="lcondicionespago.id" :value="lcondicionespago.id">{{ lcondicionespago.descripcion }}</option>
                                 </select>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.col -->
+
+                </div>
+
+                <div class="row invoice-info">
+                    <div class="col-sm-4 invoice-col">
+                        <div class="form-group">
+                            <div class="input-group input-group-sm">
+                                <input v-model="lugar_entrega" type="text" name="lugar_entrega" placeholder="Lugar Entrega"
+                                    class="form-control form-control-sm">
                             </div>
                         </div>
                     </div>
@@ -413,6 +427,7 @@
                 comision_venta_producto: 0,
                 comision_gestion_producto: 0,
                 numero_negocio: '',
+                lugar_entrega: '',
                 observacion: '',
 
                 // Objetos de datos
@@ -548,6 +563,7 @@
                     var response = data.data;
                     me.lvendedores_venta = response.vendedores;
                     me.lvendedores_gestion = response.vendedores;
+                    me.codigo_vendedor_gestion = response.vendedor_gestion_defecto[0].id;
                 }).catch((error) => {
                     if (error.response.status == 401) {
                         swal('Error!', 'La sesion ha caducado.', 'warning');
@@ -679,6 +695,7 @@
                         tipo: this.tipo,
                         total_orden: this.total,
                         numero_negocio: this.numero_negocio,
+                        lugar_entrega: this.lugar_entrega,
                         obs: this.observacion,
                         codigo_cliente: this.codigo_cliente, 
                         codigo_vendedor_venta: this.codigo_vendedor_venta, 
@@ -716,6 +733,7 @@
                     tipo: this.tipo,
                     total_orden: this.total,
                     numero_negocio: this.numero_negocio,
+                    lugar_entrega: this.lugar_entrega,
                     obs: this.observacion,
                     codigo_cliente: this.codigo_cliente, 
                     codigo_vendedor_venta: this.codigo_vendedor_venta, 
@@ -752,6 +770,7 @@
                     me.fecha_orden_compra = new Date(me.orden_compra.fecha);
                     me.fecha_orden_compra = me.fecha_orden_compra.setDate(me.fecha_orden_compra.getDate() + 1);
                     me.numero_negocio = me.orden_compra.numero_negocio;
+                    me.lugar_entrega = me.orden_compra.lugar_entrega;
                     me.observacion = me.orden_compra.obs;
                     
                     // Carcar valores nulos

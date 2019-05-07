@@ -109,8 +109,12 @@ class VendedorController extends Controller
     public function cargaVendedores()
     {
         $vendedores = Vendedor::orderBy('nombre', 'asc')->get();
+        $vendedor_gestion_defecto = Vendedor::join('configuracion', 'vendedores.id', '=', 'configuracion.vendedor_gestion_id')
+        ->select('vendedores.id')->get();
+
         return [
-            'vendedores' => $vendedores
+            'vendedores' => $vendedores,
+            'vendedor_gestion_defecto' => $vendedor_gestion_defecto
         ];
     } 
 }

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDepositosTable extends Migration
+class CreateConfiguracionTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,12 @@ class CreateDepositosTable extends Migration
      */
     public function up()
     {
-        Schema::create('depositos', function (Blueprint $table) {
-            $table->increments('id');
-            $table->mediumText('descripcion');
-            $table->mediumText('direccion')->nullable();
-            $table->char('estado', 1)->default('A');
+        Schema::create('configuracion', function (Blueprint $table) {
+            $table->integer('id');
+            $table->unsignedInteger('vendedor_gestion_id')->nullable();
             $table->timestamps();
+
+            $table->foreign('vendedor_gestion_id')->references('id')->on('vendedores');
         });
     }
 
@@ -29,6 +29,6 @@ class CreateDepositosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('depositos');
+        Schema::dropIfExists('configuracion');
     }
 }

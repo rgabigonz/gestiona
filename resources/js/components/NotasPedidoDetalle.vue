@@ -43,7 +43,7 @@
                         </div>
                         <!-- /.col -->
 
-                        <div class="col-sm-8 invoice-col">
+                        <div class="col-sm-4 invoice-col">
                             <div class="form-group">
                                 <div class="input-group input-group-sm">
                                     <input v-model="numero_factura" type="text" name="numero_factura" placeholder="Numero Factura"
@@ -52,6 +52,17 @@
                             </div>
                         </div>
                         <!-- /.col -->
+
+                        <div class="col-sm-4 invoice-col">
+                            <div class="form-group">
+                                <div class="input-group input-group-sm">
+                                    <input v-model="lugar_entrega" type="text" name="lugar_entrega" placeholder="Lugar Entrega"
+                                        class="form-control form-control-sm">
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.col -->
+
                     </div>
                 </div>
               </div>
@@ -248,6 +259,7 @@
                 nombre_producto: '',
                 precio_producto: 0,
                 numero_factura: '',
+                lugar_entrega: '',
                 nota_pedido: {},
                 nota_pedido_detalle: {}
             }
@@ -407,6 +419,7 @@
                         codigo_cliente: this.codigo_cliente, 
                         fecha_nota_pedido: this.fecha_nota_pedido,
                         numero_factura: this.numero_factura,
+                        lugar_entrega: this.lugar_entrega,
                         total_pedido: this.total,
                         items: this.items})
                     .then(() => {
@@ -437,6 +450,7 @@
                     codigo_cliente: this.codigo_cliente, 
                     fecha_nota_pedido: this.fecha_nota_pedido,
                     numero_factura: this.numero_factura,
+                    lugar_entrega: this.lugar_entrega,
                     total_pedido: this.total,
                     items: this.items})
                 .then(() => {
@@ -465,6 +479,7 @@
                     me.fecha_nota_pedido = new Date(me.nota_pedido.fecha);
                     me.fecha_nota_pedido = me.fecha_nota_pedido.setDate(me.fecha_nota_pedido.getDate() + 1);
                     me.numero_factura = me.nota_pedido.numero_factura;
+                    me.lugar_entrega = me.nota_pedido.lugar_entrega;
                     me.estado = me.nota_pedido.estado;
 
                     //Datos Orden Compra

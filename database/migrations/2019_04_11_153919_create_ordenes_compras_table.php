@@ -34,6 +34,7 @@ class CreateOrdenesComprasTable extends Migration
             $table->decimal('total', 8, 2);
             $table->date('fecha');
             $table->string('numero_negocio')->nullable();
+            $table->string('lugar_entrega')->nullable();
             $table->string('obs')->nullable();
             $table->timestamps();
 

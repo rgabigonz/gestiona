@@ -106,7 +106,7 @@
 			}
 
 			#gracias{
-				text-align: center; 
+				text-align: left; 
 			}
 	</style>		
 	</head>
@@ -139,10 +139,10 @@
                     <tbody>
                         <tr>
                             <th>
-								<p id="cliente">{{ $datoOrdenCompra[0]['nombre_proveedor'] }}<br>
+								<p id="cliente">{{ $datoOrdenCompra[0]['nombre_proveedor'] }}<!-- <br>
                             					Dirección: {{ $datoOrdenCompra[0]['direccion_proveedor'] }}<br>
                             					Teléfono: {{ $datoOrdenCompra[0]['telefono_proveedor'] }}<br>
-                            					Email: {{ $datoOrdenCompra[0]['email_proveedor'] }}
+                            					Email: {{ $datoOrdenCompra[0]['email_proveedor'] }} -->
 								</p>
 							</th>
                         </tr>
@@ -161,15 +161,13 @@
 							<tr>
 								<th>
 									<p id="cliente">{{ $datoOrdenCompra[0]['nombre_cliente'] }}<br>
-													Dirección: {{ $datoOrdenCompra[0]['direccion_cliente'] }}<br>
-													Teléfono: {{ $datoOrdenCompra[0]['telefono_cliente'] }}<br>
-													Email: {{ $datoOrdenCompra[0]['email_cliente'] }}
+													CUIT: {{ $datoOrdenCompra[0]['numero_documento'] }}
 									</p>
 								</th>
 							</tr>
 						</tbody>
 					</table>
-					<table id="nvcliente">
+					<!-- <table id="nvcliente">
 						<thead>                        
 							<tr>
 								<th id="nv">Deposito</th>
@@ -190,7 +188,7 @@
 								</th>
 							</tr>
 						</tbody>
-					</table>
+					</table> -->
 					<table id="nvcliente">
 						<thead>                        
 							<tr>
@@ -263,10 +261,10 @@
         </section>
         <br>
         <br>
-        <!-- <footer>
+        <footer>
             <div id="gracias">
-                <p><b>Gracias por su compra!</b></p>
+                <p>Observaciones: <b>{{ $datoOrdenCompra[0]['obs'] }}</b></p>
             </div>
-        </footer>		 -->
+        </footer>		
 	</body>
 </html>

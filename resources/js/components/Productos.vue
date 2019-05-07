@@ -122,15 +122,15 @@
                             </div> 
 
                             <div class="row">
-                                <div class="col col-md-3">
+                                <!-- <div class="col col-md-3">
                                   <div class="form-group">
                                       <label class="control-label" for="precio"><i class="fa fa-bell-o"></i> Precio</label>
                                       <input v-model="form.precio" type="number" name="precio" min="0" value="0" step=".01"
                                           class="form-control" :class="{ 'is-invalid': form.errors.has('precio') }">
                                       <has-error :form="form" field="precio"></has-error>
                                   </div>
-                                </div>
-                                <div class="col col-md-3">
+                                </div> -->
+                                <div class="col col-md-4">
                                   <div class="form-group">
                                       <label class="control-label" for="stk_min"><i class="fa fa-bell-o"></i>Stock Minimo</label>
                                       <input v-model="form.stk_min" type="number" name="stk_min" min="0" value="0" step=".01"
@@ -138,7 +138,7 @@
                                       <has-error :form="form" field="stk_min"></has-error>
                                   </div>
                                 </div>
-                                <div class="col col-md-3">
+                                <div class="col col-md-4">
                                   <div class="form-group">
                                     <label class="control-label" for="stk_max"><i class="fa fa-bell-o"></i>Stock maximo</label>
                                       <input v-model="form.stk_max" type="number" name="stk_max"  min="0" value="0" step=".01"
@@ -146,7 +146,7 @@
                                       <has-error :form="form" field="stk_max"></has-error>
                                   </div>
                                 </div>
-                                <div class="col col-md-3">
+                                <div class="col col-md-4">
                                   <div class="form-group">
                                     <label class="control-label" for="stk_actual"><i class="fa fa-bell-o"></i>Stock actual</label>
                                       <input v-model="form.stk_actual" type="number" name="stk_actual" disabled class="form-control">

@@ -36,15 +36,18 @@
                     <tbody>
                         <tr>
                             <th style="width: 10%">#</th>
-                            <th style="width: 40%">Proveedor</th>
-                            <th style="width: 16%">Fecha</th>
-                            <th style="width: 11%">Estado</th>
-                            <th style="width: 13%">Total</th>
-                            <th style="width: 10%"></th>
+                            <th style="width: 20%">Proveedor</th>
+                            <th style="width: 20%">Cliente</th>
+                            <th style="width: 21%">Distribuidor</th>                            
+                            <th style="width: 10%">Fecha</th>
+                            <th style="width: 9%">Estado</th>
+                            <th style="width: 11%"></th>
                         </tr>
                         <tr v-for="orden_compra in ordenes_compras" :key="orden_compra.id">
-                            <td>{{ orden_compra.id }}</td>
+                            <td>{{ orden_compra.anio_id }} - {{ orden_compra.anio_actual }}</td>
                             <td>{{ orden_compra.nombre_proveedor }}</td>
+                            <td>{{ orden_compra.nombre_cliente }}</td>
+                            <td>{{ orden_compra.nombre_vendedor }}</td>
                             <td>{{ orden_compra.fecha | formatDate }}</td>
                             <td>
                                 <div v-if="orden_compra.estado == 'PE'">
@@ -57,7 +60,6 @@
                                     <span class="badge badge-danger">Anulado</span>
                                 </div>
                             </td>      
-                            <td>$ {{ orden_compra.total }}</td>                      
                             <td>
                                 <a href="#" v-if="orden_compra.estado == 'PE'" @click="confirmaOrdenCompra(orden_compra.id)">
                                     <i class="fa fa-check green"></i>

@@ -13,11 +13,15 @@ class VendedoresTableSeeder extends Seeder
     public function run()
     {
         DB::table('vendedores')->insert([
-            'nombre' => 'AGRO PROYECCIONES DRL',
+            'nombre' => 'AGRO PROYECCIONES SRL',
             'direccion' => 'EL TIPAL, SALTA',
             'correo_electronico' => 'agroproyecciones@gmail.com',
             'telefono' => 'SIN TELEFONO'
         ]);
 
+        DB::table('configuracion')->insert([
+            'id' => 1,
+            'vendedor_gestion_id' => 1
+        ]);        
     }
 }
