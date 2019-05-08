@@ -42,71 +42,71 @@
 			}
 
 			#nven{
-			/*position: relative;*/
-			float: right;
-			margin-top: 2%;
-			margin-left: 2%;
-			margin-right: 2%;
-			font-size: 20px;
+				/*position: relative;*/
+				float: right;
+				margin-top: 2%;
+				margin-left: 2%;
+				margin-right: 2%;
+				font-size: 20px;
 			}
 
 			section{
-			clear: left;
+				clear: left;
 			}
 
 			#cliente{
-			text-align: left;
+				text-align: left;
 			}
 
 			#nvcliente{
-			width: 40%;
-			border-collapse: collapse;
-			border-spacing: 0;
-			margin-bottom: 15px;
+				width: 100%;
+				border-collapse: collapse;
+				border-spacing: 0;
+				margin-bottom: 15px;
 			}
 
 			#fac, #fv, #nv{
-			color: #FFFFFF;
-			font-size: 15px;
+				color: #FFFFFF;
+				font-size: 15px;
 			}
 
 			#nvcliente thead{
-			padding: 20px;
-			background: #2183E3;
-			text-align: left;
-			border-bottom: 1px solid #FFFFFF;  
+				padding: 20px;
+				background: #2183E3;
+				text-align: left;
+				border-bottom: 1px solid #FFFFFF;  
 			}
 
 			#facvendedor{
-			width: 100%;
-			border-collapse: collapse;
-			border-spacing: 0;
-			margin-bottom: 15px;
+				width: 100%;
+				border-collapse: collapse;
+				border-spacing: 0;
+				margin-bottom: 15px;
 			}
 
 			#facvendedor thead{
-			padding: 20px;
-			background: #2183E3;
-			text-align: center;
-			border-bottom: 1px solid #FFFFFF;  
+				padding: 20px;
+				background: #2183E3;
+				text-align: center;
+				border-bottom: 1px solid #FFFFFF;  
 			}
 
 			#nvarticulo{
-			width: 100%;
-			border-collapse: collapse;
-			border-spacing: 0;
-			margin-bottom: 15px;
+				width: 100%;
+				border-collapse: collapse;
+				border-spacing: 0;
+				margin-bottom: 15px;
 			}
 
 			#nvarticulo thead{
-			padding: 20px;
-			background: #2183E3;
-			/* text-align: center; */
-			border-bottom: 1px solid #FFFFFF;  
+				padding: 20px;
+				background: #2183E3;
+				/* text-align: center; */
+				border-bottom: 1px solid #FFFFFF;  
 			}
 
 			#gracias{
-			text-align: center; 
+				text-align: center; 
 			}
 	</style>		
 	</head>
@@ -134,16 +134,18 @@
                     <thead>                        
                         <tr>
                             <th id="nv">Cliente</th>
+							<th id="nv">Distribuidor</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <th>
 								<p id="cliente">Sr(a). {{ $datoNotaPedido[0]['nombre_cliente'] }}<br>
-                            					Dirección: {{ $datoNotaPedido[0]['direccion_cliente'] }}<br>
-                            					Teléfono: {{ $datoNotaPedido[0]['telefono_cliente'] }}<br>
-                            					Email: {{ $datoNotaPedido[0]['email_cliente'] }}
+												CUIT: {{ $datoNotaPedido[0]['numero_documento'] }}
 								</p>
+							</th>
+                            <th>
+								<p id="cliente">{{ $datoNotaPedido[0]['nombre_vendedor_venta'] }}</p>
 							</th>
                         </tr>
                     </tbody>
@@ -156,10 +158,12 @@
                 <table id="nvarticulo">
                     <thead>
                         <tr id="nv">
-                            <th>DESCRIPCION</th>
-                            <th>CANT</th>							
-                            <th>PRECIO UNIT</th>
-                            <th>PRECIO TOTAL</th>
+                            <th>Producto</th>
+                            <th>Cantidad</th>							
+                            <th>Precio</th>
+							<th>Flete</th>
+							<th>C. Venta</th>
+                            <th>SUBTOTAL</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -168,12 +172,15 @@
                             <td>{{ $det->nombre_producto }}</td>
                             <td>{{ $det->cantidad }}</td>							
                             <td>{{ $det->precio }}</td>
+							<td>{{ $det->flete }}</td>
+							<td>{{ $det->comision_venta }}</td>
                             <td>{{ $det->cantidad * $det->precio }}</td>
                         </tr>
                         @endforeach
                     </tbody>
                     <tfoot>
                         <tr>
+                            <th></th>
                             <th></th>
                             <th></th>
                             <th></th>

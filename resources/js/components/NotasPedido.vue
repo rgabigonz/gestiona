@@ -36,15 +36,16 @@
                     <tbody>
                         <tr>
                             <th style="width: 10%">#</th>
-                            <th style="width: 40%">Cliente</th>
-                            <th style="width: 16%">Fecha</th>
-                            <th style="width: 11%">Estado</th>
-                            <th style="width: 13%">Total</th>
+                            <th style="width: 25%">Cliente</th>
+                            <th style="width: 25%">Distribuidor</th>
+                            <th style="width: 15%">Fecha</th>
+                            <th style="width: 15%">Estado</th>
                             <th style="width: 10%"></th>
                         </tr>
                         <tr v-for="nota_pedido in notas_pedidos" :key="nota_pedido.id">
-                            <td>{{ nota_pedido.id }}</td>
+                            <td>{{ nota_pedido.anio_id }} - {{ nota_pedido.anio_actual }}</td>
                             <td>{{ nota_pedido.nombre_cliente }}</td>
+                            <td>{{ nota_pedido.nombre_vendedor }}</td>
                             <td>{{ nota_pedido.fecha | formatDate }}</td>
                             <td>
                                 <div v-if="nota_pedido.estado == 'PE'">
@@ -57,7 +58,6 @@
                                     <span class="badge badge-danger">Anulado</span>
                                 </div>
                             </td>      
-                            <td>$ {{ nota_pedido.total }}</td>                      
                             <td>
                                 <a href="#" v-if="nota_pedido.estado == 'PE'" @click="confirmaPresupuesto(nota_pedido.id)">
                                     <i class="fa fa-check green"></i>

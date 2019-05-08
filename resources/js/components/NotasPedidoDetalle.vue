@@ -73,6 +73,7 @@
                 <div class="card-body">
                     <div class="row invoice-info">
                         <div class="col-sm-4 invoice-col">
+                            <label class="control-label">Cliente</label>
                             <div class="form-group">
                                 <div class="input-group input-group-sm">
                                     <select class="form-control" v-model="codigo_cliente" @change="cargarCliente(codigo_cliente)">
@@ -84,14 +85,29 @@
                         </div>
                         <!-- /.col -->
 
-                        <div class="col-sm-8 invoice-col">
+                        <div class="col-sm-4 invoice-col">
+                            <label class="control-label">CUIT</label>
                             <div class="form-group">
                                 <div class="input-group input-group-sm">
-                                    <input v-model="cliente.direccion" type="text" name="direccion_cliente" class="form-control form-control-sm" disabled>
+                                    <input v-model="cliente.numero_documento" type="text" name="numero_documento" class="form-control form-control-sm" disabled>
                                 </div>
                             </div>
                         </div>
                         <!-- /.col -->
+
+                        <div class="col-sm-4 invoice-col">
+                            <label class="control-label">Comision de venta</label>
+                            <div class="form-group">
+                                <div class="input-group input-group-sm">
+                                    <select class="form-control" v-model="codigo_vendedor_venta">
+                                        <option value=0>x Venta...</option>
+                                        <option v-for="lvendedor_venta in lvendedores_venta" :key="lvendedor_venta.id" :value="lvendedor_venta.id">{{ lvendedor_venta.nombre }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.col -->
+
                     </div>
                 </div>
 
@@ -107,11 +123,13 @@
                         <table class="table table-striped table-sm table-responsive">
                             <thead>
                                 <tr>
-                                    <th style="width:47%">Producto</th>
+                                    <th style="width:42%">Producto</th>
                                     <th style="width:10%">Cantidad</th>
-                                    <th style="width:20%">Precio</th>
-                                    <th style="width:20%">Subtotal</th>
-                                    <th style="width:3%"></th>
+                                    <th style="width:12%">Precio</th>
+                                    <th style="width:12%">Flete</th>
+                                    <th style="width:12%">C. Venta</th>
+                                    <th style="width:12%">Subtotal</th>
+                                    <th></th>
                                 </tr>
                                 <tr>
                                     <td class="invoice-col">
@@ -140,6 +158,26 @@
                                         <div class="form-group">
                                             <div class="input-group input-group-sm">
                                                 <input v-model="precio_producto" type="number" name="precio_producto"
+                                                    class="form-control form-control-sm">
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <!-- /.col -->
+
+                                    <td class="invoice-col">
+                                        <div class="form-group">
+                                            <div class="input-group input-group-sm">
+                                                <input v-model="flete_producto" type="number" name="flete_producto"
+                                                    class="form-control form-control-sm">
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <!-- /.col -->
+
+                                    <td class="invoice-col">
+                                        <div class="form-group">
+                                            <div class="input-group input-group-sm">
+                                                <input v-model="comision_venta_producto" type="number" name="comision_venta_producto"
                                                     @keydown ="keyMonitor" class="form-control form-control-sm">
                                             </div>
                                         </div>
@@ -163,7 +201,9 @@
                                     <td>{{ item.descripcion}}</td>
                                     <td>{{ item.cantidad }}</td>
                                     <td>${{ item.precio }}</td>
-                                    <td>${{ item.precio * item.cantidad | currency }}</td>
+                                    <td>${{ item.flete }}</td>
+                                    <td>${{ item.comision_venta }}</td>
+                                    <td>${{ ((item.precio * item.cantidad) + parseFloat(item.flete) + parseFloat(item.comision_venta)) | currency }}</td>
                                     <td>
                                         <a href="#" @click="removerProducto(index)">
                                             <i class="fa fa-trash-alt red"></i>
@@ -171,6 +211,8 @@
                                     </td>
                                 </tr>
                                 <tr>
+                                    <td></td>
+                                    <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
@@ -226,6 +268,7 @@
                 //Lista de Seleccion clientes y productos
                 lclientes: {},
                 lproductos: {},
+                lvendedores_venta: {},
                 pagination: {
                     'total': 0,
                     'current_page': 0,
@@ -250,6 +293,7 @@
                 es: es,
                 cliente: {},
                 codigo_cliente: 0,
+                codigo_vendedor_venta: 0,
                 anio_id: 0,
                 anio_actual: 0,
                 items: [],
@@ -258,6 +302,8 @@
                 cantidad_producto: 0,
                 nombre_producto: '',
                 precio_producto: 0,
+                flete_producto: 0,
+                comision_venta_producto: 0,
                 numero_factura: '',
                 lugar_entrega: '',
                 nota_pedido: {},
@@ -276,7 +322,7 @@
                 let origenKey = event.key || String.fromCharCode(event.keyCode);
 
                 switch(origenInput) {
-                    case 'precio_producto':
+                    case 'comision_venta_producto':
                         switch(origenKey) {
                             case 'Tab':    
                                 this.agregaProducto();
@@ -297,6 +343,18 @@
                 axios.get(url).then(data => {
                     var response = data.data;
                     me.lclientes = response.clientes;
+                }).catch((error) => {
+                    if (error.response.status == 401) {
+                        swal('Error!', 'La sesion ha caducado.', 'warning');
+                    }
+                });
+            },
+            cargaVendedores() {
+                let me = this;                
+                var url = 'api/vendedor/cargaVendedores';
+                axios.get(url).then(data => {
+                    var response = data.data;
+                    me.lvendedores_venta = response.vendedores;
                 }).catch((error) => {
                     if (error.response.status == 401) {
                         swal('Error!', 'La sesion ha caducado.', 'warning');
@@ -360,13 +418,17 @@
                         this.items.push({ cod: parseInt(this.codigo_producto), 
                                         descripcion: this.nombre_producto, 
                                         cantidad: this.cantidad_producto, 
-                                        precio: this.precio_producto 
+                                        precio: this.precio_producto,
+                                        flete: this.flete_producto,
+                                        comision_venta: this.comision_venta_producto
                         });
                     }
                     this.codigo_producto = 0;
                     this.cantidad_producto = 0;
                     this.nombre_producto = '';
-                    this.precio_producto = 0;    
+                    this.precio_producto = 0;
+                    this.flete_producto = 0;
+                    this.comision_venta_producto = 0;
 
                 } /*else {
                     toast({
@@ -417,6 +479,7 @@
                 if (this.validaNV()) {
                     axios.post('api/notaPedido', {
                         codigo_cliente: this.codigo_cliente, 
+                        codigo_vendedor_venta: this.codigo_vendedor_venta,
                         fecha_nota_pedido: this.fecha_nota_pedido,
                         numero_factura: this.numero_factura,
                         lugar_entrega: this.lugar_entrega,
@@ -448,6 +511,7 @@
                 
                 axios.put('api/notaPedido/'+this.notas_pedido_id_edicion, {
                     codigo_cliente: this.codigo_cliente, 
+                    codigo_vendedor_venta: this.codigo_vendedor_venta,
                     fecha_nota_pedido: this.fecha_nota_pedido,
                     numero_factura: this.numero_factura,
                     lugar_entrega: this.lugar_entrega,
@@ -476,6 +540,13 @@
 
                     //Datos Nota Pedido
                     me.codigo_cliente = me.nota_pedido.cliente_id;
+
+                    if (me.nota_pedido.vendedor_venta_id != null) {
+                        me.codigo_vendedor_venta = me.nota_pedido.vendedor_venta_id;
+                    } else {
+                        me.codigo_vendedor_venta = 0;
+                    }
+
                     me.fecha_nota_pedido = new Date(me.nota_pedido.fecha);
                     me.fecha_nota_pedido = me.fecha_nota_pedido.setDate(me.fecha_nota_pedido.getDate() + 1);
                     me.numero_factura = me.nota_pedido.numero_factura;
@@ -492,7 +563,9 @@
                         me.items.push({ cod: me.nota_pedido_detalle[i].producto_id, 
                                           descripcion: me.nota_pedido_detalle[i].nombre_producto, 
                                           cantidad: me.nota_pedido_detalle[i].cantidad, 
-                                          precio: me.nota_pedido_detalle[i].precio 
+                                          precio: me.nota_pedido_detalle[i].precio,
+                                          flete: me.nota_pedido_detalle[i].flete,
+                                          comision_venta: me.nota_pedido_detalle[i].comision_venta
                         });
                     }
 
@@ -504,11 +577,12 @@
         },
         computed: {
             subtotal_producto() {
-                return this.cantidad_producto * this.precio_producto;
+                var lTotal = parseFloat(this.flete_producto) + parseFloat(this.comision_venta_producto);
+                return ((this.cantidad_producto * this.precio_producto) + parseFloat(lTotal));
             },
             total() {
                 return this.items.reduce(
-                    (acc, item) => acc + item.precio * item.cantidad,
+                    (acc, item) => acc + (parseFloat(item.flete) + parseFloat(item.comision_venta) + (item.precio * item.cantidad)),
                     0
                 );
             }            
@@ -517,6 +591,7 @@
             this.notas_pedido_id_edicion = this.$route.params.notaspedidoId;
             this.cargaClientes();
             this.cargaProductos();
+            this.cargaVendedores();
 
             if(this.notas_pedido_id_edicion > 0) {
                 this.modoEdicion = true;

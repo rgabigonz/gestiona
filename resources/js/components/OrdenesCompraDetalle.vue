@@ -161,7 +161,7 @@
                         <label class="control-label">Cliente</label>
                         <div class="form-group">
                             <div class="input-group input-group-sm">
-                                <select class="form-control" v-model="codigo_cliente">
+                                <select class="form-control" v-model="codigo_cliente" @change="cargarCliente(codigo_cliente)">>
                                     <option value=0>Cliente...</option>
                                     <option v-for="lcliente in lclientes" :key="lcliente.id" :value="lcliente.id">{{ lcliente.nombre }}</option>
                                 </select>
@@ -176,7 +176,7 @@
                             <div class="input-group input-group-sm">
                                 <select class="form-control" v-model="codigo_vendedor_venta">
                                     <option value=0>x Venta...</option>
-                                    <option v-for="lvendedor_gestion in lvendedores_gestion" :key="lvendedor_gestion.id" :value="lvendedor_gestion.id">{{ lvendedor_gestion.nombre }}</option>
+                                    <option v-for="lvendedor_venta in lvendedores_venta" :key="lvendedor_venta.id" :value="lvendedor_venta.id">{{ lvendedor_venta.nombre }}</option>
                                 </select>
                             </div>
                         </div>
@@ -197,6 +197,17 @@
                     <!-- /.col -->
 
                 </div>
+                <div class="row invoice-info">
+                    <div class="col-sm-4 invoice-col">
+                        <label class="control-label">CUIT</label>
+                        <div class="form-group">
+                            <div class="input-group input-group-sm">
+                                <input v-model="cliente.numero_documento" type="text" name="numero_documento" class="form-control form-control-sm" disabled>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.col -->
+                </div>
                 </div>
               </div>
               <!-- /.row -->
@@ -212,7 +223,7 @@
                                 <tr>
                                     <th style="width:30%">Producto</th>
                                     <th style="width:10%">Cantidad</th>
-                                    <th style="width:12%">Importe</th>
+                                    <th style="width:12%">Precio</th>
                                     <th style="width:12%">Flete</th>
                                     <th style="width:12%">C. Venta</th>
                                     <th style="width:12%">C. Gestion</th>
@@ -413,6 +424,7 @@
                 codigo_deposito: '',
                 codigo_formapago: '',
                 codigo_condicionpago: '',
+                cliente: {},
                 codigo_cliente: 0,
                 codigo_vendedor_venta: 0,
                 codigo_vendedor_gestion: 0,
@@ -485,6 +497,18 @@
                     this.$nextTick(() => {
                         this.$refs.codigo_proveedor.focus();
                     });
+                });
+            },cargarCliente(cCod) {
+                let me = this;
+                var url = 'api/cliente/devuelveDatosCliente/'+cCod;
+                axios.get(url).then(data => {
+                    var response = data.data;
+                    me.cliente = response.datoCliente;
+                }).catch((error) => {
+                    me.cliente = {};
+                    me.codigo_cliente = '';
+
+                    this.focusInput('codigo_cliente');
                 });
             },
             cargarProducto(pCod) {
@@ -792,7 +816,8 @@
                     me.codigo_cliente = me.orden_compra.cliente_id;
                     me.codigo_vendedor_venta = me.orden_compra.vendedor_venta_id;
                     me.codigo_vendedor_gestion = me.orden_compra.vendedor_gestion_id;
-
+                    
+                    me.cargarCliente(me.codigo_cliente);
                     me.cargarProveedor(me.codigo_proveedor);
 
                     for (var i = 0; i < me.orden_compra_detalle.length; i++) {
