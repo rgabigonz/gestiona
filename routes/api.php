@@ -130,4 +130,17 @@ Route::middleware('auth:api')->group( function () {
     Route::apiResources([
         'ordenCompra' => 'Api\OrdenCompraController'
     ]);    
+
+    //Rutas Recibos
+    Route::get('/recibo/ReciboPDF/{nota_pedido}','Api\ReciboController@ReciboPDF');
+    Route::get('/recibo/devuelveRecibo/{nota_pedido}', 'Api\ReciboController@devuelveRecibo');
+    Route::put('/recibo/anulaRecibo/{nota_pedido}', 'Api\ReciboController@anulaRecibo');
+    Route::put('/recibo/confirmaRecibo/{nota_pedido}', 'Api\ReciboController@confirmaRecibo');
+
+    Route::apiResources([
+        'recibo' => 'Api\ReciboController'
+    ]);
+
+    // Rutas Bancos
+    Route::get('/banco/cargaBancos', 'Api\BancoController@cargaBancos');
 });

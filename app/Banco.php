@@ -4,11 +4,11 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Deposito extends Model
+class Banco extends Model
 {
-    protected $table = 'depositos';
+    protected $table = 'bancos';
 
     protected $fillable = [
-        'descripcion', 'direccion'
+        'nombre'
     ];
 }

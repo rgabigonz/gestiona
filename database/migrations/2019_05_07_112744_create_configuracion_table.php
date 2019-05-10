@@ -16,9 +16,11 @@ class CreateConfiguracionTable extends Migration
         Schema::create('configuracion', function (Blueprint $table) {
             $table->integer('id');
             $table->unsignedInteger('vendedor_gestion_id')->nullable();
+            $table->unsignedInteger('sucursal_id')->nullable();
             $table->timestamps();
 
             $table->foreign('vendedor_gestion_id')->references('id')->on('vendedores');
+            $table->foreign('sucursal_id')->references('id')->on('sucursales');
         });
     }
 

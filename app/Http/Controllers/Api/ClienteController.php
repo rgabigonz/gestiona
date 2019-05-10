@@ -128,5 +128,5 @@ class ClienteController extends Controller
         return [
             'clientes' => $clientes
         ];
-    }     
+    }
 }

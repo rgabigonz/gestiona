@@ -21,7 +21,8 @@ class VendedoresTableSeeder extends Seeder
 
         DB::table('configuracion')->insert([
             'id' => 1,
-            'vendedor_gestion_id' => 1
+            'vendedor_gestion_id' => 1,
+            'sucursal_id' => 1
         ]);        
     }
 }

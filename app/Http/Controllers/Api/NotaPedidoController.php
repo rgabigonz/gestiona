@@ -49,6 +49,7 @@ class NotaPedidoController extends Controller
             'notas_pedidos' => $notas_pedidos
         ];
     }
+    
     /**
      * Store a newly created resource in storage.
      *

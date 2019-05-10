@@ -174,6 +174,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <p>Notas de Venta Cliente</p>
                 </router-link>
               </li>
+              <li class="nav-item">
+                <router-link to="/recibos" class="nav-link">
+                  <i class="fas fa-file-invoice-dollar nav-icon"></i>
+                  <p>Recibos</p>
+                </router-link>
+              </li>
             </ul>
           </li>
           <li class="nav-item">
