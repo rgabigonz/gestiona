@@ -25,7 +25,7 @@
               <div class="card-header border-light">
                 <h3 class="card-title">Recibos</h3>
                 <div class="card-tools">
-                    <router-link :to="{ name: 'recibodetalle', params: { reciboId: 0 } }" class="btn btn-success">
+                    <router-link :to="{ name: 'recibosdetalle', params: { reciboId: 0 } }" class="btn btn-success">
                         <i class="fas fa-plus fa-fw"></i>
                     </router-link>                     
                 </div>

@@ -132,10 +132,10 @@ Route::middleware('auth:api')->group( function () {
     ]);    
 
     //Rutas Recibos
-    Route::get('/recibo/ReciboPDF/{nota_pedido}','Api\ReciboController@ReciboPDF');
-    Route::get('/recibo/devuelveRecibo/{nota_pedido}', 'Api\ReciboController@devuelveRecibo');
-    Route::put('/recibo/anulaRecibo/{nota_pedido}', 'Api\ReciboController@anulaRecibo');
-    Route::put('/recibo/confirmaRecibo/{nota_pedido}', 'Api\ReciboController@confirmaRecibo');
+    Route::get('/recibo/ReciboPDF/{recibo}','Api\ReciboController@ReciboPDF');
+    Route::get('/recibo/devuelveRecibo/{recibo}', 'Api\ReciboController@devuelveRecibo');
+    Route::put('/recibo/anulaRecibo/{recibo}', 'Api\ReciboController@anulaRecibo');
+    Route::put('/recibo/confirmaRecibo/{recibo}', 'Api\ReciboController@confirmaRecibo');
 
     Route::apiResources([
         'recibo' => 'Api\ReciboController'

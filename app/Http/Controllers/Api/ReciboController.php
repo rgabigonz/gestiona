@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Recibo;
+use App\Configuracion;
+use App\ReciboDetalle;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
@@ -50,16 +52,6 @@ class ReciboController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -67,52 +59,103 @@ class ReciboController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = auth('api')->user();
+        $fecha_recibo = \Carbon\Carbon::parse($request->fecha_recibo);
+        
+        $cantidad_items = count($request->items);
+
+        $configuracion = Configuracion::get();
+
+        $numero_recibo = Recibo::where('sucursal_id', $configuracion[0]->sucursal_id)->max('numero_recibo') + 1;
+
+        $recibo = new Recibo();
+
+        $recibo->sucursal_id = $configuracion[0]->sucursal_id;
+        $recibo->cliente_id = $request->codigo_cliente;
+        $recibo->user_id = $user->id;
+        $recibo->total = $request->total_recibo;
+        $recibo->numero_recibo = $numero_recibo;
+        $recibo->obs = $request->obs;
+        $recibo->fecha = $fecha_recibo->format('Y-m-d');
+
+        $recibo->save();
+
+        for($i = 0; $i < $cantidad_items; $i++)
+        {
+            $recibo_item = new ReciboDetalle();
+
+            if (!empty($request->items[$i]['fecha_cheque'])) {
+                $fecha_cheque = \Carbon\Carbon::parse($request->items[$i]['fecha_cheque']);
+                $recibo_item->fecha_cheque = $fecha_cheque->format('Y-m-d');
+            }
+
+            $recibo_item->tipo_pago = $request->items[$i]['tipo_pago'];
+
+            if (!empty($request->items[$i]['numero_cheque']))
+                $recibo_item->numero_cheque = $request->items[$i]['numero_cheque'];
+
+            if (!empty($request->items[$i]['banco_id']))
+                $recibo_item->banco_id = $request->items[$i]['banco_id'];
+
+            $recibo_item->importe = $request->items[$i]['importe'];
+            $recibo->notaReciboDetalle()->save($recibo_item);
+        }
+                
+        return $recibo;
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Recibo  $recibo
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Recibo $recibo)
+    public function update(Request $request, $id)
     {
-        //
-    }
+        $Recibo = Recibo::findOrFail($id);
+        $Recibo->total = $request->total_recibo;
+        $Recibo->obs = $request->obs;
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Recibo  $recibo
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Recibo $recibo)
-    {
-        //
-    }
+        $Recibo->update();
+        
+        $ReciboDetalle = ReciboDetalle::where('recibo_id', $id)->delete();
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Recibo  $recibo
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Recibo $recibo)
-    {
-        //
-    }
+        $cantidad_items = count($request->items);
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Recibo  $recibo
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Recibo $recibo)
+        for($i = 0; $i < $cantidad_items; $i++)
+        {
+            $recibo_item = new ReciboDetalle();
+
+            $recibo_item->recibo_id = $id;
+
+            if (!empty($request->items[$i]['fecha_cheque'])) {
+                $fecha_cheque = \Carbon\Carbon::parse($request->items[$i]['fecha_cheque']);
+                $recibo_item->fecha_cheque = $fecha_cheque->format('Y-m-d');
+            }
+
+            $recibo_item->tipo_pago = $request->items[$i]['tipo_pago'];
+
+            if (!empty($request->items[$i]['numero_cheque']))
+                $recibo_item->numero_cheque = $request->items[$i]['numero_cheque'];
+
+            if (!empty($request->items[$i]['banco_id']))
+                $recibo_item->banco_id = $request->items[$i]['banco_id'];
+
+            $recibo_item->importe = $request->items[$i]['importe'];
+            $recibo_item->save();
+        }
+        
+        return $request->items;
+    }    
+
+    public function devuelveRecibo(Request $request, $id)
     {
-        //
+        $datoRecibo = Recibo::join('sucursales', 'recibos.sucursal_id', '=', 'sucursales.id')
+        ->select('recibos.*', 'sucursales.punto_venta as punto_venta')
+        ->where('recibos.id', '=', $id)->get();        
+        
+        $datoReciboD = ReciboDetalle::leftjoin('bancos', 'recibos_detalles.banco_id', '=', 'bancos.id')
+        ->select('recibos_detalles.*', 'bancos.nombre as nombre_banco')
+        ->where('recibos_detalles.recibo_id', '=', $id)->get();
+
+        return [
+            'datoRecibo' => $datoRecibo,
+            'datoReciboD' => $datoReciboD,
+        ];
     }
 
     public function confirmaRecibo(Request $request, $id)

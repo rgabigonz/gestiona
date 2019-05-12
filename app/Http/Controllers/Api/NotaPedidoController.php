@@ -105,7 +105,6 @@ class NotaPedidoController extends Controller
         
         $NotaPedido = NotaPedido::findOrFail($id);
         $NotaPedido->total = $request->total_pedido;
-        $NotaPedido->total = $request->total_pedido;
         $NotaPedido->numero_factura = $request->numero_factura;
         $NotaPedido->lugar_entrega = $request->lugar_entrega;
 
