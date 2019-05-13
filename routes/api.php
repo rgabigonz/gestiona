@@ -40,6 +40,16 @@ Route::middleware('auth:api')->group( function () {
     Route::put('/deposito/desactivar/{deposito}', 'Api\DepositoController@desactivar');
     Route::put('/deposito/activar/{deposito}', 'Api\DepositoController@activar');
 
+    // Rutas Bancos
+    Route::get('/banco/cargaBancos', 'Api\BancoController@cargaBancos');
+
+    Route::apiResources([
+        'banco' => 'Api\BancoController'
+    ]);
+
+    Route::put('/banco/desactivar/{banco}', 'Api\BancoController@desactivar');
+    Route::put('/banco/activar/{banco}', 'Api\BancoController@activar');
+
     // Rutas Vendedores
     Route::get('/vendedor/cargaVendedores', 'Api\VendedorController@cargaVendedores');
 

@@ -13,19 +13,31 @@ class BancoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
-    }
+        $sBuscar = $request->buscar;
+        $sCriterio = $request->criterio;
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        if(empty($sBuscar)) {
+            $bancos = Banco::orderBy('nombre', 'asc')->paginate(15);//where('state', '=', 'A')
+        } 
+        else {
+            $bancos = Banco::where($sCriterio, 'like', '%' . $sBuscar . '%')//where('state', '=', 'A')
+            ->orderBy('nombre', 'asc')
+            ->paginate(15);
+        }
+
+        return [
+            'pagination' => [
+                'total'         => $bancos->total(),
+                'current_page'  => $bancos->currentPage(),
+                'per_page'      => $bancos->perPage(),
+                'last_page'     => $bancos->lastPage(),
+                'from'          => $bancos->firstItem(),
+                'to'            => $bancos->lastItem(),
+            ],
+            'bancos' => $bancos
+        ];
     }
 
     /**
@@ -36,29 +48,15 @@ class BancoController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        $this->validate($request, [
+            'nombre' => 'required|string'
+        ], [
+            'nombre.required' => 'El nombre es requerido'
+        ]);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Banco  $banco
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Banco $banco)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Banco  $banco
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Banco $banco)
-    {
-        //
+        return Banco::create([
+            'nombre' => $request['nombre']
+        ]);
     }
 
     /**
@@ -68,20 +66,31 @@ class BancoController extends Controller
      * @param  \App\Banco  $banco
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Banco $banco)
+    public function update(Request $request, $id)
     {
-        //
+        $banco = Banco::findOrFail($id);
+
+        $this->validate($request, [
+            'nombre' => 'required|string'
+        ], [
+            'nombre.required' => 'El nombre es requerido'
+        ]);
+
+        $banco->update($request->all());
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Banco  $banco
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Banco $banco)
+    public function desactivar(Request $request, $id)
     {
-        //
+        $banco = Banco::findOrFail($id);
+        $banco->estado = 'D';
+        $banco->update();
+    }
+
+    public function activar(Request $request, $id)
+    {
+        $banco = Banco::findOrFail($id);
+        $banco->estado = 'A';
+        $banco->update();
     }
 
     public function cargaBancos()

@@ -412,7 +412,7 @@
             },
 
             // Operaciones con NP Proveedores (OC)
-            validaNV() {
+            validaRecibo() {
                 var resultado = false;
 
                 if (this.codigo_cliente && this.items.length) {
@@ -435,7 +435,7 @@
             creaRecibo() {
                 this.$Progress.start();
                 
-               // if (this.validaNV()) {
+                if (this.validaRecibo()) {
                     axios.post('api/recibo', {
                         codigo_cliente: this.codigo_cliente, 
                         fecha_recibo: this.fecha_recibo,
@@ -453,12 +453,12 @@
                         this.$Progress.fail();
                     });
 
-                /*} else {
+                } else {
                     toast({
                         type: 'error',
                         title: 'Verificar errores'
                     });
-                }*/
+                }
                 
                 this.$Progress.finish();
                 
@@ -466,21 +466,22 @@
             actualizaRecibo() {
                 this.$Progress.start();
                 
-                axios.put('api/recibo/'+this.recibo_id_edicion, {
-                        total_recibo: this.total,
-                        obs: this.observacion,
-                        items: this.items})
-                .then(() => {
-                    Fire.$emit('AfterAction');
-                    toast({
-                        type: 'success',
-                        title: 'Se actualizo el recibo correctamente!'
+                if (this.validaRecibo()) {
+                    axios.put('api/recibo/'+this.recibo_id_edicion, {
+                            total_recibo: this.total,
+                            obs: this.observacion,
+                            items: this.items})
+                    .then(() => {
+                        Fire.$emit('AfterAction');
+                        toast({
+                            type: 'success',
+                            title: 'Se actualizo el recibo correctamente!'
+                        });
+                    })
+                    .catch(() => {
+                        this.$Progress.fail();
                     });
-                })
-                .catch(() => {
-                    this.$Progress.fail();
-                });
-
+                }
                 this.$Progress.finish();
             },
             cargarRecibo(rCod) {

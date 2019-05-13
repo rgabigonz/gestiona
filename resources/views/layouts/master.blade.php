@@ -102,6 +102,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <p>Depositos</p>
                 </router-link>
               </li>
+              <li class="nav-item">
+                <router-link to="/bancos" class="nav-link">
+                  <i class="fas fa-archive nav-icon"></i>
+                  <p>Bancos</p>
+                </router-link>
+              </li>
               <hr>
               <li class="nav-item">
                 <router-link to="/proveedores" class="nav-link">
