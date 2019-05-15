@@ -46,18 +46,18 @@
                             <td>{{ cheque.importe }}</td>
                             <td>
                                 <div v-if="cheque.estado_cheque == 'PE'">
-                                    <span class="badge badge-success">Pendiente de Cobro</span>
+                                    <span class="badge badge-danger">Pendiente de Cobro</span>
                                 </div>
                                 <div v-else>
-                                    <span class="badge badge-danger">Cobrado</span>
+                                    <span class="badge badge-success">Cobrado</span>
                                 </div>
                             </td>                            
                             <td>
                                 <a href="#" @click="editarModal(cheque)">
                                     <i class="fa fa-edit blue"></i>
                                 </a>
-                                <a href="#" v-if="cheque.estado == 'PE'" @click="cobrarCheque(cheque.id)">
-                                    <i class="fa fa-trash-alt red"></i>
+                                <a href="#" v-if="cheque.estado_cheque == 'PE'" @click="cobrarCheque(cheque.id)">
+                                    <i class="fas fa-dollar-sign green"></i>
                                 </a>
                             </td>
                         </tr>
@@ -96,16 +96,52 @@
                     </div>
                     <form @submit.prevent="actualizaCheque()">
                         <div class="modal-body">
-                            <div class="form-group">
-                                <label class="control-label" for="nombre"><i class="fa fa-bell-o"></i>Nombre</label>
-                                <input v-model="form.nombre" type="text" name="nombre" placeholder="Nombre"
-                                    class="form-control" :class="{ 'is-invalid': form.errors.has('nombre') }">                                
-                                <has-error :form="form" field="nombre"></has-error>
-                            </div>   
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label class="control-label" for="numero_cheque"><i class="fa fa-bell-o"></i>N° Cheque</label>
+                                        <input v-model="form.numero_cheque" type="number" name="numero_cheque" disabled
+                                            class="form-control">                                
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label class="control-label" for="fecha_cheque"><i class="fa fa-bell-o"></i>Fecha Cheque</label>
+                                        <input v-model="form.fecha_cheque" type="date" name="fecha_cheque" disabled
+                                            class="form-control">                                
+                                    </div>   
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label class="control-label" for="nombre_banco_cheque"><i class="fa fa-bell-o"></i>Banco</label>
+                                        <input v-model="form.nombre_banco_cheque" type="text" name="nombre_banco_cheque" disabled
+                                            class="form-control">                                
+                                    </div>  
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label class="control-label" for="importe_cheque"><i class="fa fa-bell-o"></i>Importe</label>
+                                        <input v-model="form.importe_cheque" type="number" name="importe_cheque" disabled
+                                            class="form-control">                                
+                                    </div>  
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label class="control-label" for="fecha_cobro_cheque"><i class="fa fa-bell-o"></i>Fecha Cobro</label>
+                                        <input v-model="form.fecha_cobro_cheque" type="date" name="fecha_cobro_cheque"
+                                            class="form-control" :class="{ 'is-invalid': form.errors.has('fecha_cobro_cheque') }">                                
+                                        <has-error :form="form" field="fecha_cobro_cheque"></has-error>
+                                    </div>   
+                                </div>
+                            </div> 
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger" @click="cerrarModal()">Cerrar</button>
-                            <button v-show="modoEdicion" type="submit" class="btn btn-success">Actualizar</button>
+                            <button v-show="modoEdicion" type="submit" class="btn btn-success">Cobrado</button>
                         </div>
                     </form>
                 </div>
@@ -124,7 +160,6 @@
                     id: 0,
                     fecha_cheque: '',
                     numero_cheque: '',
-                    codigo_banco: 0,
                     nombre_banco_cheque: '',
                     importe_cheque: 0,
                     estado_cheque: '',
@@ -225,15 +260,15 @@
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: 'Si, ACTIVAR',
+                    confirmButtonText: 'Si, COBRADO',
                     cancelButtonText: 'Cancelar'
                 }).then((result) => {
                     if (result.value) {
-                        this.form.put('api/banco/activar/'+id)
+                        this.form.put('api/cheque/cobrarCheque/'+id)
                         .then(() => {
                             swal(
-                                'ACTIVADO!',
-                                'El registro a sido Activado.',
+                                'COBRADO!',
+                                'El cheque a sido Cobrado.',
                                 'success'
                             );
                             Fire.$emit('AfterAction');

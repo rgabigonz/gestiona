@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\ReciboDetalle;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 
 class ConsultaChequesController extends Controller
 {
@@ -15,7 +16,7 @@ class ConsultaChequesController extends Controller
 
         if(empty($sBuscar)) {
             $cheques = ReciboDetalle::join('bancos', 'recibos_detalles.banco_id', '=', 'bancos.id')
-            ->select('recibos_detalles.*', 'bancos.nombre as nombre_banco_cheque')
+            ->select('recibos_detalles.*', 'bancos.nombre as nombre_banco_cheque', 'recibos_detalles.importe as importe_cheque')
             ->orderBy('fecha_cheque', 'asc')->paginate(15);
         } 
         else {
@@ -39,4 +40,14 @@ class ConsultaChequesController extends Controller
             'cheques' => $cheques
         ];
     }
+
+    public function cobrarCheque(Request $request, $id)
+    {
+        $fecha_cobro = \Carbon\Carbon::parse($request->fecha_cobro_cheque);
+
+        $cheque = ReciboDetalle::findOrFail($id);
+        $cheque->estado_cheque = 'CO';
+        $cheque->fecha_cobro_cheque = $fecha_cobro->format('Y-m-d');
+        $cheque->update();
+    }    
 }

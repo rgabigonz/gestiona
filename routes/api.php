@@ -155,4 +155,6 @@ Route::middleware('auth:api')->group( function () {
     Route::apiResources([
         'cheque' => 'Api\ConsultaChequesController'
     ]);    
+
+    Route::put('/cheque/cobrarCheque/{item}', 'Api\ConsultaChequesController@cobrarCheque');
 });
