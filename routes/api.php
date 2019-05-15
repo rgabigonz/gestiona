@@ -151,6 +151,8 @@ Route::middleware('auth:api')->group( function () {
         'recibo' => 'Api\ReciboController'
     ]);
 
-    // Rutas Bancos
-    Route::get('/banco/cargaBancos', 'Api\BancoController@cargaBancos');
+    //Rutas Consultas cheques
+    Route::apiResources([
+        'cheque' => 'Api\ConsultaChequesController'
+    ]);    
 });

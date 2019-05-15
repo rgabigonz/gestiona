@@ -1,0 +1,42 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use App\ReciboDetalle;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+
+class ConsultaChequesController extends Controller
+{
+    public function index(Request $request)
+    {
+        $sBuscar = $request->buscar;
+        $sCriterio = $request->criterio;
+
+        if(empty($sBuscar)) {
+            $cheques = ReciboDetalle::join('bancos', 'recibos_detalles.banco_id', '=', 'bancos.id')
+            ->select('recibos_detalles.*', 'bancos.nombre as nombre_banco_cheque')
+            ->orderBy('fecha_cheque', 'asc')->paginate(15);
+        } 
+        else {
+            /*$cheques = Recibo::join('clientes', 'recibos.cliente_id', '=', 'clientes.id')
+            ->join('sucursales', 'recibos.sucursal_id', '=', 'sucursales.id')
+            ->select('recibos.*', 'clientes.nombre as nombre_cliente', 'sucursales.punto_venta as punto_venta')
+            ->where($sCriterio, 'like', '%' . $sBuscar . '%')//where('state', '=', 'A')
+            ->orderBy('created_at', 'asc')
+            ->paginate(15);*/
+        }
+
+        return [
+            'pagination' => [
+                'total'         => $cheques->total(),
+                'current_page'  => $cheques->currentPage(),
+                'per_page'      => $cheques->perPage(),
+                'last_page'     => $cheques->lastPage(),
+                'from'          => $cheques->firstItem(),
+                'to'            => $cheques->lastItem(),
+            ],
+            'cheques' => $cheques
+        ];
+    }
+}
