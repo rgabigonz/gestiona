@@ -240,7 +240,7 @@
             actualizaCheque() {
                 this.$Progress.start();
                 
-                this.form.put('api/banco/'+this.form.id)
+                this.form.put('api/cheque/cobrarCheque/'+this.form.id)
                 .then(() => {
                     Fire.$emit('AfterAction');
                     this.cerrarModal();
