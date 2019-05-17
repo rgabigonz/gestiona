@@ -16,10 +16,19 @@ class ConsultaChequesController extends Controller
 
         if(empty($sBuscar)) {
             $cheques = ReciboDetalle::join('bancos', 'recibos_detalles.banco_id', '=', 'bancos.id')
+            ->join('recibos', 'recibos_detalles.recibo_id', '=', 'recibos.id')
             ->select('recibos_detalles.*', 'bancos.nombre as nombre_banco_cheque', 'recibos_detalles.importe as importe_cheque')
+            ->where('recibos.estado', '=', 'CO')
             ->orderBy('fecha_cheque', 'asc')->paginate(15);
         } 
         else {
+            $cheques = ReciboDetalle::join('bancos', 'recibos_detalles.banco_id', '=', 'bancos.id')
+            ->join('recibos', 'recibos_detalles.recibo_id', '=', 'recibos.id')
+            ->select('recibos_detalles.*', 'bancos.nombre as nombre_banco_cheque', 'recibos_detalles.importe as importe_cheque')
+            ->where('recibos.estado', '=', 'CO')
+            ->where($sCriterio, 'like', '%' . $sBuscar . '%')
+            ->orderBy('fecha_cheque', 'asc')->paginate(15);
+
             /*$cheques = Recibo::join('clientes', 'recibos.cliente_id', '=', 'clientes.id')
             ->join('sucursales', 'recibos.sucursal_id', '=', 'sucursales.id')
             ->select('recibos.*', 'clientes.nombre as nombre_cliente', 'sucursales.punto_venta as punto_venta')

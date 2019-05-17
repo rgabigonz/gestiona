@@ -12,9 +12,10 @@
                     <div class="row">
                         <div class="col col-md-4">
                             <select class="form-control" v-model="sCriterio">
-                                <option value="estado_cheque">Estado</option>
+                                <option value="numero_cheque">N° Cheque</option>
+                                <!-- <option value="estado_cheque">Estado</option>
                                 <option value="fecha_cheque">Fecha Cheque</option>
-                                <option value="fecha_cobro_cheque">Fecha de Cobro</option>
+                                <option value="fecha_cobro_cheque">Fecha de Cobro</option> -->
                             </select>
                         </div>
                         <div class="col col-md-8">
@@ -133,7 +134,8 @@
                                     <div class="form-group">
                                         <label class="control-label" for="fecha_cobro_cheque"><i class="fa fa-bell-o"></i>Fecha Cobro</label>
                                         <input v-model="form.fecha_cobro_cheque" type="date" name="fecha_cobro_cheque"
-                                            class="form-control" :class="{ 'is-invalid': form.errors.has('fecha_cobro_cheque') }">                                
+                                            class="form-control" :disabled="form.estado_cheque != 'PE' ? true : false" 
+                                            :class="{ 'is-invalid': form.errors.has('fecha_cobro_cheque') }">                                
                                         <has-error :form="form" field="fecha_cobro_cheque"></has-error>
                                     </div>   
                                 </div>
@@ -141,7 +143,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger" @click="cerrarModal()">Cerrar</button>
-                            <button v-show="modoEdicion" type="submit" class="btn btn-success">Cobrado</button>
+                            <button v-show="modoEdicion && form.estado_cheque == 'PE'" type="submit" class="btn btn-success">Cobrado</button>
                         </div>
                     </form>
                 </div>
@@ -174,7 +176,7 @@
                     'to': 0
                 },
                 offset: 3,
-                sCriterio: 'estado_cheque',
+                sCriterio: 'numero_cheque',
                 sBuscar: ''
             }
         },
