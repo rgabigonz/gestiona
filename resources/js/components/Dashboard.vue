@@ -7,6 +7,34 @@
             </div> -->
             <div class="car-body">
                 <div class="row">
+                    <div class="col-md-12">
+                        <!-- BAR CHART -->
+                        <div class="card card-success">
+
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-6 alert alert-success" role="alert">
+                                        <h3>DOLAR OFICIAL (BCRA) al: {{  cotizacion_oficial['d'] | formatDate}} / ${{  cotizacion_oficial['v'] }}</h3>
+                                    </div>
+                                    <div v-if="!cotizacion_oficial['d']" class="col-6 alert alert-info" role="alert">
+                                        <h3>Consultando cotizacion...</h3>
+                                    </div>
+                                    <!-- <div v-if="cotizacion_oficial['d']" class="col-3 alert alert-info" role="alert">
+                                        <h3>Boton Refrescar</h3>
+                                    </div>
+                                    <div v-if="cotizacion_oficial['d']" class="col-3 alert alert-info" role="alert">
+                                        <h3>Boton Guardar</h3>
+                                    </div> -->
+                                </div>
+                            </div>
+                            <!-- /.card-body -->
+
+                        </div>
+                        <!-- /.card -->   
+                    </div>
+                </div>     
+
+                <div class="row">
                     <div class="col-md-6">
                         <!-- BAR CHART -->
                         <div class="card card-success">
@@ -71,6 +99,7 @@
                 ventas:[],
                 varTotalVenta:[],
                 varMesVenta:[],
+                cotizacion_oficial: {}
             }
         },
         methods : {
@@ -95,6 +124,17 @@
                     me.ventas = respuesta.ventas;
                     //cargamos los datos del chart
                     me.loadVentas();
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            },
+            getCotizacion(){
+                let me = this;
+                var url = 'api/cotizacion/devuelveCotizacion';
+                axios.get(url).then(function (response) {
+                    var respuesta = response.data;
+                    me.cotizacion_oficial = respuesta.cotizacion_oficial;
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -166,6 +206,7 @@
         mounted() {
             this.getCompras();
             this.getVentas();
+            this.getCotizacion();
         }
     }
 </script>

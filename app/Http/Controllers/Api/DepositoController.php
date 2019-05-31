@@ -96,7 +96,7 @@ class DepositoController extends Controller
 
     public function cargaDepositos()
     {
-        $ldepositos = Deposito::orderBy('descripcion', 'asc')->get();
+        $ldepositos = Deposito::orderBy('descripcion', 'asc')->where('estado', '=', 'A')->get();
         return [
             'ldepositos' => $ldepositos
         ];

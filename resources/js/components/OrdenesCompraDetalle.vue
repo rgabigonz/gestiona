@@ -223,11 +223,12 @@
                                 <tr>
                                     <th style="width:30%">Producto</th>
                                     <th style="width:10%">Cantidad</th>
-                                    <th style="width:12%">Precio</th>
-                                    <th style="width:12%">Flete</th>
-                                    <th style="width:12%">C. Venta</th>
-                                    <th style="width:12%">C. Gestion</th>
-                                    <th style="width:12%">Subtotal</th>
+                                    <th style="width:10%">Precio</th>
+                                    <th style="width:10%">Flete</th>
+                                    <th style="width:10%">C. Venta</th>
+                                    <th style="width:10%">C. Gestion</th>
+                                    <th style="width:10%">P. Unitario</th>
+                                    <th style="width:10%">Subtotal</th>
                                     <th></th>
                                 </tr>
                                 <tr>
@@ -238,6 +239,11 @@
                                                     <option value=0>Producto...</option>
                                                     <option v-for="lproducto in lproductos" :key="lproducto.id" :value="lproducto.id">{{ lproducto.nombre }}</option>
                                                 </select>                                                    
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="input-group input-group-sm">
+                                                <input v-model="descripcion_producto" type="text" name="descripcion_producto" class="form-control form-control-sm" disabled>
                                             </div>
                                         </div>
                                     </td>
@@ -296,6 +302,16 @@
                                     <td class="invoice-col">
                                         <div class="form-group">
                                             <div class="input-group input-group-sm">
+                                                <input v-model="unitario_producto" type="text" name="unitario_producto" 
+                                                    class="form-control form-control-sm" disabled>
+                                            </div>
+                                        </div>
+                                    </td>                        
+                                    <!-- /.col -->
+
+                                    <td class="invoice-col">
+                                        <div class="form-group">
+                                            <div class="input-group input-group-sm">
                                                 <input v-model="subtotal_producto" type="text" name="subtotal_producto" 
                                                     class="form-control form-control-sm" disabled>
                                             </div>
@@ -303,7 +319,7 @@
                                     </td>                        
                                     <!-- /.col -->
 
-                                </tr>                            
+                                </tr>
                             </thead>
                             <tbody>
                                 <tr class="item" v-for="(item, index) in items" :key="item.cod">
@@ -313,7 +329,8 @@
                                     <td>${{ item.flete }}</td>
                                     <td>${{ item.comision_venta }}</td>
                                     <td>${{ item.comision_gestion }}</td>
-                                    <td>${{ ((item.precio * item.cantidad) + parseFloat(item.flete) + parseFloat(item.comision_venta) + parseFloat(item.comision_gestion)) | currency }}</td>
+                                    <td>${{ (parseFloat(item.precio) + parseFloat(item.flete) + parseFloat(item.comision_venta) + parseFloat(item.comision_gestion)) | currency }}</td>
+                                    <td>${{ ((parseFloat(item.precio) + parseFloat(item.flete) + parseFloat(item.comision_venta) + parseFloat(item.comision_gestion)) * item.cantidad) | currency }}</td>
                                     <td>
                                         <a href="#" @click="removerProducto(index)">
                                             <i class="fa fa-trash-alt red"></i>
@@ -321,6 +338,9 @@
                                     </td>
                                 </tr>
                                 <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
@@ -433,6 +453,7 @@
                 codigo_producto: 0,
                 cantidad_producto: 0,
                 nombre_producto: '',
+                descripcion_producto: '',
                 obs_producto: '',
                 precio_producto: 0,
                 flete_producto: 0,
@@ -519,10 +540,12 @@
                     var response = data.data;
                     me.producto = response.datoProducto;
                     me.nombre_producto = me.producto.nombre;
+                    me.descripcion_producto = me.producto.descripcion;
                 }).catch((error) => {
                     me.producto = {};
                     me.codigo_producto = 0;
                     me.nombre_producto = '';
+                    me.descripcion_producto = '';
 
                     //Levo el foco al codigo de producto
                     this.$nextTick(() => {
@@ -638,6 +661,7 @@
                 this.codigo_producto = 0;
                 this.cantidad_producto = 0;
                 this.nombre_producto = '';
+                this.descripcion_producto = '';
                 this.obs_producto = '';
                 this.precio_producto = 0;
                 this.flete_producto = 0;
@@ -840,12 +864,17 @@
         },
         computed: {
             subtotal_producto() {
+                var lTotal_Adicionales = parseFloat(this.flete_producto) + parseFloat(this.comision_venta_producto) + parseFloat(this.comision_gestion_producto);
+                var lTotal = parseFloat(this.precio_producto) + parseFloat(lTotal_Adicionales);
+                return (this.cantidad_producto * lTotal);
+            },
+            unitario_producto() {
                 var lTotal = parseFloat(this.flete_producto) + parseFloat(this.comision_venta_producto) + parseFloat(this.comision_gestion_producto);
-                return ((this.cantidad_producto * this.precio_producto) + parseFloat(lTotal));
+                return (parseFloat(this.precio_producto) + parseFloat(lTotal));
             },
             total() {
                 return this.items.reduce(
-                    (acc, item) => acc + (parseFloat(item.flete) + parseFloat(item.comision_venta) + parseFloat(item.comision_gestion) + (item.precio * item.cantidad)),
+                    (acc, item) => acc + ((parseFloat(item.flete) + parseFloat(item.comision_venta) + parseFloat(item.comision_gestion) + parseFloat(item.precio)) * parseFloat(item.cantidad)),
                     0
                 );
             }            

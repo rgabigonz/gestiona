@@ -109,7 +109,7 @@ class ProductoController extends Controller
 
     public function cargaProductos()
     {
-        $productos = Producto::orderBy('nombre', 'asc')->get();
+        $productos = Producto::orderBy('nombre', 'asc')->where('estado', '=', 'A')->get();
         return [
             'productos' => $productos
         ];

@@ -225,7 +225,8 @@
 								<th>C. Venta</th>
 								<th>C. Gestion</th>
 							@endif
-                            <th>SUBTOTAL</th>
+							<th>P. Unitario</th>
+                            <th>Subtotal</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -233,13 +234,14 @@
                         <tr>
                             <td>{{ $det->nombre_producto }}</td>
                             <td>{{ $det->cantidad }}</td>							
-                            <td>$ {{ $det->precio }}</td>
+                            <td>$ {{ number_format($det->precio, 2, ',', '.') }}</td>
 							@if ($datoOrdenCompra[0]['tipo'] == 'CL')
-								<td>$ {{ $det->flete }}</td>
-								<td>$ {{ $det->comision_venta }}</td>
-								<td>$ {{ $det->comision_gestion }}</td>
+								<td>$ {{ number_format($det->flete, 2, ',', '.') }}</td>
+								<td>$ {{ number_format($det->comision_venta, 2, ',', '.') }}</td>
+								<td>$ {{ number_format($det->comision_gestion, 2, ',', '.') }}</td>
 							@endif
-                            <td>$ {{ $det->flete + $det->comision_venta + $det->comision_gestion + ($det->cantidad * $det->precio) }}</td>
+							<td>$ {{ number_format($det->flete + $det->comision_venta + $det->comision_gestion + $det->precio, 2, ',', '.') }}</td>
+                            <td>$ {{ number_format(($det->flete + $det->comision_venta + $det->comision_gestion + $det->precio) * $det->cantidad, 2, ',', '.') }}</td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -252,8 +254,9 @@
 								<th></th>
 								<th></th>
 							@endif
+							<th></th>
                             <th>TOTAL</th>
-                            <td>$ {{ $datoOrdenCompra[0]['total'] }}</td>
+                            <td>$ {{ number_format($datoOrdenCompra[0]['total'], 2, ',', '.') }}</td>
                         </tr>
                     </tfoot>
                 </table>

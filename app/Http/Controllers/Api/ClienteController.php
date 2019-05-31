@@ -52,14 +52,14 @@ class ClienteController extends Controller
         $this->validate($request, [
             'nombre' => 'required|string|max:100',
             'direccion' => 'required|string',
-            'correo_electronico' => 'required|string|email|max:255|unique:clientes',
-            'numero_documento' => 'required'
+            'correo_electronico' => 'unique:clientes',
+            'numero_documento' => 'required|unique:clientes'
         ], [
             'nombre.required' => 'El nombre es requerido',
             'direccion.required' => 'La direccion es requerida',
-            'correo_electronico.required' => 'El correo electronico es requerido',
             'correo_electronico.unique' => 'El correo electronico ya esta registrado',
-            'numero_documento.required' => 'El numero de documento es requerido'
+            'numero_documento.required' => 'El numero de documento es requerido',
+            'numero_documento.unique' => 'El numero de documento ya esta registrado'
         ]);
 
         return Cliente::create([
@@ -86,14 +86,14 @@ class ClienteController extends Controller
         $this->validate($request, [
             'nombre' => 'required|string|max:100',
             'direccion' => 'required|string',
-            'correo_electronico' => 'required|string|email|max:255||unique:clientes,correo_electronico,'.$cliente->id,
-            'numero_documento' => 'required'
+            'correo_electronico' => 'unique:clientes,correo_electronico,'.$cliente->id,
+            'numero_documento' => 'required|unique:clientes,numero_documento,'.$cliente->id
         ], [
             'nombre.required' => 'El nombre es requerido',
             'direccion.required' => 'La direccion es requerida',
-            'correo_electronico.required' => 'El correo electronico es requerido',
             'correo_electronico.unique' => 'El correo electronico ya esta registrado',
-            'numero_documento.required' => 'El numero de documento es requerido'
+            'numero_documento.required' => 'El numero de documento es requerido',
+            'numero_documento.unique' => 'El numero de documento ya esta registrado'
         ]);
 
         $cliente->update($request->all());
@@ -124,7 +124,7 @@ class ClienteController extends Controller
 
     public function cargaClientes()
     {
-        $clientes = Cliente::orderBy('nombre', 'asc')->get();
+        $clientes = Cliente::orderBy('nombre', 'asc')->where('estado', '=', 'A')->get();
         return [
             'clientes' => $clientes
         ];

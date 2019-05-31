@@ -125,7 +125,7 @@ class ProveedorController extends Controller
 
     public function cargaProveedores()
     {
-        $proveedores = Proveedor::orderBy('nombre', 'asc')->get();
+        $proveedores = Proveedor::orderBy('nombre', 'asc')->where('estado', '=', 'A')->get();
         return [
             'proveedores' => $proveedores
         ];

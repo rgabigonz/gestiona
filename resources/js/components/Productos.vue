@@ -35,15 +35,15 @@
                     <tbody>
                         <tr>
                             <th style="width: 8%">#</th>
-                            <th style="width: 60%">Nombre</th>
-                            <th style="width: 15%">Precio</th>
+                            <th style="width: 40%">Nombre</th>
+                            <th style="width: 35%">Descripcion</th>
                             <th style="width: 8%">Estado</th>
                             <th style="width: 9%"></th>
                         </tr>
                         <tr v-for="producto in productos" :key="producto.id">
                             <td>{{ producto.id }}</td>
                             <td>{{ producto.nombre }}</td>
-                            <td>$ {{ producto.precio }}</td>
+                            <td>{{ producto.descripcion }}</td>
                             <td>
                                 <div v-if="producto.estado == 'A'">
                                     <span class="badge badge-success">Activo</span>

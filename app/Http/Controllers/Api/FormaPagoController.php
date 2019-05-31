@@ -95,7 +95,7 @@ class FormaPagoController extends Controller
 
     public function cargaFormasPago()
     {
-        $lformaspagos = FormaPago::orderBy('descripcion', 'asc')->get();
+        $lformaspagos = FormaPago::orderBy('descripcion', 'asc')->where('estado', '=', 'A')->get();
         return [
             'lformaspagos' => $lformaspagos
         ];

@@ -257,7 +257,7 @@
             return {
                 ltipos_pagos: [
                     {id: 'CH', nombre: 'CHEQUE'},
-                    {id: 'CO', nombre: 'CONTADO'}
+                    {id: 'EF', nombre: 'EFECTIVO'}
                 ],                
                 //Lista de Seleccion clientes y productos
                 lclientes: {},
@@ -509,8 +509,8 @@
 
                         if (me.recibo_detalle[i].tipo_pago == 'CH' )
                             me.tipo_pago_descripcion = 'CHEQUE';
-                        if (me.recibo_detalle[i].tipo_pago == 'CO' )
-                            me.tipo_pago_descripcion = 'CONTADO';
+                        if (me.recibo_detalle[i].tipo_pago == 'EF' )
+                            me.tipo_pago_descripcion = 'EFECTIVO';
 
                         me.items.push({ tipo_pago: me.recibo_detalle[i].tipo_pago, 
                                         tipo_pago_descripcion: me.tipo_pago_descripcion,

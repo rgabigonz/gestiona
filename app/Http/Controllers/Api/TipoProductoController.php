@@ -86,7 +86,7 @@ class TipoProductoController extends Controller
 
     public function cargaTP()
     {
-        $tiposProducto = TipoProducto::orderBy('descripcion', 'asc')->get();
+        $tiposProducto = TipoProducto::orderBy('descripcion', 'asc')->where('estado', '=', 'A')->get();
         return [
             'tiposProducto' => $tiposProducto
         ];

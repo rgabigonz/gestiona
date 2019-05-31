@@ -95,7 +95,7 @@ class CondicionPagoController extends Controller
 
     public function cargaCP()
     {
-        $condicionesPago = CondicionPago::orderBy('descripcion', 'asc')->get();
+        $condicionesPago = CondicionPago::orderBy('descripcion', 'asc')->where('estado', '=', 'A')->get();
         return [
             'condicionesPago' => $condicionesPago
         ];

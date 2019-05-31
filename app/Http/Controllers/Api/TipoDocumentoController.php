@@ -75,7 +75,7 @@ class TipoDocumentoController extends Controller
 
     public function cargaTD()
     {
-        $tiposDocumento = TipoDocumento::orderBy('descripcion', 'asc')->get();
+        $tiposDocumento = TipoDocumento::orderBy('descripcion', 'asc')->where('estado', '=', 'A')->get();
         return [
             'tiposDocumento' => $tiposDocumento
         ];

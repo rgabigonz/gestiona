@@ -19,10 +19,10 @@ class BancoController extends Controller
         $sCriterio = $request->criterio;
 
         if(empty($sBuscar)) {
-            $bancos = Banco::orderBy('nombre', 'asc')->paginate(15);//where('state', '=', 'A')
+            $bancos = Banco::orderBy('nombre', 'asc')->paginate(15);
         } 
         else {
-            $bancos = Banco::where($sCriterio, 'like', '%' . $sBuscar . '%')//where('state', '=', 'A')
+            $bancos = Banco::where($sCriterio, 'like', '%' . $sBuscar . '%')
             ->orderBy('nombre', 'asc')
             ->paginate(15);
         }
@@ -95,7 +95,7 @@ class BancoController extends Controller
 
     public function cargaBancos()
     {
-        $bancos = Banco::orderBy('nombre', 'asc')->get();
+        $bancos = Banco::orderBy('nombre', 'asc')->where('estado', '=', 'A')->get();
         return [
             'bancos' => $bancos
         ];
