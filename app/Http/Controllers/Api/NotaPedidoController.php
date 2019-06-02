@@ -138,7 +138,7 @@ class NotaPedidoController extends Controller
         $datoNotaPedido = NotaPedido::findOrFail($id);
 
         $datoNotaPedidoD = NotaPedidoDetalle::join('productos', 'notas_pedidos_detalle.producto_id', '=', 'productos.id')
-        ->select('notas_pedidos_detalle.*', 'productos.nombre as nombre_producto')
+        ->select('notas_pedidos_detalle.*', 'productos.nombre as nombre_producto', 'productos.descripcion as descripcion_producto')
         ->where('notas_pedidos_detalle.nota_pedido_id', '=', $id)->get();
 
         return [
@@ -171,7 +171,7 @@ class NotaPedidoController extends Controller
         ->where('notas_pedidos.id', '=', $id)->get();
 
         $datoNotaPedidoD = NotaPedidoDetalle::join('productos', 'notas_pedidos_detalle.producto_id', '=', 'productos.id')
-        ->select('notas_pedidos_detalle.*', 'productos.nombre as nombre_producto')
+        ->select('notas_pedidos_detalle.*', 'productos.nombre as nombre_producto', 'productos.descripcion as descripcion_producto')
         ->where('notas_pedidos_detalle.nota_pedido_id', '=', $id)->get();
         
         $pdf = \PDF::loadView('reportesPDF.notapedido', ['datoNotaPedido'=>$datoNotaPedido, 'datoNotaPedidoD'=>$datoNotaPedidoD]);

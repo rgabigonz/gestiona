@@ -120,124 +120,124 @@
                 <div class="card-body">              
                     <div class="row invoice-info">
                         <div class="col-12 invoice-col">
-                        <table class="table table-striped table-sm table-responsive">
-                            <thead>
-                                <tr>
-                                    <th style="width:40%">Producto</th>
-                                    <th style="width:10%">Cantidad</th>
-                                    <th style="width:10%">Precio</th>
-                                    <th style="width:10%">Flete</th>
-                                    <th style="width:10%">C. Venta</th>
-                                    <th style="width:10%">P. Unitario</th>
-                                    <th style="width:10%">Subtotal</th>
-                                    <th></th>
-                                </tr>
-                                <tr>
-                                    <td class="invoice-col">
-                                        <div class="form-group">
-                                            <div class="input-group input-group-sm">
-                                                <select class="form-control" v-model="codigo_producto" ref="codigo_producto" @change="cargarProducto(codigo_producto)">
-                                                    <option value=0>Producto...</option>
-                                                    <option v-for="lproducto in lproductos" :key="lproducto.id" :value="lproducto.id">{{ lproducto.nombre }}</option>
-                                                </select>                                                    
+                            <table class="table table-striped table-sm table-responsive">
+                                <thead>
+                                    <tr>
+                                        <th style="width:40%">Producto</th>
+                                        <th style="width:10%">Cantidad</th>
+                                        <th style="width:10%">Precio</th>
+                                        <th style="width:10%">Flete</th>
+                                        <th style="width:10%">C. Venta</th>
+                                        <th style="width:10%">P. Unitario</th>
+                                        <th style="width:10%">Subtotal</th>
+                                        <th></th>
+                                    </tr>
+                                    <tr>
+                                        <td class="invoice-col">
+                                            <div class="form-group">
+                                                <div class="input-group input-group-sm">
+                                                    <select class="form-control" v-model="codigo_producto" ref="codigo_producto" @change="cargarProducto(codigo_producto)">
+                                                        <option value=0>Producto...</option>
+                                                        <option v-for="lproducto in lproductos" :key="lproducto.id" :value="lproducto.id">{{ lproducto.nombre }}</option>
+                                                    </select>                                                    
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="input-group input-group-sm">
-                                                <input v-model="descripcion_producto" type="text" name="descripcion_producto" class="form-control form-control-sm" disabled>
+                                            <div class="form-group">
+                                                <div class="input-group input-group-sm">
+                                                    <input v-model="descripcion_producto" type="text" name="descripcion_producto" class="form-control form-control-sm" disabled>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </td>
-                                    <!-- /.col -->
-                                    
-                                    <td class="invoice-col">
-                                        <div class="form-group">
-                                            <div class="input-group input-group-sm">
-                                                <input v-model="cantidad_producto" type="number" name="cantidad_producto"
-                                                    class="form-control form-control-sm">
+                                        </td>
+                                        <!-- /.col -->
+                                        
+                                        <td class="invoice-col">
+                                            <div class="form-group">
+                                                <div class="input-group input-group-sm">
+                                                    <input v-model="cantidad_producto" type="number" name="cantidad_producto"
+                                                        class="form-control form-control-sm">
+                                                </div>
                                             </div>
-                                        </div>
-                                    </td>
-                                    <!-- /.col -->
+                                        </td>
+                                        <!-- /.col -->
 
-                                    <td class="invoice-col">
-                                        <div class="form-group">
-                                            <div class="input-group input-group-sm">
-                                                <input v-model="precio_producto" type="number" name="precio_producto"
-                                                    class="form-control form-control-sm">
+                                        <td class="invoice-col">
+                                            <div class="form-group">
+                                                <div class="input-group input-group-sm">
+                                                    <input v-model="precio_producto" type="number" name="precio_producto"
+                                                        class="form-control form-control-sm">
+                                                </div>
                                             </div>
-                                        </div>
-                                    </td>
-                                    <!-- /.col -->
+                                        </td>
+                                        <!-- /.col -->
 
-                                    <td class="invoice-col">
-                                        <div class="form-group">
-                                            <div class="input-group input-group-sm">
-                                                <input v-model="flete_producto" type="number" name="flete_producto"
-                                                    class="form-control form-control-sm">
+                                        <td class="invoice-col">
+                                            <div class="form-group">
+                                                <div class="input-group input-group-sm">
+                                                    <input v-model="flete_producto" type="number" name="flete_producto"
+                                                        class="form-control form-control-sm">
+                                                </div>
                                             </div>
-                                        </div>
-                                    </td>
-                                    <!-- /.col -->
+                                        </td>
+                                        <!-- /.col -->
 
-                                    <td class="invoice-col">
-                                        <div class="form-group">
-                                            <div class="input-group input-group-sm">
-                                                <input v-model="comision_venta_producto" type="number" name="comision_venta_producto"
-                                                    @keydown ="keyMonitor" class="form-control form-control-sm">
+                                        <td class="invoice-col">
+                                            <div class="form-group">
+                                                <div class="input-group input-group-sm">
+                                                    <input v-model="comision_venta_producto" type="number" name="comision_venta_producto"
+                                                        @keydown ="keyMonitor" class="form-control form-control-sm">
+                                                </div>
                                             </div>
-                                        </div>
-                                    </td>
-                                    <!-- /.col -->
+                                        </td>
+                                        <!-- /.col -->
 
-                                    <td class="invoice-col">
-                                        <div class="form-group">
-                                            <div class="input-group input-group-sm">
-                                                <input v-model="unitario_producto" type="text" name="unitario_producto" 
-                                                    class="form-control form-control-sm" disabled>
+                                        <td class="invoice-col">
+                                            <div class="form-group">
+                                                <div class="input-group input-group-sm">
+                                                    <input v-model="unitario_producto" type="text" name="unitario_producto" 
+                                                        class="form-control form-control-sm" disabled>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </td>                        
-                                    <!-- /.col -->
+                                        </td>                        
+                                        <!-- /.col -->
 
-                                    <td class="invoice-col">
-                                        <div class="form-group">
-                                            <div class="input-group input-group-sm">
-                                                <input v-model="subtotal_producto" type="text" name="subtotal_producto" 
-                                                    class="form-control form-control-sm" disabled>
+                                        <td class="invoice-col">
+                                            <div class="form-group">
+                                                <div class="input-group input-group-sm">
+                                                    <input v-model="subtotal_producto" type="text" name="subtotal_producto" 
+                                                        class="form-control form-control-sm" disabled>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </td>                        
-                                    <!-- /.col -->
+                                        </td>                        
+                                        <!-- /.col -->
 
-                                </tr>                            
-                            </thead>
-                            <tbody>
-                                <tr class="item" v-for="(item, index) in items" :key="item.cod">
-                                    <td>{{ item.descripcion}}</td>
-                                    <td>{{ item.cantidad }}</td>
-                                    <td>${{ item.precio }}</td>
-                                    <td>${{ item.flete }}</td>
-                                    <td>${{ item.comision_venta }}</td>
-                                    <td>${{ (parseFloat(item.precio) + parseFloat(item.flete) + parseFloat(item.comision_venta)) | currency }}</td>                                    
-                                    <td>${{ ((parseFloat(item.precio) + parseFloat(item.flete) + parseFloat(item.comision_venta)) * item.cantidad) | currency }}</td>
-                                    <td>
-                                        <a href="#" @click="removerProducto(index)">
-                                            <i class="fa fa-trash-alt red"></i>
-                                        </a>                            
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td>Total:</td>
-                                    <td>${{ total | currency }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                                    </tr>                            
+                                </thead>
+                                <tbody style="font-size: 12px;">
+                                    <tr class="item" v-for="(item, index) in items" :key="item.cod">
+                                        <td><b>{{ item.descripcion }}</b> / {{ item.descripcion_larga}}</td>
+                                        <td>{{ item.cantidad }}</td>
+                                        <td>${{ item.precio }}</td>
+                                        <td>${{ item.flete }}</td>
+                                        <td>${{ item.comision_venta }}</td>
+                                        <td>${{ (parseFloat(item.precio) + parseFloat(item.flete) + parseFloat(item.comision_venta)) | currency }}</td>                                    
+                                        <td><b>${{ ((parseFloat(item.precio) + parseFloat(item.flete) + parseFloat(item.comision_venta)) * item.cantidad) | currency }}</b></td>
+                                        <td>
+                                            <a href="#" @click="removerProducto(index)">
+                                                <i class="fa fa-trash-alt red"></i>
+                                            </a>                            
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><b>Total:</b></td>
+                                        <td><b>${{ total | currency }}</b></td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                         <!-- /.col -->
                     </div>
@@ -437,6 +437,7 @@
                     if (this.existeProducto(parseInt(this.codigo_producto)) === false) {
                         this.items.push({ cod: parseInt(this.codigo_producto), 
                                         descripcion: this.nombre_producto, 
+                                        descripcion_larga: this.descripcion_producto, 
                                         cantidad: this.cantidad_producto, 
                                         precio: this.precio_producto,
                                         flete: this.flete_producto,
@@ -583,6 +584,7 @@
                     for (var i = 0; i < me.nota_pedido_detalle.length; i++) {
                         me.items.push({ cod: me.nota_pedido_detalle[i].producto_id, 
                                           descripcion: me.nota_pedido_detalle[i].nombre_producto, 
+                                          descripcion_larga: me.nota_pedido_detalle[i].descripcion_producto, 
                                           cantidad: me.nota_pedido_detalle[i].cantidad, 
                                           precio: me.nota_pedido_detalle[i].precio,
                                           flete: me.nota_pedido_detalle[i].flete,

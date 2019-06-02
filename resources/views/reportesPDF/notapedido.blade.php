@@ -155,7 +155,7 @@
 		<br>
         <section>
             <div>
-                <table id="nvarticulo">
+                <table id="nvarticulo" style="font-size: 12px;">
                     <thead>
                         <tr id="nv">
                             <th>Producto</th>
@@ -170,7 +170,7 @@
                     <tbody>
                         @foreach ($datoNotaPedidoD as $det)
                         <tr>
-                            <td>{{ $det->nombre_producto }}</td>
+							<td><b>{{ $det->nombre_producto }}</b> / {{ $det->descripcion_producto }}</td>
                             <td>{{ $det->cantidad }}</td>							
                             <td>$ {{ number_format($det->precio, 2, ',', '.') }}</td>
 							<td>$ {{ number_format($det->flete, 2, ',', '.') }}</td>

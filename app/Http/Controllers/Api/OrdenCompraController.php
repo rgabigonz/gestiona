@@ -186,7 +186,7 @@ class OrdenCompraController extends Controller
         $datoOrdenCompra = OrdenCompra::findOrFail($id);
 
         $datoOrdenCompraD = OrdenCompraDetalle::join('productos', 'ordenes_compras_detalle.producto_id', '=', 'productos.id')
-        ->select('ordenes_compras_detalle.*', 'productos.nombre as nombre_producto')
+        ->select('ordenes_compras_detalle.*', 'productos.nombre as nombre_producto', 'productos.descripcion as descripcion_producto')
         ->where('ordenes_compras_detalle.orden_compra_id', '=', $id)->get();
 
         return [
@@ -227,7 +227,7 @@ class OrdenCompraController extends Controller
         ->where('ordenes_compras.id', '=', $id)->get();
 
         $datoOrdenCompraD = OrdenCompraDetalle::join('productos', 'ordenes_compras_detalle.producto_id', '=', 'productos.id')
-        ->select('ordenes_compras_detalle.*', 'productos.nombre as nombre_producto')
+        ->select('ordenes_compras_detalle.*', 'productos.nombre as nombre_producto', 'productos.descripcion as descripcion_producto')
         ->where('ordenes_compras_detalle.orden_compra_id', '=', $id)->get();
         
         $pdf = \PDF::loadView('reportesPDF.notapedidoproveedor', ['datoOrdenCompra'=>$datoOrdenCompra, 'datoOrdenCompraD'=>$datoOrdenCompraD]);

@@ -321,16 +321,16 @@
 
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody style="font-size: 12px;">
                                 <tr class="item" v-for="(item, index) in items" :key="item.cod">
-                                    <td>{{ item.descripcion}}</td>
+                                    <td><b>{{ item.descripcion }}</b> / {{ item.descripcion_larga}}</td>
                                     <td>{{ item.cantidad }}</td>
                                     <td>${{ item.precio }}</td>
                                     <td>${{ item.flete }}</td>
                                     <td>${{ item.comision_venta }}</td>
                                     <td>${{ item.comision_gestion }}</td>
                                     <td>${{ (parseFloat(item.precio) + parseFloat(item.flete) + parseFloat(item.comision_venta) + parseFloat(item.comision_gestion)) | currency }}</td>
-                                    <td>${{ ((parseFloat(item.precio) + parseFloat(item.flete) + parseFloat(item.comision_venta) + parseFloat(item.comision_gestion)) * item.cantidad) | currency }}</td>
+                                    <td><b>${{ ((parseFloat(item.precio) + parseFloat(item.flete) + parseFloat(item.comision_venta) + parseFloat(item.comision_gestion)) * item.cantidad) | currency }}</b></td>
                                     <td>
                                         <a href="#" @click="removerProducto(index)">
                                             <i class="fa fa-trash-alt red"></i>
@@ -344,8 +344,8 @@
                                     <td></td>
                                     <td></td>
                                     <td></td>
-                                    <td>Total:</td>
-                                    <td>${{ total | currency }}</td>
+                                    <td><b>Total:</b></td>
+                                    <td><b>${{ total | currency }}</b></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -648,6 +648,7 @@
                     if (this.existeProducto(parseInt(this.codigo_producto)) === false) {
                         this.items.push({ cod: parseInt(this.codigo_producto), 
                                         descripcion: this.nombre_producto, 
+                                        descripcion_larga: this.descripcion_producto, 
                                         obs: this.obs_producto, 
                                         flete: this.flete_producto, 
                                         comision_venta: this.comision_venta_producto, 
@@ -847,6 +848,7 @@
                     for (var i = 0; i < me.orden_compra_detalle.length; i++) {
                         me.items.push({ cod: me.orden_compra_detalle[i].producto_id, 
                                           descripcion: me.orden_compra_detalle[i].nombre_producto, 
+                                          descripcion_larga: me.orden_compra_detalle[i].descripcion_producto, 
                                           obs: me.orden_compra_detalle[i].obs, 
                                           cantidad: me.orden_compra_detalle[i].cantidad, 
                                           precio: me.orden_compra_detalle[i].precio, 
