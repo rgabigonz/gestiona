@@ -47,7 +47,7 @@
 				margin-top: 2%;
 				margin-left: 2%;
 				margin-right: 2%;
-				font-size: 20px;
+				font-size: 15px;
 			}
 
 			section{
@@ -120,11 +120,14 @@
                     <b>Agro Proyecciones SRL</b>
 					<br>Ituzaingo 72 (4400), Salta, Argentina
 					<br>Celular:(+54)93875088902
-					<!-- <br>Email:jcarlos.ad7@gmail.com -->
+					<br>CUIT: 30-71424172-5
                 </p>
             </div>
             <div id="nven">
-                <p>Nota de Venta N° {{ $datoNotaPedido[0]['anio_id'] }} - {{ $datoNotaPedido[0]['anio_actual'] }}</p>
+                <p>
+					Fecha de Pedido: {{ date('d-m-Y', strtotime($datoNotaPedido[0]['fecha'])) }}
+					<br>Nota de Venta N° {{ $datoNotaPedido[0]['anio_id'] }} - {{ $datoNotaPedido[0]['anio_actual'] }}
+				</p>
             </div>
         </header>
         <br>

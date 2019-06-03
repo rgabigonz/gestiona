@@ -1,7 +1,7 @@
 <html lang="en">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-		<title>Nota de Venta</title>
+		<title>Nota de Pedido</title>
 		<style>
 			body {
 				/*position: relative;*/
@@ -120,11 +120,14 @@
                     <b>Agro Proyecciones SRL</b>
 					<br>Ituzaingo 72 (4400), Salta, Argentina
 					<br>Celular:(+54)93875088902
-					<!-- <br>Email:jcarlos.ad7@gmail.com -->
+					<br>CUIT: 30-71424172-5
                 </p>
             </div>
             <div id="nven">
-                <p>Nota de Pedido N° {{ $datoOrdenCompra[0]['anio_id'] }} - {{ $datoOrdenCompra[0]['anio_actual'] }}</p>
+                <p>
+					Fecha de Pedido: {{ date('d-m-Y', strtotime($datoOrdenCompra[0]['fecha'])) }}
+					<br>Nota de Pedido N° {{ $datoOrdenCompra[0]['anio_id'] }} - {{ $datoOrdenCompra[0]['anio_actual'] }}
+				</p>
             </div>
         </header>
         <br>
@@ -155,6 +158,8 @@
 						<thead>                        
 							<tr>
 								<th id="nv">Cliente</th>
+								<th id="nv">Forma de Pago</th>
+								<th id="nv">Condicion de Pago</th>								
 							</tr>
 						</thead>
 						<tbody>
@@ -164,31 +169,15 @@
 													CUIT: {{ $datoOrdenCompra[0]['numero_documento'] }}
 									</p>
 								</th>
-							</tr>
-						</tbody>
-					</table>
-					<!-- <table id="nvcliente">
-						<thead>                        
-							<tr>
-								<th id="nv">Deposito</th>
-								<th id="nv">Forma de Pago</th>
-								<th id="nv">Condicion de Pago</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<th>
-									<p id="cliente">{{ $datoOrdenCompra[0]['descripcion_deposito'] }}<br></p>
-								</th>
 								<th>
 									<p id="cliente">{{ $datoOrdenCompra[0]['descripcion_forma_pago'] }}<br></p>
 								</th>
 								<th>
 									<p id="cliente">{{ $datoOrdenCompra[0]['descripcion_condicion_pago'] }}<br></p>
-								</th>
+								</th>								
 							</tr>
 						</tbody>
-					</table> -->
+					</table>
 					<table id="nvcliente">
 						<thead>                        
 							<tr>
