@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Cotizacion;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use GuzzleHttp\Exception\GuzzleException;
@@ -28,12 +29,22 @@ class CotizacionController extends Controller
         $cotizacion_oficial = json_decode($cotizacion->getContents(), true);
 
         $cantidad_items = count($cotizacion_oficial);
+
+        // Sino existe la cotizacion la genero
+        $fecha_del_dia_menos_1 = $cotizacion_oficial[$cantidad_items -1]['d'];
+
+        $cotizacion_del_dia_1 = Cotizacion::whereDate('fecha', '=', $fecha_del_dia_menos_1)->get();
+
+        if (count($cotizacion_del_dia_1) <= 0) {
+            Cotizacion::create([
+                'fecha' => $cotizacion_oficial[$cantidad_items -1]['d'],
+                'precio_dolar' => $cotizacion_oficial[$cantidad_items -1]['v']
+            ]);
+        }
+        // Sino existe la cotizacion la genero
                 
-        //return $cotizacion_oficial;
         return [
             'cotizacion_oficial' => $cotizacion_oficial[$cantidad_items -1]
         ];
-
-        //dd($cotizacion_2);
     } 
 }
