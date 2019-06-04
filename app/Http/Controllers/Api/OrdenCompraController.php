@@ -95,7 +95,10 @@ class OrdenCompraController extends Controller
         //Si es de cliente
         if ($request->tipo == 'CL') {
             $orden_compra->cliente_id = $request->codigo_cliente;
-            $orden_compra->vendedor_venta_id = $request->codigo_vendedor_venta;
+
+            if (!empty($request->codigo_vendedor_venta))
+                $orden_compra->vendedor_venta_id = $request->codigo_vendedor_venta;
+
             $orden_compra->vendedor_gestion_id = $request->codigo_vendedor_gestion;
         }
 
@@ -150,7 +153,12 @@ class OrdenCompraController extends Controller
         //Si es de cliente
         if ($request->tipo == 'CL') {
             $OrdenCompra->cliente_id = $request->codigo_cliente;
-            $OrdenCompra->vendedor_venta_id = $request->codigo_vendedor_venta;
+
+            if (!empty($request->codigo_vendedor_venta))
+                $OrdenCompra->vendedor_venta_id = $request->codigo_vendedor_venta;
+            else
+                $OrdenCompra->vendedor_venta_id = null;
+                
             $OrdenCompra->vendedor_gestion_id = $request->codigo_vendedor_gestion;
         }
 

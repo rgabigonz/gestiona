@@ -57,6 +57,10 @@ class ConsultaChequesController extends Controller
         $cheque = ReciboDetalle::findOrFail($id);
         $cheque->estado_cheque = 'CO';
         $cheque->fecha_cobro_cheque = $fecha_cobro->format('Y-m-d');
+
+        if (!empty($request->proveedor_id))
+            $cheque->proveedor_id = $request->proveedor_id;
+
         $cheque->update();
     }    
 }

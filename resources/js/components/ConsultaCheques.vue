@@ -140,6 +140,22 @@
                                     </div>   
                                 </div>
                             </div> 
+
+                            <!-- Proveedor row -->
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label class="control-label" for="proveedor_id"><i class="fa fa-bell-o"></i>Proveedor</label>
+                                        <select class="form-control" v-model="form.proveedor_id" :disabled="form.estado_cheque != 'PE' ? true : false">
+                                            <option value=0>Seleccionar...</option>
+                                            <option v-for="lproveedor in lproveedores" :key="lproveedor.id" :value="lproveedor.id">{{ lproveedor.nombre }}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <!-- /.col -->
+                            </div>
+                            <!-- /.row -->
+
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger" @click="cerrarModal()">Cerrar</button>
@@ -158,6 +174,7 @@
             return {
                 modoEdicion: false,
                 cheques: {},
+                lproveedores: {},
                 form: new Form({
                     id: 0,
                     fecha_cheque: '',
@@ -165,7 +182,8 @@
                     nombre_banco_cheque: '',
                     importe_cheque: 0,
                     estado_cheque: '',
-                    fecha_cobro_cheque: ''
+                    fecha_cobro_cheque: '',
+                    proveedor_id: 0
                 }),
                 pagination: {
                     'total': 0,
@@ -213,11 +231,14 @@
                 this.pagination.current_page = page;
                 this.cargarCondicionesPago(page, buscar, criterio);
             },
-            editarModal(banco) {
+            editarModal(cheque) {
                 this.modoEdicion = true;
                 this.form.reset();
                 $('#ventanaModal').modal('show');
-                this.form.fill(banco);
+                this.form.fill(cheque);
+
+                if(!cheque.proveedor_id)
+                    this.form.proveedor_id = 0;
             },
             cerrarModal() {
                 this.form.errors.clear();
@@ -280,9 +301,23 @@
                 .catch(() => {
                     swal('Fallo!', 'Hubo un error al procesar la transaccion.', 'warning');                    
                 });
+            },
+            cargaProveedores() {
+                let me = this;                
+                var url = 'api/proveedor/cargaProveedores';
+                axios.get(url).then(data => {
+                    var response = data.data;
+                    me.lproveedores = response.proveedores;
+                }).catch((error) => {
+                    if (error.response.status == 401) {
+                        swal('Error!', 'La sesion ha caducado.', 'warning');
+                    }
+                });
             }
         },
         created() {
+            this.cargaProveedores();
+
             this.cargarCheques(1, this.sBuscar, this.sCriterio);
             Fire.$on('AfterAction', () => {
                 this.cargarCheques(1, this.sBuscar, this.sCriterio);

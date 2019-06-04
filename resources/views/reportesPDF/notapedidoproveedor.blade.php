@@ -152,6 +152,7 @@
                     </tbody>
                 </table>
             </div>
+
 			@if ($datoOrdenCompra[0]['tipo'] == 'CL')
             	<div>
 					<table id="nvcliente">
@@ -198,7 +199,28 @@
 					</table>
 				</div>					
 			@endif
-            
+
+			@if ($datoOrdenCompra[0]['tipo'] == 'PR')
+            	<div>
+					<table id="nvcliente">
+						<thead>                        
+							<tr>
+								<th id="nv">Cliente</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<th>
+									<p id="cliente">AGRO PROYECCIONES S.R.L.<br>
+													CUIT: 30-71424172-5
+									</p>
+								</th>
+							</tr>
+						</tbody>
+					</table>
+				</div>					
+			@endif
+
         </section>		
 		<br>
         <section>

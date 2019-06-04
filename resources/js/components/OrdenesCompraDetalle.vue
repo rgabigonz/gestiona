@@ -705,7 +705,7 @@
                         this.errors.push('Debe ingresar al menos un producto');
                     }
                 } else {
-                    if (this.codigo_proveedor && this.codigo_cliente && this.codigo_vendedor_venta && 
+                    if (this.codigo_proveedor && this.codigo_cliente && 
                         this.codigo_vendedor_gestion && this.items.length) {
                         resultado = true;
                     }
@@ -718,9 +718,9 @@
                     if (this.codigo_cliente == 0) {
                         this.errors.push('Debe ingresar un cliente');
                     }
-                    if (this.codigo_vendedor_venta == 0) {
+                    /*if (this.codigo_vendedor_venta == 0) {
                         this.errors.push('Debe ingresar un distribuidor de comision de venta');
-                    }
+                    }*/
                     if (this.codigo_vendedor_gestion == 0) {
                         this.errors.push('Debe ingresar un distribuidor de comision de gestion');
                     }
@@ -839,7 +839,12 @@
                         me.codigo_formapago = me.orden_compra.formapago_id;
 
                     me.codigo_cliente = me.orden_compra.cliente_id;
-                    me.codigo_vendedor_venta = me.orden_compra.vendedor_venta_id;
+
+                    if (!me.orden_compra.vendedor_venta_id) 
+                        me.codigo_vendedor_venta = 0;
+                    else
+                        me.codigo_vendedor_venta = me.orden_compra.vendedor_venta_id;
+
                     me.codigo_vendedor_gestion = me.orden_compra.vendedor_gestion_id;
                     
                     me.cargarCliente(me.codigo_cliente);
