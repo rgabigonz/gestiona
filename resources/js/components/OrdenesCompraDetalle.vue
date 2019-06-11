@@ -222,13 +222,14 @@
                             <thead>
                                 <tr>
                                     <th style="width:30%">Producto</th>
-                                    <th style="width:10%">Cantidad</th>
-                                    <th style="width:10%">Precio</th>
-                                    <th style="width:10%">Flete</th>
-                                    <th style="width:10%">C. Venta</th>
-                                    <th style="width:10%">C. Gestion</th>
-                                    <th style="width:10%">P. Unitario</th>
-                                    <th style="width:10%">Subtotal</th>
+                                    <th style="width:9%">Cantidad</th>
+                                    <th style="width:9%">Precio</th>
+                                    <th style="width:9%">Flete</th>
+                                    <th style="width:9%">C. Venta</th>
+                                    <th style="width:9%">C. Gestion</th>
+                                    <th style="width:9%">P. Unitario</th>
+                                    <th style="width:9%">Subtotal</th>
+                                    <th style="width:7%">IVA</th>
                                     <th></th>
                                 </tr>
                                 <tr>
@@ -319,6 +320,16 @@
                                     </td>                        
                                     <!-- /.col -->
 
+                                    <td class="invoice-col">
+                                        <div class="form-group">
+                                            <div class="input-group input-group-sm">
+                                                <input v-model="subtotal_iva_producto" type="text" name="subtotal_iva_producto" 
+                                                    class="form-control form-control-sm" disabled>
+                                            </div>
+                                        </div>
+                                    </td>                        
+                                    <!-- /.col -->
+
                                 </tr>
                             </thead>
                             <tbody style="font-size: 12px;">
@@ -330,7 +341,20 @@
                                     <td>${{ item.comision_venta }}</td>
                                     <td>${{ item.comision_gestion }}</td>
                                     <td>${{ (parseFloat(item.precio) + parseFloat(item.flete) + parseFloat(item.comision_venta) + parseFloat(item.comision_gestion)) | currency }}</td>
-                                    <td><b>${{ ((parseFloat(item.precio) + parseFloat(item.flete) + parseFloat(item.comision_venta) + parseFloat(item.comision_gestion)) * item.cantidad) | currency }}</b></td>
+                                    <td>
+                                        <b>${{ ((parseFloat(item.precio) + parseFloat(item.flete) + parseFloat(item.comision_venta) + 
+                                                 parseFloat(item.comision_gestion)) * item.cantidad) | currency }}</b>
+                                    </td>
+                                    <td v-if="item.iva == 21">
+                                        <b>${{ (((parseFloat(item.precio) + parseFloat(item.flete) + parseFloat(item.comision_venta) + 
+                                                  parseFloat(item.comision_gestion)) * item.cantidad) * 1.21) - ((parseFloat(item.precio) + parseFloat(item.flete) + parseFloat(item.comision_venta) + 
+                                                 parseFloat(item.comision_gestion)) * item.cantidad) | currency }}</b>
+                                    </td>
+                                    <td v-if="item.iva == 10.5">
+                                        <b>${{ (((parseFloat(item.precio) + parseFloat(item.flete) + parseFloat(item.comision_venta) + 
+                                                  parseFloat(item.comision_gestion)) * item.cantidad) * 1.105) - ((parseFloat(item.precio) + parseFloat(item.flete) + parseFloat(item.comision_venta) + 
+                                                 parseFloat(item.comision_gestion)) * item.cantidad)| currency }}</b>
+                                    </td>
                                     <td>
                                         <a href="#" @click="removerProducto(index)">
                                             <i class="fa fa-trash-alt red"></i>
@@ -344,8 +368,42 @@
                                     <td></td>
                                     <td></td>
                                     <td></td>
+                                    <td></td>
+                                    <td><b>Total sin IVA:</b></td>
+                                    <td><b>US${{ total | currency }}</b></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td><b>IVA 10,5%:</b></td>
+                                    <td><b>US${{ total | currency }}</b></td>
+                                </tr>    
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td><b>IVA 21%:</b></td>
+                                    <td><b>US${{ total | currency }}</b></td>
+                                </tr>                                
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
                                     <td><b>Total:</b></td>
-                                    <td><b>${{ total | currency }}</b></td>
+                                    <td><b>US${{ total | currency }}</b></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -456,6 +514,7 @@
                 descripcion_producto: '',
                 obs_producto: '',
                 precio_producto: 0,
+                iva_producto: 0,
                 flete_producto: 0,
                 comision_venta_producto: 0,
                 comision_gestion_producto: 0,
@@ -539,13 +598,15 @@
                 axios.get(url).then(data => {
                     var response = data.data;
                     me.producto = response.datoProducto;
-                    me.nombre_producto = me.producto.nombre;
-                    me.descripcion_producto = me.producto.descripcion;
+                    me.nombre_producto = me.producto[0].nombre;
+                    me.descripcion_producto = me.producto[0].descripcion;
+                    me.iva_producto = me.producto[0].iva_producto;
                 }).catch((error) => {
                     me.producto = {};
                     me.codigo_producto = 0;
                     me.nombre_producto = '';
                     me.descripcion_producto = '';
+                    me.iva_producto = 0;
 
                     //Levo el foco al codigo de producto
                     this.$nextTick(() => {
@@ -654,7 +715,8 @@
                                         comision_venta: this.comision_venta_producto, 
                                         comision_gestion: this.comision_gestion_producto, 
                                         cantidad: this.cantidad_producto, 
-                                        precio: this.precio_producto 
+                                        precio: this.precio_producto,
+                                        iva: this.iva_producto 
                         });
                     }
                 }
@@ -665,6 +727,7 @@
                 this.descripcion_producto = '';
                 this.obs_producto = '';
                 this.precio_producto = 0;
+                this.iva_producto = 0;
                 this.flete_producto = 0;
                 this.comision_venta_producto = 0;
                 this.comision_gestion_producto = 0;
@@ -870,6 +933,15 @@
             }
         },
         computed: {
+            subtotal_iva_producto() {
+                var lTotal_Adicionales = parseFloat(this.flete_producto) + parseFloat(this.comision_venta_producto) + parseFloat(this.comision_gestion_producto);
+                var lTotal = parseFloat(this.precio_producto) + parseFloat(lTotal_Adicionales);
+
+                if (this.iva_producto == 21)
+                    return ((this.cantidad_producto * lTotal * 1.21) - (this.cantidad_producto * lTotal));
+                else
+                    return ((this.cantidad_producto * lTotal * 1.105) - (this.cantidad_producto * lTotal));
+            },
             subtotal_producto() {
                 var lTotal_Adicionales = parseFloat(this.flete_producto) + parseFloat(this.comision_venta_producto) + parseFloat(this.comision_gestion_producto);
                 var lTotal = parseFloat(this.precio_producto) + parseFloat(lTotal_Adicionales);
@@ -884,7 +956,7 @@
                     (acc, item) => acc + ((parseFloat(item.flete) + parseFloat(item.comision_venta) + parseFloat(item.comision_gestion) + parseFloat(item.precio)) * parseFloat(item.cantidad)),
                     0
                 );
-            }            
+            }           
         },
         created() {
             this.cargaDepositos();

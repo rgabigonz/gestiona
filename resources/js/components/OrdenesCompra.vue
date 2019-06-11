@@ -13,6 +13,9 @@
                         <div class="col col-md-4">
                             <select class="form-control" v-model="sCriterio">
                                 <option value="ordenes_compras.id">Numero Nota de Pedido</option>
+                                <option value="proveedores.nombre">Proveedor</option>
+                                <option value="clientes.nombre">Cliente</option>
+                                <option value="vendedores.nombre">Distribuidor</option>
                             </select>
                         </div>
                         <div class="col col-md-8">

@@ -101,7 +101,12 @@ class ProductoController extends Controller
 
     public function devuelveDatosProducto(Request $request, $id)
     {
-        $datoProducto = Producto::findOrFail($id);
+        $datoProducto = Producto::join('tipo_productos', 'productos.tipo_producto', '=', 'tipo_productos.id')
+        ->select('productos.*', 'tipo_productos.iva as iva_producto')
+        ->where('productos.id', '=', $id)->get();   
+        
+        
+       // $datoProducto = Producto::findOrFail($id);
         return [
             'datoProducto' => $datoProducto
         ];

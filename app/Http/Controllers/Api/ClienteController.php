@@ -52,12 +52,10 @@ class ClienteController extends Controller
         $this->validate($request, [
             'nombre' => 'required|string|max:100',
             'direccion' => 'required|string',
-            'correo_electronico' => 'unique:clientes',
             'numero_documento' => 'required|unique:clientes'
         ], [
             'nombre.required' => 'El nombre es requerido',
             'direccion.required' => 'La direccion es requerida',
-            'correo_electronico.unique' => 'El correo electronico ya esta registrado',
             'numero_documento.required' => 'El numero de documento es requerido',
             'numero_documento.unique' => 'El numero de documento ya esta registrado'
         ]);
@@ -86,12 +84,10 @@ class ClienteController extends Controller
         $this->validate($request, [
             'nombre' => 'required|string|max:100',
             'direccion' => 'required|string',
-            'correo_electronico' => 'unique:clientes,correo_electronico,'.$cliente->id,
             'numero_documento' => 'required|unique:clientes,numero_documento,'.$cliente->id
         ], [
             'nombre.required' => 'El nombre es requerido',
             'direccion.required' => 'La direccion es requerida',
-            'correo_electronico.unique' => 'El correo electronico ya esta registrado',
             'numero_documento.required' => 'El numero de documento es requerido',
             'numero_documento.unique' => 'El numero de documento ya esta registrado'
         ]);
