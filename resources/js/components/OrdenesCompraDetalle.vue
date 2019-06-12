@@ -340,20 +340,12 @@
                                     <td>${{ item.flete }}</td>
                                     <td>${{ item.comision_venta }}</td>
                                     <td>${{ item.comision_gestion }}</td>
-                                    <td>${{ (parseFloat(item.precio) + parseFloat(item.flete) + parseFloat(item.comision_venta) + parseFloat(item.comision_gestion)) | currency }}</td>
+                                    <td>${{ calculaPUnitario(item) | currency }}</td>
                                     <td>
-                                        <b>${{ ((parseFloat(item.precio) + parseFloat(item.flete) + parseFloat(item.comision_venta) + 
-                                                 parseFloat(item.comision_gestion)) * item.cantidad) | currency }}</b>
+                                        <b>${{ calculaSTotal(item) | currency }}</b>
                                     </td>
-                                    <td v-if="item.iva == 21">
-                                        <b>${{ (((parseFloat(item.precio) + parseFloat(item.flete) + parseFloat(item.comision_venta) + 
-                                                  parseFloat(item.comision_gestion)) * item.cantidad) * 1.21) - ((parseFloat(item.precio) + parseFloat(item.flete) + parseFloat(item.comision_venta) + 
-                                                 parseFloat(item.comision_gestion)) * item.cantidad) | currency }}</b>
-                                    </td>
-                                    <td v-if="item.iva == 10.5">
-                                        <b>${{ (((parseFloat(item.precio) + parseFloat(item.flete) + parseFloat(item.comision_venta) + 
-                                                  parseFloat(item.comision_gestion)) * item.cantidad) * 1.105) - ((parseFloat(item.precio) + parseFloat(item.flete) + parseFloat(item.comision_venta) + 
-                                                 parseFloat(item.comision_gestion)) * item.cantidad)| currency }}</b>
+                                    <td>
+                                        <b>${{ calculaIVA(item) | currency }}</b>
                                     </td>
                                     <td>
                                         <a href="#" @click="removerProducto(index)">
@@ -381,7 +373,7 @@
                                     <td></td>
                                     <td></td>
                                     <td><b>IVA 10,5%:</b></td>
-                                    <td><b>US${{ total | currency }}</b></td>
+                                    <td><b>US${{ total105 }}</b></td>
                                 </tr>    
                                 <tr>
                                     <td></td>
@@ -392,7 +384,7 @@
                                     <td></td>
                                     <td></td>
                                     <td><b>IVA 21%:</b></td>
-                                    <td><b>US${{ total | currency }}</b></td>
+                                    <td><b>US${{ total21 }}</b></td>
                                 </tr>                                
                                 <tr>
                                     <td></td>
@@ -747,6 +739,7 @@
                         return true;
                     }
                 }
+
                 return false;
             },
 
@@ -930,6 +923,24 @@
                     me.orden_compra = {};
                     me.orden_compra_detalle = {};
                 });
+            },
+            calculaPUnitario(item) {
+                return (parseFloat(item.precio) + parseFloat(item.flete) + parseFloat(item.comision_venta) + parseFloat(item.comision_gestion));
+            },
+            calculaSTotal(item) {
+                return ((parseFloat(item.precio) + parseFloat(item.flete) + parseFloat(item.comision_venta) + parseFloat(item.comision_gestion)) * item.cantidad);
+            },
+            calculaIVA(item) {
+                if (item.iva == 21) 
+                    return (((parseFloat(item.precio) + parseFloat(item.flete) + parseFloat(item.comision_venta) + 
+                              parseFloat(item.comision_gestion)) * item.cantidad) * 1.21) - 
+                            ((parseFloat(item.precio) + parseFloat(item.flete) + parseFloat(item.comision_venta) + 
+                              parseFloat(item.comision_gestion)) * item.cantidad);
+                else if (item.iva == 10.5)
+                    return (((parseFloat(item.precio) + parseFloat(item.flete) + parseFloat(item.comision_venta) + 
+                              parseFloat(item.comision_gestion)) * item.cantidad) * 1.105) - 
+                            ((parseFloat(item.precio) + parseFloat(item.flete) + parseFloat(item.comision_venta) + 
+                              parseFloat(item.comision_gestion)) * item.cantidad);
             }
         },
         computed: {
@@ -956,7 +967,41 @@
                     (acc, item) => acc + ((parseFloat(item.flete) + parseFloat(item.comision_venta) + parseFloat(item.comision_gestion) + parseFloat(item.precio)) * parseFloat(item.cantidad)),
                     0
                 );
-            }           
+            },
+            total105() {
+                var lTotal_Adicionales = 0;
+                var lTotal = 0;
+                var lCantidad = 0;
+
+                for (var i = 0; i < this.items.length; i++) {
+                    if (this.items[i].iva == '10.50') {
+                        lTotal_Adicionales += (parseFloat(this.items[i].flete) + parseFloat(this.items[i].comision_venta) + 
+                                             parseFloat(this.items[i].comision_gestion));
+
+                        lTotal += (parseFloat(this.items[i].precio) + parseFloat(lTotal_Adicionales));
+                        lCantidad += (parseFloat(this.items[i].cantidad));
+                    }
+                }  
+
+                return ((lCantidad * lTotal * 1.105) - (lCantidad * lTotal));
+            },
+            total21() {
+                var lTotal_Adicionales = 0;
+                var lTotal = 0;
+                var lCantidad = 0;
+
+                for (var i = 0; i < this.items.length; i++) {
+                    if (this.items[i].iva == '21.00') {
+                        lTotal_Adicionales += (parseFloat(this.items[i].flete) + parseFloat(this.items[i].comision_venta) + 
+                                             parseFloat(this.items[i].comision_gestion));
+
+                        lTotal += (parseFloat(this.items[i].precio) + parseFloat(lTotal_Adicionales));
+                        lCantidad += (parseFloat(this.items[i].cantidad));
+                    }
+                }  
+                  
+                return ((lCantidad * lTotal * 1.21) - (lCantidad * lTotal));
+            }
         },
         created() {
             this.cargaDepositos();
