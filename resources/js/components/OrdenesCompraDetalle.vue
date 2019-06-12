@@ -222,14 +222,13 @@
                             <thead>
                                 <tr>
                                     <th style="width:30%">Producto</th>
-                                    <th style="width:9%">Cantidad</th>
-                                    <th style="width:9%">Precio</th>
-                                    <th style="width:9%">Flete</th>
-                                    <th style="width:9%">C. Venta</th>
-                                    <th style="width:9%">C. Gestion</th>
-                                    <th style="width:9%">P. Unitario</th>
-                                    <th style="width:9%">Subtotal</th>
-                                    <th style="width:7%">IVA</th>
+                                    <th style="width:10%">Cantidad</th>
+                                    <th style="width:10%">Precio</th>
+                                    <th style="width:10%">Flete</th>
+                                    <th style="width:10%">C. Venta</th>
+                                    <th style="width:10%">C. Gestion</th>
+                                    <th style="width:10%">P. Unitario</th>
+                                    <th style="width:10%">Subtotal</th>
                                     <th></th>
                                 </tr>
                                 <tr>
@@ -323,7 +322,7 @@
                                     <td class="invoice-col">
                                         <div class="form-group">
                                             <div class="input-group input-group-sm">
-                                                <input v-model="subtotal_iva_producto" type="text" name="subtotal_iva_producto" 
+                                                <input v-model="subtotal_iva_producto" type="hidden" name="subtotal_iva_producto" 
                                                     class="form-control form-control-sm" disabled>
                                             </div>
                                         </div>
@@ -362,7 +361,7 @@
                                     <td></td>
                                     <td></td>
                                     <td><b>Total sin IVA:</b></td>
-                                    <td><b>US${{ total | currency }}</b></td>
+                                    <td><b>${{ total_sinIVA | currency }}</b></td>
                                 </tr>
                                 <tr>
                                     <td></td>
@@ -373,7 +372,7 @@
                                     <td></td>
                                     <td></td>
                                     <td><b>IVA 10,5%:</b></td>
-                                    <td><b>US${{ total105 }}</b></td>
+                                    <td><b>${{ total105 | currency }}</b></td>
                                 </tr>    
                                 <tr>
                                     <td></td>
@@ -384,7 +383,7 @@
                                     <td></td>
                                     <td></td>
                                     <td><b>IVA 21%:</b></td>
-                                    <td><b>US${{ total21 }}</b></td>
+                                    <td><b>${{ total21 | currency }}</b></td>
                                 </tr>                                
                                 <tr>
                                     <td></td>
@@ -395,7 +394,7 @@
                                     <td></td>
                                     <td></td>
                                     <td><b>Total:</b></td>
-                                    <td><b>US${{ total | currency }}</b></td>
+                                    <td><b>${{ total_conIVA | currency }}</b></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -962,7 +961,7 @@
                 var lTotal = parseFloat(this.flete_producto) + parseFloat(this.comision_venta_producto) + parseFloat(this.comision_gestion_producto);
                 return (parseFloat(this.precio_producto) + parseFloat(lTotal));
             },
-            total() {
+            total_sinIVA() {
                 return this.items.reduce(
                     (acc, item) => acc + ((parseFloat(item.flete) + parseFloat(item.comision_venta) + parseFloat(item.comision_gestion) + parseFloat(item.precio)) * parseFloat(item.cantidad)),
                     0
@@ -975,32 +974,44 @@
 
                 for (var i = 0; i < this.items.length; i++) {
                     if (this.items[i].iva == '10.50') {
-                        lTotal_Adicionales += (parseFloat(this.items[i].flete) + parseFloat(this.items[i].comision_venta) + 
+                        lTotal_Adicionales = (parseFloat(this.items[i].flete) + parseFloat(this.items[i].comision_venta) + 
                                              parseFloat(this.items[i].comision_gestion));
 
-                        lTotal += (parseFloat(this.items[i].precio) + parseFloat(lTotal_Adicionales));
-                        lCantidad += (parseFloat(this.items[i].cantidad));
+                        lTotal += (parseFloat(this.items[i].precio) + lTotal_Adicionales) * parseFloat(this.items[i].cantidad);
                     }
                 }  
 
-                return ((lCantidad * lTotal * 1.105) - (lCantidad * lTotal));
+                return parseFloat((lTotal * 1.105) - (lTotal));
             },
             total21() {
                 var lTotal_Adicionales = 0;
                 var lTotal = 0;
-                var lCantidad = 0;
 
                 for (var i = 0; i < this.items.length; i++) {
                     if (this.items[i].iva == '21.00') {
                         lTotal_Adicionales += (parseFloat(this.items[i].flete) + parseFloat(this.items[i].comision_venta) + 
                                              parseFloat(this.items[i].comision_gestion));
 
-                        lTotal += (parseFloat(this.items[i].precio) + parseFloat(lTotal_Adicionales));
-                        lCantidad += (parseFloat(this.items[i].cantidad));
+                        lTotal += (parseFloat(this.items[i].precio) + lTotal_Adicionales) * parseFloat(this.items[i].cantidad);
                     }
                 }  
-                  
-                return ((lCantidad * lTotal * 1.21) - (lCantidad * lTotal));
+                
+                return parseFloat((lTotal * 1.21) - (lTotal));
+            },
+            total_conIVA() {
+                var lTotal_Adicionales = 0;
+                var lTotal = 0;
+
+                for (var i = 0; i < this.items.length; i++) {
+                    if (this.items[i].iva == '21.00') {
+                        lTotal_Adicionales += (parseFloat(this.items[i].flete) + parseFloat(this.items[i].comision_venta) + 
+                                             parseFloat(this.items[i].comision_gestion));
+
+                        lTotal += (parseFloat(this.items[i].precio) + lTotal_Adicionales) * parseFloat(this.items[i].cantidad);
+                    }
+                }  
+                
+                return parseFloat((lTotal * 1.21) - (lTotal));
             }
         },
         created() {
