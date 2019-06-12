@@ -512,6 +512,8 @@
                 numero_negocio: '',
                 lugar_entrega: '',
                 observacion: '',
+                total_iva_21: 0,
+                total_iva_105: 0,
 
                 // Objetos de datos
                 proveedor: {},
@@ -797,7 +799,7 @@
                         codigo_condicion_pago: this.codigo_condicionpago, 
                         fecha_orden_compra: this.fecha_orden_compra,
                         tipo: this.tipo,
-                        total_orden: this.total,
+                        total_orden: this.total_conIVA,
                         numero_negocio: this.numero_negocio,
                         lugar_entrega: this.lugar_entrega,
                         obs: this.observacion,
@@ -835,7 +837,7 @@
                     codigo_condicion_pago: this.codigo_condicionpago, 
                     fecha_orden_compra: this.fecha_orden_compra,
                     tipo: this.tipo,
-                    total_orden: this.total,
+                    total_orden: this.total_conIVA,
                     numero_negocio: this.numero_negocio,
                     lugar_entrega: this.lugar_entrega,
                     obs: this.observacion,
@@ -914,7 +916,8 @@
                                           precio: me.orden_compra_detalle[i].precio, 
                                           flete: me.orden_compra_detalle[i].flete, 
                                           comision_venta: me.orden_compra_detalle[i].comision_venta, 
-                                          comision_gestion: me.orden_compra_detalle[i].comision_gestion
+                                          comision_gestion: me.orden_compra_detalle[i].comision_gestion,
+                                          //iva: me.orden_compra_detalle[i].
                         });
                     }
 
@@ -981,6 +984,7 @@
                     }
                 }  
 
+                this.total_iva_105 = parseFloat((lTotal * 1.105) - (lTotal));
                 return parseFloat((lTotal * 1.105) - (lTotal));
             },
             total21() {
@@ -989,13 +993,14 @@
 
                 for (var i = 0; i < this.items.length; i++) {
                     if (this.items[i].iva == '21.00') {
-                        lTotal_Adicionales += (parseFloat(this.items[i].flete) + parseFloat(this.items[i].comision_venta) + 
+                        lTotal_Adicionales = (parseFloat(this.items[i].flete) + parseFloat(this.items[i].comision_venta) + 
                                              parseFloat(this.items[i].comision_gestion));
 
                         lTotal += (parseFloat(this.items[i].precio) + lTotal_Adicionales) * parseFloat(this.items[i].cantidad);
                     }
-                }  
-                
+                }
+
+                this.total_iva_21 = parseFloat((lTotal * 1.21) - (lTotal));
                 return parseFloat((lTotal * 1.21) - (lTotal));
             },
             total_conIVA() {
@@ -1003,15 +1008,13 @@
                 var lTotal = 0;
 
                 for (var i = 0; i < this.items.length; i++) {
-                    if (this.items[i].iva == '21.00') {
-                        lTotal_Adicionales += (parseFloat(this.items[i].flete) + parseFloat(this.items[i].comision_venta) + 
-                                             parseFloat(this.items[i].comision_gestion));
+                    lTotal_Adicionales = (parseFloat(this.items[i].flete) + parseFloat(this.items[i].comision_venta) + 
+                                            parseFloat(this.items[i].comision_gestion));
 
-                        lTotal += (parseFloat(this.items[i].precio) + lTotal_Adicionales) * parseFloat(this.items[i].cantidad);
-                    }
+                    lTotal += (parseFloat(this.items[i].precio) + lTotal_Adicionales) * parseFloat(this.items[i].cantidad);
                 }  
                 
-                return parseFloat((lTotal * 1.21) - (lTotal));
+                return parseFloat(this.total_iva_21 + this.total_iva_105 + lTotal);
             }
         },
         created() {
