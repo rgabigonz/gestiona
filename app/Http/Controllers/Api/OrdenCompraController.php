@@ -86,7 +86,6 @@ class OrdenCompraController extends Controller
         if (!empty($request->tipo))
             $orden_compra->tipo = $request->tipo;
         
-        $orden_compra->total = $request->total_orden;
         $orden_compra->fecha = $fecha_compra->format('Y-m-d');
         $orden_compra->numero_negocio = $request->numero_negocio;
         $orden_compra->lugar_entrega = $request->lugar_entrega;
@@ -102,6 +101,18 @@ class OrdenCompraController extends Controller
             $orden_compra->vendedor_gestion_id = $request->codigo_vendedor_gestion;
         }
 
+        // Totales
+        if (!empty($request->total_pedido_siniva))
+            $orden_compra->total_siniva = $request->total_pedido_siniva;
+
+        if (!empty($request->total_pedido_21))
+            $orden_compra->total_iva21  = $request->total_pedido_21;
+
+        if (!empty($request->total_pedido_105))
+            $orden_compra->total_iva105 = $request->total_pedido_105;
+
+        $orden_compra->total = $request->total_orden;
+
         $orden_compra->save();
 
         for($i = 0; $i < $cantidad_items; $i++)
@@ -112,12 +123,13 @@ class OrdenCompraController extends Controller
             $orden_compra_item->precio = $request->items[$i]['precio'];
             $orden_compra_item->flete = $request->items[$i]['flete'];
             $orden_compra_item->obs = $request->items[$i]['obs'];
+            $orden_compra_item->alicuota_iva = $request->items[$i]['alicuota_iva'];
             $orden_compra_item->comision_venta = $request->items[$i]['comision_venta'];
             $orden_compra_item->comision_gestion = $request->items[$i]['comision_gestion'];
             $orden_compra_item->precio_total  = ($request->items[$i]['flete'] + 
                                                  $request->items[$i]['comision_venta'] + 
                                                  $request->items[$i]['comision_gestion'] + 
-                                                 ($request->items[$i]['precio'] * $request->items[$i]['cantidad']));
+                                                 $request->items[$i]['precio']) * $request->items[$i]['cantidad'];
             $orden_compra_item->user_id = $user->id;
             $orden_compra->ordenCompraDetalle()->save($orden_compra_item);
         }
@@ -130,7 +142,7 @@ class OrdenCompraController extends Controller
         $user = auth('api')->user();
         
         $OrdenCompra = OrdenCompra::findOrFail($id);
-        $OrdenCompra->total = $request->total_orden;
+
         $OrdenCompra->numero_negocio = $request->numero_negocio;
         $OrdenCompra->lugar_entrega = $request->lugar_entrega;
         $OrdenCompra->obs = $request->obs;
@@ -162,6 +174,18 @@ class OrdenCompraController extends Controller
             $OrdenCompra->vendedor_gestion_id = $request->codigo_vendedor_gestion;
         }
 
+        // Totales
+        if (!empty($request->total_pedido_siniva))
+            $OrdenCompra->total_siniva = $request->total_pedido_siniva;
+
+        if (!empty($request->total_pedido_21))
+            $OrdenCompra->total_iva21  = $request->total_pedido_21;
+
+        if (!empty($request->total_pedido_105))
+            $OrdenCompra->total_iva105 = $request->total_pedido_105;
+
+        $OrdenCompra->total = $request->total_orden;
+
         $OrdenCompra->update();
 
         $OrdenCompraDetalle = OrdenCompraDetalle::where('orden_compra_id', $id)->delete();
@@ -177,12 +201,13 @@ class OrdenCompraController extends Controller
             $orden_compra_item->precio = $request->items[$i]['precio'];
             $orden_compra_item->flete = $request->items[$i]['flete'];
             $orden_compra_item->obs = $request->items[$i]['obs'];
+            $orden_compra_item->alicuota_iva = $request->items[$i]['alicuota_iva'];
             $orden_compra_item->comision_venta = $request->items[$i]['comision_venta'];
             $orden_compra_item->comision_gestion = $request->items[$i]['comision_gestion'];
             $orden_compra_item->precio_total  = ($request->items[$i]['flete'] + 
                                                  $request->items[$i]['comision_venta'] + 
                                                  $request->items[$i]['comision_gestion'] + 
-                                                 ($request->items[$i]['precio'] * $request->items[$i]['cantidad']));
+                                                 $request->items[$i]['precio']) * $request->items[$i]['cantidad'];
             $orden_compra_item->user_id = $user->id;
             $orden_compra_item->save();
         }
@@ -194,7 +219,8 @@ class OrdenCompraController extends Controller
         $datoOrdenCompra = OrdenCompra::findOrFail($id);
 
         $datoOrdenCompraD = OrdenCompraDetalle::join('productos', 'ordenes_compras_detalle.producto_id', '=', 'productos.id')
-        ->select('ordenes_compras_detalle.*', 'productos.nombre as nombre_producto', 'productos.descripcion as descripcion_producto')
+        ->join('tipo_productos', 'productos.tipo_producto', '=', 'tipo_productos.id')
+        ->select('ordenes_compras_detalle.*', 'productos.nombre as nombre_producto', 'productos.descripcion as descripcion_producto', 'tipo_productos.iva as alicuota_iva')
         ->where('ordenes_compras_detalle.orden_compra_id', '=', $id)->get();
 
         return [
