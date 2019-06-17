@@ -41,6 +41,13 @@
 				font-size: 15px;
 			}
 
+			#firma{
+				text-align: center;
+				/* margin-left: 10%;
+				margin-right: 35%; */
+				font-size: 10px;
+			}
+
 			#nven{
 				/*position: relative;*/
 				float: right;
@@ -108,6 +115,7 @@
 			#gracias{
 				text-align: left; 
 			}
+
 	</style>		
 	</head>
 	<body>
@@ -266,9 +274,45 @@
 								<th></th>
 							@endif
 							<th></th>
-                            <th>TOTAL</th>
-                            <td>$ {{ number_format($datoOrdenCompra[0]['total'], 2, ',', '.') }}</td>
+                            <th>Total sin IVA: </th>
+                            <td>$ {{ number_format($datoOrdenCompra[0]['total_siniva'], 2, ',', '.') }}</td>
                         </tr>
+                        <tr>
+                            <th></th>
+                            <th></th>
+							@if ($datoOrdenCompra[0]['tipo'] == 'CL')
+								<th></th>
+								<th></th>
+								<th></th>
+							@endif
+							<th></th>
+                            <th>IVA 10,5%: </th>
+                            <td>$ {{ number_format($datoOrdenCompra[0]['total_iva105'], 2, ',', '.') }}</td>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <th></th>
+							@if ($datoOrdenCompra[0]['tipo'] == 'CL')
+								<th></th>
+								<th></th>
+								<th></th>
+							@endif
+							<th></th>
+                            <th>IVA 21%: </th>
+                            <td>$ {{ number_format($datoOrdenCompra[0]['total_iva21'], 2, ',', '.') }}</td>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <th></th>
+							@if ($datoOrdenCompra[0]['tipo'] == 'CL')
+								<th></th>
+								<th></th>
+								<th></th>
+							@endif
+							<th></th>
+                            <th>Total: </th>
+                            <td>$ {{ number_format($datoOrdenCompra[0]['total'], 2, ',', '.') }}</td>
+                        </tr>																		
                     </tfoot>
                 </table>
             </div>
@@ -279,6 +323,14 @@
             <div id="gracias">
                 <p>Observaciones: <b>{{ $datoOrdenCompra[0]['obs'] }}</b></p>
             </div>
-        </footer>		
+        </footer>
+		<div>&nbsp;</div>
+		<div>&nbsp;</div>
+		<div style="border: none; border-top: 1px solid #000000;; padding: 2px; padding-bottom: -4px; text-align: center; border-bottom: none;">&nbsp;</div>
+
+		<div id="firma">
+				<b>Ing. Agronomo Diego Collado</b>
+				<br>Celular:(+54)93875088902
+        </div>		
 	</body>
 </html>
