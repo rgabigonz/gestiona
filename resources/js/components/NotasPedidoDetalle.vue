@@ -210,6 +210,16 @@
                                         </td>                        
                                         <!-- /.col -->
 
+                                        <td class="invoice-col">
+                                            <div class="form-group">
+                                                <div class="input-group input-group-sm">
+                                                    <input v-model="subtotal_iva_producto" type="hidden" name="subtotal_iva_producto" 
+                                                        class="form-control form-control-sm" disabled>
+                                                </div>
+                                            </div>
+                                        </td>                        
+                                        <!-- /.col -->
+
                                     </tr>                            
                                 </thead>
                                 <tbody style="font-size: 12px;">
@@ -219,8 +229,10 @@
                                         <td>${{ item.precio }}</td>
                                         <td>${{ item.flete }}</td>
                                         <td>${{ item.comision_venta }}</td>
-                                        <td>${{ (parseFloat(item.precio) + parseFloat(item.flete) + parseFloat(item.comision_venta)) | currency }}</td>                                    
-                                        <td><b>${{ ((parseFloat(item.precio) + parseFloat(item.flete) + parseFloat(item.comision_venta)) * item.cantidad) | currency }}</b></td>
+                                        <td>${{ calculaPUnitario(item) | currency }}</td>
+                                        <td>
+                                            <b>${{ calculaSTotal(item) | currency }}</b>
+                                        </td>
                                         <td>
                                             <a href="#" @click="removerProducto(index)">
                                                 <i class="fa fa-trash-alt red"></i>
@@ -233,8 +245,35 @@
                                         <td></td>
                                         <td></td>
                                         <td></td>
+                                        <td><b>Total sin IVA:</b></td>
+                                        <td><b>${{ total_sinIVA | currency }}</b></td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><b>IVA 10,5%:</b></td>
+                                        <td><b>${{ total105 | currency }}</b></td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><b>IVA 21%:</b></td>
+                                        <td><b>${{ total21 | currency }}</b></td>
+                                    </tr>                                                                                                            
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
                                         <td><b>Total:</b></td>
-                                        <td><b>${{ total | currency }}</b></td>
+                                        <td><b>${{ total_conIVA | currency }}</b></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -320,10 +359,13 @@
                 nombre_producto: '',
                 descripcion_producto: '',
                 precio_producto: 0,
+                iva_producto: 0,
                 flete_producto: 0,
                 comision_venta_producto: 0,
                 numero_factura: '',
                 lugar_entrega: '',
+                total_iva_21: 0,
+                total_iva_105: 0,                
                 nota_pedido: {},
                 nota_pedido_detalle: {}
             }
@@ -413,8 +455,9 @@
                 axios.get(url).then(data => {
                     var response = data.data;
                     me.producto = response.datoProducto;
-                    me.nombre_producto = me.producto.nombre;
-                    me.descripcion_producto = me.producto.descripcion;                    
+                    me.nombre_producto = me.producto[0].nombre;
+                    me.descripcion_producto = me.producto[0].descripcion;
+                    me.iva_producto = me.producto[0].iva_producto;
                 }).catch((error) => {
                     me.producto = {};
                     me.codigo_producto = 0;
@@ -441,7 +484,8 @@
                                         cantidad: this.cantidad_producto, 
                                         precio: this.precio_producto,
                                         flete: this.flete_producto,
-                                        comision_venta: this.comision_venta_producto
+                                        comision_venta: this.comision_venta_producto,
+                                        alicuota_iva: this.iva_producto
                         });
                     }
                     this.codigo_producto = 0;
@@ -449,6 +493,7 @@
                     this.nombre_producto = '';
                     this.descripcion_producto = '';
                     this.precio_producto = 0;
+                    this.iva_producto = 0;
                     this.flete_producto = 0;
                     this.comision_venta_producto = 0;
 
@@ -505,7 +550,10 @@
                         fecha_nota_pedido: this.fecha_nota_pedido,
                         numero_factura: this.numero_factura,
                         lugar_entrega: this.lugar_entrega,
-                        total_pedido: this.total,
+                        total_pedido: this.total_conIVA,
+                        total_pedido_siniva: this.total_sinIVA,
+                        total_pedido_21: this.total_iva_21,
+                        total_pedido_105: this.total_iva_105,
                         items: this.items})
                     .then(() => {
                         Fire.$emit('AfterAction');
@@ -537,7 +585,10 @@
                     fecha_nota_pedido: this.fecha_nota_pedido,
                     numero_factura: this.numero_factura,
                     lugar_entrega: this.lugar_entrega,
-                    total_pedido: this.total,
+                    total_pedido: this.total_conIVA,
+                    total_pedido_siniva: this.total_sinIVA,
+                    total_pedido_21: this.total_iva_21,
+                    total_pedido_105: this.total_iva_105,
                     items: this.items})
                 .then(() => {
                     Fire.$emit('AfterAction');
@@ -588,7 +639,8 @@
                                           cantidad: me.nota_pedido_detalle[i].cantidad, 
                                           precio: me.nota_pedido_detalle[i].precio,
                                           flete: me.nota_pedido_detalle[i].flete,
-                                          comision_venta: me.nota_pedido_detalle[i].comision_venta
+                                          comision_venta: me.nota_pedido_detalle[i].comision_venta,
+                                          alicuota_iva: me.nota_pedido_detalle[i].alicuota_iva
                         });
                     }
 
@@ -596,9 +648,32 @@
                     me.nota_pedido = {};
                     me.nota_pedido_detalle = {};
                 });
+            },
+            calculaPUnitario(item) {
+                return (parseFloat(item.precio) + parseFloat(item.flete) + parseFloat(item.comision_venta));
+            },
+            calculaSTotal(item) {
+                return ((parseFloat(item.precio) + parseFloat(item.flete) + parseFloat(item.comision_venta)) * item.cantidad);
+            },
+            calculaIVA(item) {
+                if (item.iva == 21) 
+                    return (((parseFloat(item.precio) + parseFloat(item.flete) + parseFloat(item.comision_venta)) * item.cantidad) * 1.21) - 
+                            ((parseFloat(item.precio) + parseFloat(item.flete) + parseFloat(item.comision_venta)) * item.cantidad);
+                else if (item.iva == 10.5)
+                    return (((parseFloat(item.precio) + parseFloat(item.flete) + parseFloat(item.comision_venta)) * item.cantidad) * 1.105) - 
+                            ((parseFloat(item.precio) + parseFloat(item.flete) + parseFloat(item.comision_venta)) * item.cantidad);
             }
         },
         computed: {
+            subtotal_iva_producto() {
+                var lTotal_Adicionales = parseFloat(this.flete_producto) + parseFloat(this.comision_venta_producto);
+                var lTotal = parseFloat(this.precio_producto) + parseFloat(lTotal_Adicionales);
+
+                if (this.iva_producto == 21)
+                    return ((this.cantidad_producto * lTotal * 1.21) - (this.cantidad_producto * lTotal));
+                else
+                    return ((this.cantidad_producto * lTotal * 1.105) - (this.cantidad_producto * lTotal));
+            },
             subtotal_producto() {
                 var lTotal_Adicionales = parseFloat(this.flete_producto) + parseFloat(this.comision_venta_producto);
                 var lTotal = parseFloat(this.precio_producto) + parseFloat(lTotal_Adicionales);
@@ -608,12 +683,52 @@
                 var lTotal = parseFloat(this.flete_producto) + parseFloat(this.comision_venta_producto);
                 return (parseFloat(this.precio_producto) + parseFloat(lTotal));
             },
-            total() {
+            total_sinIVA() {
                 return this.items.reduce(
                     (acc, item) => acc + ((parseFloat(item.flete) + parseFloat(item.comision_venta) + parseFloat(item.precio)) * parseFloat(item.cantidad)),
                     0
                 );
-            }            
+            },
+            total105() {
+                var lTotal_Adicionales = 0;
+                var lTotal = 0;
+                var lCantidad = 0;
+
+                for (var i = 0; i < this.items.length; i++) {
+                    if (this.items[i].alicuota_iva == '10.50') {
+                        lTotal_Adicionales = (parseFloat(this.items[i].flete) + parseFloat(this.items[i].comision_venta));
+                        lTotal += (parseFloat(this.items[i].precio) + lTotal_Adicionales) * parseFloat(this.items[i].cantidad);
+                    }
+                }  
+
+                this.total_iva_105 = parseFloat((lTotal * 1.105) - (lTotal));
+                return parseFloat((lTotal * 1.105) - (lTotal));
+            },
+            total21() {
+                var lTotal_Adicionales = 0;
+                var lTotal = 0;
+
+                for (var i = 0; i < this.items.length; i++) {
+                    if (this.items[i].alicuota_iva == '21.00') {
+                        lTotal_Adicionales = (parseFloat(this.items[i].flete) + parseFloat(this.items[i].comision_venta));
+                        lTotal += (parseFloat(this.items[i].precio) + lTotal_Adicionales) * parseFloat(this.items[i].cantidad);
+                    }
+                }
+
+                this.total_iva_21 = parseFloat((lTotal * 1.21) - (lTotal));
+                return parseFloat((lTotal * 1.21) - (lTotal));
+            },
+            total_conIVA() {
+                var lTotal_Adicionales = 0;
+                var lTotal = 0;
+
+                for (var i = 0; i < this.items.length; i++) {
+                    lTotal_Adicionales = (parseFloat(this.items[i].flete) + parseFloat(this.items[i].comision_venta));
+                    lTotal += (parseFloat(this.items[i].precio) + lTotal_Adicionales) * parseFloat(this.items[i].cantidad);
+                }  
+                
+                return parseFloat(this.total_iva_21 + this.total_iva_105 + lTotal);
+            }           
         },
         created() {
             this.notas_pedido_id_edicion = this.$route.params.notaspedidoId;

@@ -184,6 +184,33 @@
                         @endforeach
                     </tbody>
                     <tfoot>
+						<tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+							<th></th>
+                            <th>Total sin IVA: </th>
+                            <td>$ {{ number_format($datoNotaPedido[0]['total_siniva'], 2, ',', '.') }}</td>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+							<th></th>
+                            <th>IVA 10,5%: </th>
+                            <td>$ {{ number_format($datoNotaPedido[0]['total_iva105'], 2, ',', '.') }}</td>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+							<th></th>
+                            <th>IVA 21%: </th>
+                            <td>$ {{ number_format($datoNotaPedido[0]['total_iva21'], 2, ',', '.') }}</td>
+                        </tr>												
                         <tr>
                             <th></th>
                             <th></th>

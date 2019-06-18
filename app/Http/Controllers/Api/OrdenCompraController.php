@@ -102,14 +102,14 @@ class OrdenCompraController extends Controller
         }
 
         // Totales
-        if (!empty($request->total_pedido_siniva))
-            $orden_compra->total_siniva = $request->total_pedido_siniva;
+        if (!empty($request->total_orden_siniva))
+            $orden_compra->total_siniva = $request->total_orden_siniva;
 
-        if (!empty($request->total_pedido_21))
-            $orden_compra->total_iva21  = $request->total_pedido_21;
+        if (!empty($request->total_orden_21))
+            $orden_compra->total_iva21  = $request->total_orden_21;
 
-        if (!empty($request->total_pedido_105))
-            $orden_compra->total_iva105 = $request->total_pedido_105;
+        if (!empty($request->total_orden_105))
+            $orden_compra->total_iva105 = $request->total_orden_105;
 
         $orden_compra->total = $request->total_orden;
 
@@ -175,14 +175,14 @@ class OrdenCompraController extends Controller
         }
 
         // Totales
-        if (!empty($request->total_pedido_siniva))
-            $OrdenCompra->total_siniva = $request->total_pedido_siniva;
+        if (!empty($request->total_orden_siniva))
+            $OrdenCompra->total_siniva = $request->total_orden_siniva;
 
-        if (!empty($request->total_pedido_21))
-            $OrdenCompra->total_iva21  = $request->total_pedido_21;
+        if (!empty($request->total_orden_21))
+            $OrdenCompra->total_iva21  = $request->total_orden_21;
 
-        if (!empty($request->total_pedido_105))
-            $OrdenCompra->total_iva105 = $request->total_pedido_105;
+        if (!empty($request->total_orden_105))
+            $OrdenCompra->total_iva105 = $request->total_orden_105;
 
         $OrdenCompra->total = $request->total_orden;
 

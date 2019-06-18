@@ -70,7 +70,6 @@ class NotaPedidoController extends Controller
 
         $nota_pedido->cliente_id = $request->codigo_cliente;
         $nota_pedido->user_id = $user->id;
-        $nota_pedido->total = $request->total_pedido;
         $nota_pedido->numero_factura = $request->numero_factura;
         $nota_pedido->lugar_entrega = $request->lugar_entrega;
         $nota_pedido->fecha = $fecha_pedido->format('Y-m-d');
@@ -81,6 +80,18 @@ class NotaPedidoController extends Controller
         // ID Segun anio
         $nota_pedido->anio_id = $anio_id;
         $nota_pedido->anio_actual = $anio_actual->year;
+
+        // Totales
+        if (!empty($request->total_pedido_siniva))
+            $nota_pedido->total_siniva = $request->total_pedido_siniva;
+
+        if (!empty($request->total_pedido_21))
+            $nota_pedido->total_iva21  = $request->total_pedido_21;
+
+        if (!empty($request->total_pedido_105))
+            $nota_pedido->total_iva105 = $request->total_pedido_105;
+
+        $nota_pedido->total = $request->total_pedido;
 
         $nota_pedido->save();
 
@@ -104,12 +115,23 @@ class NotaPedidoController extends Controller
         $user = auth('api')->user();
         
         $NotaPedido = NotaPedido::findOrFail($id);
-        $NotaPedido->total = $request->total_pedido;
         $NotaPedido->numero_factura = $request->numero_factura;
         $NotaPedido->lugar_entrega = $request->lugar_entrega;
 
         if (!empty($request->codigo_vendedor_venta))
             $NotaPedido->vendedor_venta_id = $request->codigo_vendedor_venta;
+
+        // Totales
+        if (!empty($request->total_pedido_siniva))
+            $NotaPedido->total_siniva = $request->total_pedido_siniva;
+
+        if (!empty($request->total_pedido_21))
+            $NotaPedido->total_iva21  = $request->total_pedido_21;
+
+        if (!empty($request->total_pedido_105))
+            $NotaPedido->total_iva105 = $request->total_pedido_105;
+
+        $NotaPedido->total = $request->total_pedido;
 
         $NotaPedido->update();
 
@@ -138,7 +160,8 @@ class NotaPedidoController extends Controller
         $datoNotaPedido = NotaPedido::findOrFail($id);
 
         $datoNotaPedidoD = NotaPedidoDetalle::join('productos', 'notas_pedidos_detalle.producto_id', '=', 'productos.id')
-        ->select('notas_pedidos_detalle.*', 'productos.nombre as nombre_producto', 'productos.descripcion as descripcion_producto')
+        ->join('tipo_productos', 'productos.tipo_producto', '=', 'tipo_productos.id')
+        ->select('notas_pedidos_detalle.*', 'productos.nombre as nombre_producto', 'productos.descripcion as descripcion_producto', 'tipo_productos.iva as alicuota_iva')
         ->where('notas_pedidos_detalle.nota_pedido_id', '=', $id)->get();
 
         return [
