@@ -43,26 +43,6 @@
                         </div>
                         <!-- /.col -->
 
-                        <!-- <div class="col-sm-4 invoice-col">
-                            <div class="form-group">
-                                <div class="input-group input-group-sm">
-                                    <input v-model="numero_factura" type="text" name="numero_factura" placeholder="Numero Factura"
-                                        class="form-control form-control-sm">
-                                </div>
-                            </div>
-                        </div> -->
-                        <!-- /.col -->
-
-                        <!-- <div class="col-sm-4 invoice-col">
-                            <div class="form-group">
-                                <div class="input-group input-group-sm">
-                                    <input v-model="lugar_entrega" type="text" name="lugar_entrega" placeholder="Lugar Entrega"
-                                        class="form-control form-control-sm">
-                                </div>
-                            </div>
-                        </div> -->
-                        <!-- /.col -->
-
                     </div>
                 </div>
               </div>
@@ -113,7 +93,7 @@
                                 <tr>
                                     <th style="width:25%">Tipo Pago</th>
                                     <th style="width:30%">Banco</th>
-                                    <th style="width:10%">Fecha Cheque</th>
+                                    <th style="width:10%">Fecha Cobro</th>
                                     <th style="width:15%">N° Cheque</th>
                                     <th style="width:15%">Importe</th>
                                     <th style="width:5%"></th>
@@ -146,7 +126,7 @@
                                     <td class="invoice-col">
                                         <div class="form-group">
                                             <div class="input-group input-group-sm">
-                                                <input v-model="fecha_cheque" type="date" name="fecha_cheque"
+                                                <input v-model="fecha_cobro_cheque" type="date" name="fecha_cobro_cheque"
                                                     class="form-control form-control-sm" :disabled="tipo_pago.id != 'CH' ? true : false">
                                             </div>
                                         </div>
@@ -179,7 +159,7 @@
                                 <tr class="item" v-for="(item, index) in items" :key="item.cod">
                                     <td>{{ item.tipo_pago_descripcion}}</td>
                                     <td>{{ item.codigo_banco_nombre }}</td>
-                                    <td>{{ item.fecha_cheque | formatDate }}</td>
+                                    <td>{{ item.fecha_cobro_cheque | formatDate }}</td>
                                     <td>{{ item.numero_cheque }}</td>
                                     <td>${{ item.importe }}</td>
                                     <td>
@@ -291,7 +271,7 @@
                 items: [],
                 tipo_pago: '',
                 codigo_banco: 0,
-                fecha_cheque: '',
+                fecha_cobro_cheque: '',
                 numero_cheque: 0,
                 importe_item_recibo: 0,
                 observacion:'',
@@ -370,20 +350,20 @@
             agregaItemRecibo() {
                 if (this.importe_item_recibo > 0) {
 
-                    if (this.existeItemRecibo(this.tipo_pago.id, this.codigo_banco.id, this.fecha_cheque, 
+                    if (this.existeItemRecibo(this.tipo_pago.id, this.codigo_banco.id, this.fecha_cobro_cheque, 
                                             this.numero_cheque, this.importe_item_recibo) === false) {
                         this.items.push({tipo_pago: this.tipo_pago.id, 
                                         tipo_pago_descripcion: this.tipo_pago.text, 
                                         banco_id: this.codigo_banco.id, 
                                         codigo_banco_nombre: this.codigo_banco.text, 
-                                        fecha_cheque: this.fecha_cheque, 
+                                        fecha_cobro_cheque: this.fecha_cobro_cheque, 
                                         numero_cheque: this.numero_cheque,
                                         importe: this.importe_item_recibo
                         });
                     }
                     this.tipo_pago = '';
                     this.codigo_banco = 0;
-                    this.fecha_cheque = '';
+                    this.fecha_cobro_cheque = '';
                     this.numero_cheque = 0;
                     this.importe_item_recibo = 0;
 
@@ -403,7 +383,7 @@
                 for (var i = 0; i < this.items.length; i++) {
                     if (this.items[i].tipo_pago === tp_id && this.items[i].banco_id === bco_id && 
                         this.items[i].numero_cheque === num_ch ) {
-                            this.items[i].fecha_cheque = fec_ch;
+                            this.items[i].fecha_cobro_cheque = fec_ch;
                             this.items[i].importe = imp;
                             return true;
                     }
@@ -425,7 +405,7 @@
                     this.errors.push('Debe ingresar un cliente');
                 }
                 if (this.items.length == 0) {
-                    this.errors.push('Debe ingresar al menos un producto');
+                    this.errors.push('Debe ingresar al menos un item de recibo');
                 }
 
                 return resultado;
@@ -516,7 +496,7 @@
                                         tipo_pago_descripcion: me.tipo_pago_descripcion,
                                         banco_id: me.recibo_detalle[i].banco_id, 
                                         codigo_banco_nombre: me.recibo_detalle[i].nombre_banco,
-                                        fecha_cheque: me.recibo_detalle[i].fecha_cheque,
+                                        fecha_cobro_cheque: me.recibo_detalle[i].fecha_cobro_cheque,
                                         numero_cheque: me.recibo_detalle[i].numero_cheque,
                                         importe: me.recibo_detalle[i].importe
                         });

@@ -14,7 +14,6 @@
                             <select class="form-control" v-model="sCriterio">
                                 <option value="numero_cheque">N° Cheque</option>
                                 <!-- <option value="estado_cheque">Estado</option>
-                                <option value="fecha_cheque">Fecha Cheque</option>
                                 <option value="fecha_cobro_cheque">Fecha de Cobro</option> -->
                             </select>
                         </div>
@@ -34,7 +33,7 @@
                     <tbody>
                         <tr>
                             <th style="width: 20%">N° Cheque</th>
-                            <th style="width: 15%">Fecha</th>
+                            <th style="width: 15%">Fecha Cobro</th>
                             <th style="width: 25%">Banco</th>
                             <th style="width: 15%">Importe</th>
                             <th style="width: 15%">Estado</th>
@@ -42,7 +41,7 @@
                         </tr>
                         <tr v-for="cheque in cheques" :key="cheque.id">
                             <td>{{ cheque.numero_cheque }}</td>
-                            <td>{{ cheque.fecha_cheque | formatDate}}</td>
+                            <td>{{ cheque.fecha_cobro_cheque | formatDate}}</td>
                             <td>{{ cheque.nombre_banco_cheque }}</td>
                             <td>{{ cheque.importe }}</td>
                             <td>
@@ -101,47 +100,30 @@
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label class="control-label" for="numero_cheque"><i class="fa fa-bell-o"></i>N° Cheque</label>
-                                        <input v-model="form.numero_cheque" type="number" name="numero_cheque" disabled
-                                            class="form-control">                                
+                                        <h4>{{ form.numero_cheque }}</h4>
                                     </div>
                                 </div>
                                 <div class="col-6">
                                     <div class="form-group">
-                                        <label class="control-label" for="fecha_cheque"><i class="fa fa-bell-o"></i>Fecha Cheque</label>
-                                        <input v-model="form.fecha_cheque" type="date" name="fecha_cheque" disabled
-                                            class="form-control">                                
+                                        <label class="control-label" for="fecha_cobro_cheque"><i class="fa fa-bell-o"></i>Fecha Cobro</label>
+                                        <h4>{{ form.fecha_cobro_cheque | formatDate }}</h4>
                                     </div>   
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-12">
+                                <div class="col-6">
                                     <div class="form-group">
                                         <label class="control-label" for="nombre_banco_cheque"><i class="fa fa-bell-o"></i>Banco</label>
-                                        <input v-model="form.nombre_banco_cheque" type="text" name="nombre_banco_cheque" disabled
-                                            class="form-control">                                
+                                        <h4>{{ form.nombre_banco_cheque }}</h4>
                                     </div>  
                                 </div>
-                            </div>
-                            <div class="row">
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label class="control-label" for="importe_cheque"><i class="fa fa-bell-o"></i>Importe</label>
-                                        <input v-model="form.importe_cheque" type="number" name="importe_cheque" disabled
-                                            class="form-control">                                
+                                        <h4>${{ form.importe_cheque }}</h4>
                                     </div>  
-                                </div>
-                                <div class="col-6">
-                                    <div class="form-group">
-                                        <label class="control-label" for="fecha_cobro_cheque"><i class="fa fa-bell-o"></i>Fecha Cobro</label>
-                                        <input v-model="form.fecha_cobro_cheque" type="date" name="fecha_cobro_cheque"
-                                            class="form-control" :disabled="form.estado_cheque != 'PE' ? true : false" 
-                                            :class="{ 'is-invalid': form.errors.has('fecha_cobro_cheque') }">                                
-                                        <has-error :form="form" field="fecha_cobro_cheque"></has-error>
-                                    </div>   
-                                </div>
-                            </div> 
-
-                            <!-- Proveedor row -->
+                                </div>                                
+                            </div>
                             <div class="row">
                                 <div class="col-12">
                                     <div class="form-group">
@@ -152,9 +134,7 @@
                                         </select>
                                     </div>
                                 </div>
-                                <!-- /.col -->
-                            </div>
-                            <!-- /.row -->
+                            </div> 
 
                         </div>
                         <div class="modal-footer">
@@ -169,7 +149,13 @@
 </template>
 
 <script>
+    import Datepicker from "vuejs-datepicker/dist/vuejs-datepicker.esm.js";
+    import {en, es} from 'vuejs-datepicker/dist/locale';
+
     export default {
+        components: {
+            Datepicker
+        },
         data() {
             return {
                 modoEdicion: false,
@@ -177,7 +163,6 @@
                 lproveedores: {},
                 form: new Form({
                     id: 0,
-                    fecha_cheque: '',
                     numero_cheque: '',
                     nombre_banco_cheque: '',
                     importe_cheque: 0,
@@ -195,7 +180,9 @@
                 },
                 offset: 3,
                 sCriterio: 'numero_cheque',
-                sBuscar: ''
+                sBuscar: '',
+                formato_fecha_cheque: "dd-MM-yyyy",
+                es: es
             }
         },
         computed: {
@@ -234,6 +221,7 @@
             editarModal(cheque) {
                 this.modoEdicion = true;
                 this.form.reset();
+                
                 $('#ventanaModal').modal('show');
                 this.form.fill(cheque);
 

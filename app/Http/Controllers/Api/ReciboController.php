@@ -84,9 +84,9 @@ class ReciboController extends Controller
         {
             $recibo_item = new ReciboDetalle();
 
-            if (!empty($request->items[$i]['fecha_cheque'])) {
-                $fecha_cheque = \Carbon\Carbon::parse($request->items[$i]['fecha_cheque']);
-                $recibo_item->fecha_cheque = $fecha_cheque->format('Y-m-d');
+            if (!empty($request->items[$i]['fecha_cobro_cheque'])) {
+                $fecha_cobro_cheque = \Carbon\Carbon::parse($request->items[$i]['fecha_cobro_cheque']);
+                $recibo_item->fecha_cobro_cheque = $fecha_cobro_cheque->format('Y-m-d');
             }
 
             $recibo_item->tipo_pago = $request->items[$i]['tipo_pago'];
@@ -122,9 +122,9 @@ class ReciboController extends Controller
 
             $recibo_item->recibo_id = $id;
 
-            if (!empty($request->items[$i]['fecha_cheque'])) {
-                $fecha_cheque = \Carbon\Carbon::parse($request->items[$i]['fecha_cheque']);
-                $recibo_item->fecha_cheque = $fecha_cheque->format('Y-m-d');
+            if (!empty($request->items[$i]['fecha_cobro_cheque'])) {
+                $fecha_cobro_cheque = \Carbon\Carbon::parse($request->items[$i]['fecha_cobro_cheque']);
+                $recibo_item->fecha_cobro_cheque = $fecha_cobro_cheque->format('Y-m-d');
             }
 
             $recibo_item->tipo_pago = $request->items[$i]['tipo_pago'];
