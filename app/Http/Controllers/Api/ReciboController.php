@@ -76,6 +76,7 @@ class ReciboController extends Controller
         $recibo->total = $request->total_recibo;
         $recibo->numero_recibo = $numero_recibo;
         $recibo->obs = $request->obs;
+        $recibo->referencia_talonario = $request->referencia_talonario;
         $recibo->fecha = $fecha_recibo->format('Y-m-d');
 
         $recibo->save();
@@ -109,6 +110,7 @@ class ReciboController extends Controller
         $Recibo = Recibo::findOrFail($id);
         $Recibo->total = $request->total_recibo;
         $Recibo->obs = $request->obs;
+        $Recibo->referencia_talonario = $request->referencia_talonario;
 
         $Recibo->update();
         

@@ -31,7 +31,7 @@
                 <div class="card-header border-light bg-secondary">Datos Recibo</div>
                 <div class="card-body">
                     <div class="row invoice-info">
-                        <div class="col-sm-4 invoice-col">
+                        <div class="col-sm-6 invoice-col">
                             <div class="form-group">
                                 <div class="input-group input-group-sm">
                                     <datepicker :bootstrap-styling="true" v-model="fecha_recibo" name="fecha_recibo" :language="es" 
@@ -42,6 +42,16 @@
                             </div>
                         </div>
                         <!-- /.col -->
+
+                    <div class="col-sm-6 invoice-col">
+                        <div class="form-group">
+                            <div class="input-group input-group-sm">
+                                <input v-model="referencia_talonario" type="text" name="referencia_talonario" placeholder="N° Recibo Talonario"
+                                    class="form-control form-control-sm">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.col -->                        
 
                     </div>
                 </div>
@@ -275,6 +285,7 @@
                 numero_cheque: 0,
                 importe_item_recibo: 0,
                 observacion:'',
+                referencia_talonario: '',
                 recibo: {},
                 recibo_detalle: {}
             }
@@ -421,6 +432,7 @@
                         fecha_recibo: this.fecha_recibo,
                         total_recibo: this.total,
                         obs: this.observacion,
+                        referencia_talonario: this.referencia_talonario,
                         items: this.items})
                     .then(() => {
                         Fire.$emit('AfterAction');
@@ -450,6 +462,7 @@
                     axios.put('api/recibo/'+this.recibo_id_edicion, {
                             total_recibo: this.total,
                             obs: this.observacion,
+                            referencia_talonario: this.referencia_talonario,
                             items: this.items})
                     .then(() => {
                         Fire.$emit('AfterAction');
@@ -477,6 +490,8 @@
 
                     me.fecha_recibo = new Date(me.recibo[0].fecha);
                     me.fecha_recibo = me.fecha_recibo.setDate(me.fecha_recibo.getDate() + 1);
+
+                    me.referencia_talonario = me.recibo[0].referencia_talonario;
 
                     me.estado = me.recibo[0].estado;
 
