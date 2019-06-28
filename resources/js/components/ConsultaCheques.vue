@@ -32,18 +32,18 @@
                 <table class="table table-hover">
                     <tbody>
                         <tr>
+                            <th style="width: 25%">Cliente</th>
                             <th style="width: 20%">N° Cheque</th>
-                            <th style="width: 15%">Fecha Cobro</th>
-                            <th style="width: 25%">Banco</th>
                             <th style="width: 15%">Importe</th>
+                            <th style="width: 15%">Fecha Cobro</th>
                             <th style="width: 15%">Estado</th>
                             <th style="width: 10%"></th>
                         </tr>
                         <tr v-for="cheque in cheques" :key="cheque.id">
+                            <td>{{ cheque.nombre_cliente }}</td>
                             <td>{{ cheque.numero_cheque }}</td>
-                            <td>{{ cheque.fecha_cobro_cheque | formatDate}}</td>
-                            <td>{{ cheque.nombre_banco_cheque }}</td>
                             <td>{{ cheque.importe }}</td>
+                            <td>{{ cheque.fecha_cobro_cheque | formatDate}}</td>
                             <td>
                                 <div v-if="cheque.estado_cheque == 'PE'">
                                     <span class="badge badge-danger">Pendiente de Cobro</span>
@@ -113,8 +113,8 @@
                             <div class="row">
                                 <div class="col-6">
                                     <div class="form-group">
-                                        <label class="control-label" for="nombre_banco_cheque"><i class="fa fa-bell-o"></i>Banco</label>
-                                        <h4>{{ form.nombre_banco_cheque }}</h4>
+                                        <label class="control-label" for="nombre_cliente"><i class="fa fa-bell-o"></i>Cliente</label>
+                                        <h4>{{ form.nombre_cliente }}</h4>
                                     </div>  
                                 </div>
                                 <div class="col-6">
@@ -127,7 +127,7 @@
                             <div class="row">
                                 <div class="col-12">
                                     <div class="form-group">
-                                        <label class="control-label" for="proveedor_id"><i class="fa fa-bell-o"></i>Proveedor</label>
+                                        <label class="control-label" for="proveedor_id"><i class="fa fa-bell-o"></i>Destinatario (Proveedor)</label>
                                         <select class="form-control" v-model="form.proveedor_id" :disabled="form.estado_cheque != 'PE' ? true : false">
                                             <option value=0>Seleccionar...</option>
                                             <option v-for="lproveedor in lproveedores" :key="lproveedor.id" :value="lproveedor.id">{{ lproveedor.nombre }}</option>
@@ -164,7 +164,7 @@
                 form: new Form({
                     id: 0,
                     numero_cheque: '',
-                    nombre_banco_cheque: '',
+                    nombre_cliente: '',
                     importe_cheque: 0,
                     estado_cheque: '',
                     fecha_cobro_cheque: '',

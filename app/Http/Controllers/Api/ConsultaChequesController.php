@@ -14,17 +14,19 @@ class ConsultaChequesController extends Controller
         $sCriterio = $request->criterio;
 
         if(empty($sBuscar)) {
-            $cheques = ReciboDetalle::join('bancos', 'recibos_detalles.banco_id', '=', 'bancos.id')
-            ->join('recibos', 'recibos_detalles.recibo_id', '=', 'recibos.id')
-            ->select('recibos_detalles.*', 'bancos.nombre as nombre_banco_cheque', 'recibos_detalles.importe as importe_cheque')
+            $cheques = ReciboDetalle::join('recibos', 'recibos_detalles.recibo_id', '=', 'recibos.id')
+            ->join('clientes', 'recibos.cliente_id', '=', 'clientes.id')
+            ->select('recibos_detalles.*', 'recibos_detalles.importe as importe_cheque', 'clientes.nombre as nombre_cliente')
             ->where('recibos.estado', '=', 'CO')
-            ->orderBy('fecha_cobro_cheque', 'asc')->paginate(15);
+            ->where('recibos_detalles.tipo_pago', '=', 'CH')
+            ->orderBy('fecha_cobro_cheque', 'asc', 'lol')->paginate(15);
         } 
         else {
-            $cheques = ReciboDetalle::join('bancos', 'recibos_detalles.banco_id', '=', 'bancos.id')
-            ->join('recibos', 'recibos_detalles.recibo_id', '=', 'recibos.id')
-            ->select('recibos_detalles.*', 'bancos.nombre as nombre_banco_cheque', 'recibos_detalles.importe as importe_cheque')
+            $cheques = ReciboDetalle::join('recibos', 'recibos_detalles.recibo_id', '=', 'recibos.id')
+            ->join('clientes', 'recibos.cliente_id', '=', 'clientes.id')
+            ->select('recibos_detalles.*', 'recibos_detalles.importe as importe_cheque', 'clientes.nombre as nombre_cliente')
             ->where('recibos.estado', '=', 'CO')
+            ->where('recibos_detalles.tipo_pago', '=', 'CH')
             ->where($sCriterio, 'like', '%' . $sBuscar . '%')
             ->orderBy('fecha_cobro_cheque', 'asc')->paginate(15);
         }
