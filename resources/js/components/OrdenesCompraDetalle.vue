@@ -273,7 +273,7 @@
                                         <div class="form-group">
                                             <div class="input-group input-group-sm">
                                                 <input v-model="flete_producto" type="number" name="flete_producto"
-                                                    @keydown ="keyMonitor" class="form-control form-control-sm" :disabled="tipo != 'CL' ? true : false">
+                                                    @keydown ="keyMonitor" class="form-control form-control-sm">
                                             </div>
                                         </div>
                                     </td>
