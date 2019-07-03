@@ -140,6 +140,33 @@
                                     <has-error :form="form" field="telefono"></has-error>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col col-md-6">
+                                    <div class="form-group">
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa fa-list-ol"></i></span>
+                                            </div>
+                                            <select v-model="form.tipo_documento" name="tipo_documento" class="form-control" :class="{ 'is-invalid': form.errors.has('tipo_documento') }">
+                                                <option v-for="tipoDocumento in tiposDocumento" :key="tipoDocumento.id" :value="tipoDocumento.id">{{ tipoDocumento.descripcion }}</option>
+                                            </select>
+                                            <has-error :form="form" field="tipo_documento"></has-error>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col col-md-6">
+                                  <div class="form-group">
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa fa-address-card"></i></span>
+                                            </div>
+                                            <input v-model="form.numero_documento" name="numero_documento" placeholder="Numero documento"
+                                                class="form-control" :class="{ 'is-invalid': form.errors.has('numero_documento') }">
+                                            <has-error :form="form" field="numero_documento"></has-error>
+                                        </div>
+                                  </div>
+                                </div>
+                            </div>                            
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger" @click="cerrarModal()">Cerrar</button>
@@ -165,7 +192,9 @@
                     nombre: '',
                     direccion: '',
                     correo_electronico: '',
-                    telefono: ''
+                    telefono: '',
+                    tipo_documento: 1,
+                    numero_documento: ''
                 }),
                 pagination: {
                     'total': 0,
@@ -214,11 +243,13 @@
                 this.cargarVendedores(page, buscar, criterio);
             },
             nuevoModal() {
+                this.cargarTD();
                 this.modoEdicion = false;
                 this.form.reset();
                 $('#ventanaModal').modal('show');
             },
             editarModal(vendedor) {
+                this.cargarTD();
                 this.modoEdicion = true;
                 this.form.reset();
                 $('#ventanaModal').modal('show');
@@ -330,6 +361,18 @@
                 })
                 .catch(() => {
                     swal('Fallo!', 'Hubo un error al procesar la transaccion.', 'warning');                    
+                });
+            },
+            cargarTD() {
+                let me = this;                
+                var url = 'api/tipodocumento/cargaTD';
+                axios.get(url).then(data => {
+                    var response = data.data;
+                    me.tiposDocumento = response.tiposDocumento;
+                }).catch((error) => {
+                    if (error.response.status == 401) {
+                        swal('Error!', 'La sesion ha caducado.', 'warning');
+                    }
                 });
             }
         },

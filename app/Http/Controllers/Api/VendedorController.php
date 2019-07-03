@@ -63,7 +63,9 @@ class VendedorController extends Controller
             'nombre' => $request['nombre'],
             'direccion' => $request['direccion'],
             'correo_electronico' => $request['correo_electronico'],
-            'telefono' => $request['telefono']
+            'telefono' => $request['telefono'],
+            'tipo_documento' => $request['tipo_documento'],
+            'numero_documento' => $request['numero_documento']
         ]);
     }
 
