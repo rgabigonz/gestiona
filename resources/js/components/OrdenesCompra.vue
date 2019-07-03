@@ -35,16 +35,16 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body table-responsive p-0">
-                <table class="table table-hover">
-                    <tbody>
+                <table class="table table-hover table-sm">
+                    <tbody style="font-size: 14px;">
                         <tr>
                             <th style="width: 10%">#</th>
                             <th style="width: 20%">Proveedor</th>
-                            <th style="width: 23%">Cliente</th>
+                            <th style="width: 20%">Cliente</th>
                             <th style="width: 20%">Distribuidor</th>                            
-                            <th style="width: 8%">Fecha</th>
-                            <th style="width: 9%">Estado</th>
-                            <th style="width: 11%"></th>
+                            <th style="width: 10%">Fecha</th>
+                            <th style="width: 10%">Estado</th>
+                            <th style="width: 10%"></th>
                         </tr>
                         <tr v-for="orden_compra in ordenes_compras" :key="orden_compra.id">
                             <td>{{ orden_compra.anio_id }} - {{ orden_compra.anio_actual }}</td>

@@ -255,7 +255,8 @@ class OrdenCompraController extends Controller
         ->select('ordenes_compras.*', 'clientes.nombre as nombre_cliente', 'clientes.direccion as direccion_cliente', 
                  'clientes.numero_documento as numero_documento', 'clientes.correo_electronico as email_cliente', 'proveedores.nombre as nombre_proveedor', 
                  'proveedores.direccion as direccion_proveedor', 'proveedores.telefono as telefono_proveedor', 
-                 'proveedores.correo_electronico as email_proveedor', 'vv.nombre as nombre_vendedor_venta', 'vg.nombre as nombre_vendedor_gestion',
+                 'proveedores.correo_electronico as email_proveedor', 'vv.nombre as nombre_vendedor_venta', 'vv.numero_documento as numero_documento_vendedor_venta', 
+                 'vg.nombre as nombre_vendedor_gestion',
                  'depositos.descripcion as descripcion_deposito', 'forma_pagos.descripcion as descripcion_forma_pago', 
                  'condicion_pagos.descripcion as descripcion_condicion_pago')
         ->where('ordenes_compras.id', '=', $id)->get();

@@ -275,7 +275,7 @@
             },
             actualizaVendedor() {
                 this.$Progress.start();
-                
+                console.log(this.form);
                 this.form.put('api/vendedor/'+this.form.id)
                 .then(() => {
                     Fire.$emit('AfterAction');

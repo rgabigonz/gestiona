@@ -92,6 +92,7 @@ class VendedorController extends Controller
         ]);
 
         $vendedor->update($request->all());
+        return $request->all();
     }
 
     public function desactivar(Request $request, $id)
@@ -119,4 +120,13 @@ class VendedorController extends Controller
             'vendedor_gestion_defecto' => $vendedor_gestion_defecto
         ];
     } 
+
+    public function devuelveDatosVendedor(Request $request, $id)
+    {
+        $datoVendedor = Vendedor::findOrFail($id);
+        return [
+            'datoVendedor' => $datoVendedor
+        ];
+
+    }    
 }

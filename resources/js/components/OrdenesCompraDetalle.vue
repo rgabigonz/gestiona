@@ -161,7 +161,7 @@
                         <label class="control-label">Cliente</label>
                         <div class="form-group">
                             <div class="input-group input-group-sm">
-                                <select class="form-control" v-model="codigo_cliente" @change="cargarCliente(codigo_cliente)">>
+                                <select class="form-control" v-model="codigo_cliente" @change="cargarCliente(codigo_cliente)">
                                     <option value=0>Cliente...</option>
                                     <option v-for="lcliente in lclientes" :key="lcliente.id" :value="lcliente.id">{{ lcliente.nombre }}</option>
                                 </select>
@@ -174,7 +174,7 @@
                         <label class="control-label">Comision de venta</label>
                         <div class="form-group">
                             <div class="input-group input-group-sm">
-                                <select class="form-control" v-model="codigo_vendedor_venta">
+                                <select class="form-control" v-model="codigo_vendedor_venta" @change="cargarVendedor(codigo_vendedor_venta)">
                                     <option value=0>x Venta...</option>
                                     <option v-for="lvendedor_venta in lvendedores_venta" :key="lvendedor_venta.id" :value="lvendedor_venta.id">{{ lvendedor_venta.nombre }}</option>
                                 </select>
@@ -207,6 +207,17 @@
                         </div>
                     </div>
                     <!-- /.col -->
+
+                    <div class="col-sm-4 invoice-col">
+                        <label class="control-label">CUIT</label>
+                        <div class="form-group">
+                            <div class="input-group input-group-sm">
+                                <input v-model="vendedor.numero_documento" type="text" name="numero_documento_cg" class="form-control form-control-sm" disabled>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.col -->
+
                 </div>
                 </div>
               </div>
@@ -513,6 +524,7 @@
 
                 // Objetos de datos
                 proveedor: {},
+                vendedor: {},
                 items: [],
                 producto: {},
                 orden_compra: {},
@@ -578,6 +590,18 @@
                     me.codigo_cliente = '';
 
                     this.focusInput('codigo_cliente');
+                });
+            },cargarVendedor(vCod) {
+                let me = this;
+                var url = 'api/vendedor/devuelveDatosVendedor/'+vCod;
+                axios.get(url).then(data => {
+                    var response = data.data;
+                    me.vendedor = response.datoVendedor;
+                }).catch((error) => {
+                    me.vendedor = {};
+                    me.codigo_vendedor_venta = '';
+
+                    this.focusInput('codigo_vendedor_venta');
                 });
             },
             cargarProducto(pCod) {
@@ -899,10 +923,13 @@
 
                     me.codigo_cliente = me.orden_compra.cliente_id;
 
-                    if (!me.orden_compra.vendedor_venta_id) 
+                    if (!me.orden_compra.vendedor_venta_id) {
                         me.codigo_vendedor_venta = 0;
-                    else
+                    }
+                    else {
                         me.codigo_vendedor_venta = me.orden_compra.vendedor_venta_id;
+                        me.cargarVendedor(me.codigo_vendedor_venta);
+                    }
 
                     me.codigo_vendedor_gestion = me.orden_compra.vendedor_gestion_id;
                     

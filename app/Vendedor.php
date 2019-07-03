@@ -9,7 +9,7 @@ class Vendedor extends Model
     protected $table = 'vendedores';
 
     protected $fillable = [
-        'nombre', 'direccion', 'correo_electronico', 'telefono'
+        'nombre', 'direccion', 'correo_electronico', 'telefono', 'tipo_documento', 'numero_documento'
     ];
 
 }

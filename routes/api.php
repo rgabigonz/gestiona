@@ -52,6 +52,7 @@ Route::middleware('auth:api')->group( function () {
 
     // Rutas Vendedores
     Route::get('/vendedor/cargaVendedores', 'Api\VendedorController@cargaVendedores');
+    Route::get('/vendedor/devuelveDatosVendedor/{vendedor}', 'Api\VendedorController@devuelveDatosVendedor');
 
     Route::apiResources([
         'vendedor' => 'Api\VendedorController'

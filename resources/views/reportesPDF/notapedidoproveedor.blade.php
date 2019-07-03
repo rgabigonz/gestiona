@@ -197,7 +197,9 @@
 						<tbody>
 							<tr>
 								<th>
-									<p id="cliente">{{ $datoOrdenCompra[0]['nombre_vendedor_venta'] }}<br></p>
+									<p id="cliente">{{ $datoOrdenCompra[0]['nombre_vendedor_venta'] }}<br>
+													CUIT: {{ $datoOrdenCompra[0]['numero_documento_vendedor_venta'] }}
+									</p>
 								</th>
 								<th>
 									<p id="cliente">{{ $datoOrdenCompra[0]['nombre_vendedor_gestion'] }}<br></p>

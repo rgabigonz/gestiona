@@ -32,8 +32,8 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body table-responsive p-0">
-                <table class="table table-hover">
-                    <tbody>
+                <table class="table table-hover table-sm">
+                    <tbody style="font-size: 14px;">
                         <tr>
                             <th style="width: 10%">#</th>
                             <th style="width: 50%">Cliente</th>

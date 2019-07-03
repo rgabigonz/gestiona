@@ -29,8 +29,8 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body table-responsive p-0">
-                <table class="table table-hover">
-                    <tbody>
+                <table class="table table-hover table-sm">
+                    <tbody style="font-size: 14px;">
                         <tr>
                             <th style="width: 25%">Cliente</th>
                             <th style="width: 20%">N° Cheque</th>
