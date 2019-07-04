@@ -14,10 +14,10 @@
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-6 alert alert-success" role="alert">
-                                        <h3>DOLAR OFICIAL (BCRA) al: {{  cotizacion_oficial['d'] | formatDate}} / ${{  cotizacion_oficial['v'] }}</h3>
+                                        <h5>DOLAR OFICIAL (BCRA) al: {{  cotizacion_oficial['d'] | formatDate}} / ${{  cotizacion_oficial['v'] }}</h5>
                                     </div>
                                     <div v-if="!cotizacion_oficial['d']" class="col-6 alert alert-info" role="alert">
-                                        <h3>Consultando cotizacion...</h3>
+                                        <h5>Consultando cotizacion...</h5>
                                     </div>
                                     <!-- <div v-if="cotizacion_oficial['d']" class="col-3 alert alert-info" role="alert">
                                         <h3>Boton Refrescar</h3>

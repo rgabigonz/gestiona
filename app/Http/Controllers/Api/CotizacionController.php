@@ -22,7 +22,7 @@ class CotizacionController extends Controller
             'Connection'        => 'keep-alive'
         ];
 
-        $cotizacion = $client->request('GET', 'https://api.estadisticasbcra.com/usd_of', [
+        $cotizacion = $client->request('GET', 'https://api.estadisticasbcra.com/usd_of_minorista', [
             'headers' => $headers
         ])->getBody();
 

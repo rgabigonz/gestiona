@@ -16,7 +16,8 @@ class ConsultaChequesController extends Controller
         if(empty($sBuscar)) {
             $cheques = ReciboDetalle::join('recibos', 'recibos_detalles.recibo_id', '=', 'recibos.id')
             ->join('clientes', 'recibos.cliente_id', '=', 'clientes.id')
-            ->select('recibos_detalles.*', 'recibos_detalles.importe as importe_cheque', 'clientes.nombre as nombre_cliente')
+            ->select('recibos_detalles.*', 'recibos_detalles.importe as importe_cheque', 'clientes.nombre as nombre_cliente', 
+                     'recibos.referencia_talonario as referencia_talonario')
             ->where('recibos.estado', '=', 'CO')
             ->where('recibos_detalles.tipo_pago', '=', 'CH')
             ->orderBy('fecha_cobro_cheque', 'asc', 'lol')->paginate(15);
@@ -24,7 +25,8 @@ class ConsultaChequesController extends Controller
         else {
             $cheques = ReciboDetalle::join('recibos', 'recibos_detalles.recibo_id', '=', 'recibos.id')
             ->join('clientes', 'recibos.cliente_id', '=', 'clientes.id')
-            ->select('recibos_detalles.*', 'recibos_detalles.importe as importe_cheque', 'clientes.nombre as nombre_cliente')
+            ->select('recibos_detalles.*', 'recibos_detalles.importe as importe_cheque', 'clientes.nombre as nombre_cliente', 
+                     'recibos.referencia_talonario as referencia_talonario')
             ->where('recibos.estado', '=', 'CO')
             ->where('recibos_detalles.tipo_pago', '=', 'CH')
             ->where($sCriterio, 'like', '%' . $sBuscar . '%')

@@ -33,16 +33,18 @@
                     <tbody style="font-size: 14px;">
                         <tr>
                             <th style="width: 25%">Cliente</th>
-                            <th style="width: 20%">N° Cheque</th>
-                            <th style="width: 15%">Importe</th>
-                            <th style="width: 15%">Fecha Cobro</th>
+                            <th style="width: 12%">N° Recibo</th>
+                            <th style="width: 12%">N° Cheque</th>
+                            <th style="width: 13%">Importe</th>
+                            <th style="width: 13%">Fecha Cobro</th>
                             <th style="width: 15%">Estado</th>
                             <th style="width: 10%"></th>
                         </tr>
                         <tr v-for="cheque in cheques" :key="cheque.id">
                             <td>{{ cheque.nombre_cliente }}</td>
+                            <td>{{ cheque.referencia_talonario }}</td>
                             <td>{{ cheque.numero_cheque }}</td>
-                            <td>{{ cheque.importe }}</td>
+                            <td>${{ cheque.importe }}</td>
                             <td>{{ cheque.fecha_cobro_cheque | formatDate}}</td>
                             <td>
                                 <div v-if="cheque.estado_cheque == 'PE'">
