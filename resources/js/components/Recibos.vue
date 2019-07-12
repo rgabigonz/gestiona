@@ -149,7 +149,7 @@
         methods: {
             cambiarPagina(page, buscar, criterio){
                 this.pagination.current_page = page;
-                this.cargarClientes(page, buscar, criterio);
+                this.cargarRecibos(page, buscar, criterio);
             },
             cargarRecibos(page, buscar, criterio) {
                 let me = this;                

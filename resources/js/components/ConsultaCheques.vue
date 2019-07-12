@@ -218,7 +218,7 @@
         methods: {
             cambiarPagina(page, buscar, criterio){
                 this.pagination.current_page = page;
-                this.cargarCondicionesPago(page, buscar, criterio);
+                this.cargarCheques(page, buscar, criterio);
             },
             editarModal(cheque) {
                 this.modoEdicion = true;

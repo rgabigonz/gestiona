@@ -160,7 +160,7 @@
         methods: {
             cambiarPagina(page, buscar, criterio){
                 this.pagination.current_page = page;
-                this.cargarClientes(page, buscar, criterio);
+                this.cargarOrdenesCompra(page, buscar, criterio);
             },
             cargarOrdenesCompra(page, buscar, criterio) {
                 let me = this;                

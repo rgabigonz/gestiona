@@ -27,7 +27,7 @@ class ReciboController extends Controller
             ->join('sucursales', 'recibos.sucursal_id', '=', 'sucursales.id')
             ->select('recibos.*', 'clientes.nombre as nombre_cliente', 'sucursales.punto_venta as punto_venta')
             ->orderBy('created_at', 'asc')
-            ->paginate(15);//where('state', '=', 'A')
+            ->paginate(5);//where('state', '=', 'A')
         } 
         else {
             $recibos = Recibo::join('clientes', 'recibos.cliente_id', '=', 'clientes.id')
@@ -35,7 +35,7 @@ class ReciboController extends Controller
             ->select('recibos.*', 'clientes.nombre as nombre_cliente', 'sucursales.punto_venta as punto_venta')
             ->where($sCriterio, 'like', '%' . $sBuscar . '%')//where('state', '=', 'A')
             ->orderBy('created_at', 'asc')
-            ->paginate(15);
+            ->paginate(5);
         }
 
         return [
