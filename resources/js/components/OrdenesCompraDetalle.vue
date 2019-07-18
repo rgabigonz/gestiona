@@ -836,6 +836,7 @@
                             type: 'success',
                             title: 'Se genero la orden de compra correctamente!'
                         });
+                        this.$router.push('/ordenescompra');
                     })
                     .catch(() => {
                         this.$Progress.fail();
@@ -877,6 +878,7 @@
                         type: 'success',
                         title: 'Se actualizo la orden de compra correctamente!'
                     });
+                    this.$router.push('/ordenescompra');
                 })
                 .catch(() => {
                     this.$Progress.fail();

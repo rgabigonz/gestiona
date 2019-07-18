@@ -31,7 +31,7 @@
                 <div class="card-header border-light bg-secondary">Datos Recibo</div>
                 <div class="card-body">
                     <div class="row invoice-info">
-                        <div class="col-sm-6 invoice-col">
+                        <div class="col-sm-3 invoice-col">
                             <div class="form-group">
                                 <div class="input-group input-group-sm">
                                     <datepicker :bootstrap-styling="true" v-model="fecha_recibo" name="fecha_recibo" :language="es" 
@@ -43,15 +43,25 @@
                         </div>
                         <!-- /.col -->
 
-                    <div class="col-sm-6 invoice-col">
-                        <div class="form-group">
-                            <div class="input-group input-group-sm">
-                                <input v-model="referencia_talonario" type="text" name="referencia_talonario" placeholder="N° Recibo Talonario"
-                                    class="form-control form-control-sm">
+                        <div class="col-sm-3 invoice-col">
+                            <div class="form-group">
+                                <div class="input-group input-group-sm">
+                                    <input v-model="precio_dolar_manual" type="number" name="precio_dolar_manual" placeholder="Dolar" step=".1"
+                                        class="form-control form-control-sm">
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <!-- /.col -->                        
+                        <!-- /.col -->                        
+
+                        <div class="col-sm-6 invoice-col">
+                            <div class="form-group">
+                                <div class="input-group input-group-sm">
+                                    <input v-model="referencia_talonario" type="text" name="referencia_talonario" placeholder="N° Recibo Talonario"
+                                        class="form-control form-control-sm">
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.col -->
 
                     </div>
                 </div>
@@ -156,7 +166,7 @@
                                     <td class="invoice-col">
                                         <div class="form-group">
                                             <div class="input-group input-group-sm">
-                                                <input v-model="importe_item_recibo" type="number" name="importe_item_recibo"
+                                                <input v-model="importe_item_recibo" type="number" name="importe_item_recibo"  step=".1"
                                                     @keydown ="keyMonitor" class="form-control form-control-sm">
                                             </div>
                                         </div>
@@ -286,6 +296,7 @@
                 importe_item_recibo: 0,
                 observacion:'',
                 referencia_talonario: '',
+                precio_dolar_manual: 0,
                 recibo: {},
                 recibo_detalle: {}
             }
@@ -433,6 +444,7 @@
                         total_recibo: this.total,
                         obs: this.observacion,
                         referencia_talonario: this.referencia_talonario,
+                        precio_dolar_manual: this.precio_dolar_manual,
                         items: this.items})
                     .then(() => {
                         Fire.$emit('AfterAction');
@@ -440,6 +452,7 @@
                             type: 'success',
                             title: 'Se genero el recibo correctamente!'
                         });
+                        this.$router.push('/recibos');
                     })
                     .catch(() => {
                         this.$Progress.fail();
@@ -463,6 +476,7 @@
                             total_recibo: this.total,
                             obs: this.observacion,
                             referencia_talonario: this.referencia_talonario,
+                            precio_dolar_manual: this.precio_dolar_manual,
                             items: this.items})
                     .then(() => {
                         Fire.$emit('AfterAction');
@@ -470,6 +484,7 @@
                             type: 'success',
                             title: 'Se actualizo el recibo correctamente!'
                         });
+                        this.$router.push('/recibos');
                     })
                     .catch(() => {
                         this.$Progress.fail();
@@ -492,6 +507,7 @@
                     me.fecha_recibo = me.fecha_recibo.setDate(me.fecha_recibo.getDate() + 1);
 
                     me.referencia_talonario = me.recibo[0].referencia_talonario;
+                    me.precio_dolar_manual = me.recibo[0].precio_dolar_manual;
 
                     me.estado = me.recibo[0].estado;
 

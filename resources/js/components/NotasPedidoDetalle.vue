@@ -561,6 +561,7 @@
                             type: 'success',
                             title: 'Se genero el pedido correctamente!'
                         });
+                        this.$router.push('/notaspedido');
                     })
                     .catch(() => {
                         this.$Progress.fail();
@@ -596,6 +597,7 @@
                         type: 'success',
                         title: 'Se actualizo el pedido correctamente!'
                     });
+                    this.$router.push('/notaspedido');
                 })
                 .catch(() => {
                     this.$Progress.fail();
