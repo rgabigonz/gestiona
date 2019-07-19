@@ -281,6 +281,18 @@
                         <!-- /.col -->
                     </div>
                     <!-- /.row -->
+
+                    <!-- Observaciones row -->
+                    <div class="row">
+                        <div class="col col-md-12">
+                            <div class="form-group">
+                                <textarea v-model="observacion" type="text" name="descripcion" placeholder="Observacion"
+                                    class="form-control"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.row -->
+
                 </div>
               </div>
 
@@ -364,6 +376,7 @@
                 comision_venta_producto: 0,
                 numero_factura: '',
                 lugar_entrega: '',
+                observacion: '',
                 total_iva_21: 0,
                 total_iva_105: 0,                
                 nota_pedido: {},
@@ -550,6 +563,7 @@
                         fecha_nota_pedido: this.fecha_nota_pedido,
                         numero_factura: this.numero_factura,
                         lugar_entrega: this.lugar_entrega,
+                        obs: this.observacion,
                         total_pedido: this.total_conIVA,
                         total_pedido_siniva: this.total_sinIVA,
                         total_pedido_21: this.total_iva_21,
@@ -586,6 +600,7 @@
                     fecha_nota_pedido: this.fecha_nota_pedido,
                     numero_factura: this.numero_factura,
                     lugar_entrega: this.lugar_entrega,
+                    obs: this.observacion,
                     total_pedido: this.total_conIVA,
                     total_pedido_siniva: this.total_sinIVA,
                     total_pedido_21: this.total_iva_21,
@@ -626,6 +641,7 @@
                     me.fecha_nota_pedido = me.fecha_nota_pedido.setDate(me.fecha_nota_pedido.getDate() + 1);
                     me.numero_factura = me.nota_pedido.numero_factura;
                     me.lugar_entrega = me.nota_pedido.lugar_entrega;
+                    me.observacion = me.nota_pedido.obs;
                     me.estado = me.nota_pedido.estado;
 
                     //Datos Orden Compra

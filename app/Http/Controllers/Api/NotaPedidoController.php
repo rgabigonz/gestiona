@@ -72,6 +72,7 @@ class NotaPedidoController extends Controller
         $nota_pedido->user_id = $user->id;
         $nota_pedido->numero_factura = $request->numero_factura;
         $nota_pedido->lugar_entrega = $request->lugar_entrega;
+        $nota_pedido->obs = $request->obs;
         $nota_pedido->fecha = $fecha_pedido->format('Y-m-d');
 
         if (!empty($request->codigo_vendedor_venta))
@@ -117,6 +118,7 @@ class NotaPedidoController extends Controller
         $NotaPedido = NotaPedido::findOrFail($id);
         $NotaPedido->numero_factura = $request->numero_factura;
         $NotaPedido->lugar_entrega = $request->lugar_entrega;
+        $NotaPedido->obs = $request->obs;
 
         if (!empty($request->codigo_vendedor_venta))
             $NotaPedido->vendedor_venta_id = $request->codigo_vendedor_venta;
