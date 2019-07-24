@@ -203,6 +203,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <p>Cheques</p>
                 </router-link>
               </li>
+              <li class="nav-item">
+                <router-link to="/ctactecliente" class="nav-link">
+                  <i class="fas fa-hand-holding-usd"></i>
+                  <p>Cta Cte Clientes</p>
+                </router-link>
+              </li>              
             </ul>
           </li>
           <li class="nav-item">

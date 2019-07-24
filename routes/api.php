@@ -161,4 +161,7 @@ Route::middleware('auth:api')->group( function () {
 
     //Rutas Cotizaciones
     Route::get('/cotizacion/devuelveCotizacion/','Api\CotizacionController@devuelveCotizacion');
+
+    //Rutas Cta Cte
+    Route::get('/ctactecliente/devuelveCtaCte/','Api\CtaCteController@devuelveCtaCte');    
 });
