@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Client;
+use Carbon\Carbon;
 
 class CotizacionController extends Controller
 {
@@ -30,21 +31,29 @@ class CotizacionController extends Controller
 
         $cantidad_items = count($cotizacion_oficial);
 
+        $anio_actual = \Carbon\Carbon::now();
+
         // Sino existe la cotizacion la genero
-        $fecha_del_dia_menos_1 = $cotizacion_oficial[$cantidad_items -1]['d'];
+        for($i = 0; $i < $cantidad_items; $i++)
+        {
+            $fecha_del_dia = $cotizacion_oficial[$i]['d'];
+            $fecha_del_dia_ = new Carbon($fecha_del_dia);
 
-        $cotizacion_del_dia_1 = Cotizacion::whereDate('fecha', '=', $fecha_del_dia_menos_1)->get();
+            if ($fecha_del_dia_->format("Y") == $anio_actual->format("Y")) {
+                $cotizacion_del_dia = Cotizacion::whereDate('fecha', '=', $fecha_del_dia)->get();
 
-        if (count($cotizacion_del_dia_1) <= 0) {
-            Cotizacion::create([
-                'fecha' => $cotizacion_oficial[$cantidad_items -1]['d'],
-                'precio_dolar' => $cotizacion_oficial[$cantidad_items -1]['v']
-            ]);
+                if (count($cotizacion_del_dia) <= 0) {
+                    Cotizacion::create([
+                        'fecha' => $cotizacion_oficial[$i]['d'],
+                        'precio_dolar' => $cotizacion_oficial[$i]['v']
+                    ]);
+                }
+            }
         }
         // Sino existe la cotizacion la genero
-                
+
         return [
-            'cotizacion_oficial' => $cotizacion_oficial[$cantidad_items -1]
+            'cotizacion_oficial' => $cotizacion_oficial[$cantidad_items - 1]
         ];
     } 
 }

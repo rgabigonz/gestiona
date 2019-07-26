@@ -439,7 +439,8 @@
                 <button v-if="!modoEdicion" type="button" class="btn btn-success float-right" @click="creaOrdenCompra()">
                     <i class="fa fa-save fa-fw"></i> Guardar
                 </button>
-                <button v-if="modoEdicion && estado == 'PE'" type="button" class="btn btn-success float-right" @click="actualizaOrdenCompra()">
+                <!-- <button v-if="modoEdicion && estado == 'PE'" type="button" class="btn btn-success float-right" @click="actualizaOrdenCompra()"> -->
+                <button v-if="modoEdicion" type="button" class="btn btn-success float-right" @click="actualizaOrdenCompra()">
                     <i class="fa fa-save fa-fw"></i> Modificar
                 </button>
                 <router-link to="/ordenescompra" class="btn btn-primary float-right" style="margin-right: 5px;">
