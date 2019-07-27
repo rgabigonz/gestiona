@@ -113,7 +113,8 @@
                                 <td>{{ cta_cte_recibo.fecha | formatDate }}</td>
                                 <td>${{ cta_cte_recibo.total }}</td>
                                 <td>${{ cta_cte_recibo.precio_dolar_manual }}</td>
-                                <td>${{ (cta_cte_recibo.total / cta_cte_recibo.precio_dolar_manual) | currency }}</td>
+                                <td v-if="cta_cte_recibo.precio_dolar_manual && cta_cte_recibo.precio_dolar_manual > 0" >${{ (cta_cte_recibo.total / cta_cte_recibo.precio_dolar_manual) | currency }}</td>
+                                <td v-else>$0</td>
                             </tr>
                             <tr>
                                 <td></td>
@@ -209,10 +210,15 @@
                 var lTotalDolares = 0;
 
                 for (var i = 0; i < this.cta_cte_recibos.length; i++) {
-                    lTotalDolares += parseFloat(this.cta_cte_recibos[i].total) / parseFloat(this.cta_cte_recibos[i].precio_dolar_manual);
+                    if (this.cta_cte_recibos[i].precio_dolar_manual && this.cta_cte_recibos[i].precio_dolar_manual > 0) {
+                        lTotalDolares += parseFloat(this.cta_cte_recibos[i].total) / parseFloat(this.cta_cte_recibos[i].precio_dolar_manual);
+                    }
                 }  
                 
-                return parseFloat(lTotalDolares);
+                if (lTotalDolares)
+                    return parseFloat(lTotalDolares);
+                else    
+                    return 0;
             },
             total_recibos() {
                 var lTotal = 0;
