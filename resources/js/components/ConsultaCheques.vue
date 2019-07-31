@@ -48,19 +48,19 @@
                             <td>{{ cheque.fecha_cobro_cheque | formatDate}}</td>
                             <td>
                                 <div v-if="cheque.estado_cheque == 'PE'">
-                                    <span class="badge badge-danger">Pendiente de Cobro</span>
+                                    <span class="badge badge-info">En cartera</span>
                                 </div>
                                 <div v-else>
-                                    <span class="badge badge-success">Cobrado</span>
+                                    <span class="badge badge-success">Entregado</span>
                                 </div>
                             </td>                            
                             <td>
                                 <a href="#" @click="editarModal(cheque)">
                                     <i class="fa fa-edit blue"></i>
                                 </a>
-                                <a href="#" v-if="cheque.estado_cheque == 'PE'" @click="cobrarCheque(cheque.id)">
+                                <!-- <a href="#" v-if="cheque.estado_cheque == 'PE'" @click="cobrarCheque(cheque.id)">
                                     <i class="fas fa-dollar-sign green"></i>
-                                </a>
+                                </a> -->
                             </td>
                         </tr>
                     </tbody>
@@ -248,23 +248,40 @@
                     }
                 });
             },
+            validaDestinatario() {
+                var resultado = false;
+
+                if (this.form.proveedor_id) {
+                    resultado = true;
+                }
+
+                return resultado;
+            },
             actualizaCheque() {
                 this.$Progress.start();
                 
-                this.form.put('api/cheque/cobrarCheque/'+this.form.id)
-                .then(() => {
-                    Fire.$emit('AfterAction');
-                    this.cerrarModal();
-                    toast({
-                        type: 'success',
-                        title: 'Se actualizaron los datos correctamente!'
+                if (this.validaDestinatario()) {                
+                    this.form.put('api/cheque/cobrarCheque/'+this.form.id)
+                    .then(() => {
+                        Fire.$emit('AfterAction');
+                        this.cerrarModal();
+                        toast({
+                            type: 'success',
+                            title: 'Se actualizaron los datos correctamente!'
+                        });
+                    })
+                    .catch(() => {
+                        this.$Progress.fail();
                     });
-                    this.$Progress.finish();
-                })
-                .catch(() => {
-                    this.$Progress.fail();
-                });
-            },
+                } else {
+                    toast({
+                        type: 'error',
+                        title: 'Debe ingresar un destinatario!'
+                    });                    
+                }
+
+                this.$Progress.finish();
+            }/*,
             cobrarCheque(id) {
                 swal({
                     title: 'Esta seguro?',
@@ -273,15 +290,15 @@
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: 'Si, COBRADO',
+                    confirmButtonText: 'Si, ENTREGADO',
                     cancelButtonText: 'Cancelar'
                 }).then((result) => {
                     if (result.value) {
                         this.form.put('api/cheque/cobrarCheque/'+id)
                         .then(() => {
                             swal(
-                                'COBRADO!',
-                                'El cheque a sido Cobrado.',
+                                'ENTREGADO!',
+                                'El cheque a sido Entregado.',
                                 'success'
                             );
                             Fire.$emit('AfterAction');
@@ -291,7 +308,7 @@
                 .catch(() => {
                     swal('Fallo!', 'Hubo un error al procesar la transaccion.', 'warning');                    
                 });
-            },
+            }*/,
             cargaProveedores() {
                 let me = this;                
                 var url = 'api/proveedorsimple/cargaProveedores';

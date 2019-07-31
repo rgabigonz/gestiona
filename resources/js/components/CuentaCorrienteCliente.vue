@@ -260,7 +260,7 @@
                 if (!lTotalRecibo)
                     lTotalRecibo = 0;
 
-                return parseFloat(lTotalRecibo - lTotalNV);
+                return parseFloat(lTotalNV - lTotalRecibo);
             } 
         },
         created() {
