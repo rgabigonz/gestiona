@@ -122,6 +122,17 @@ Route::middleware('auth:api')->group( function () {
     Route::put('/proveedor/desactivar/{proveedor}', 'Api\ProveedorController@desactivar');
     Route::put('/proveedor/activar/{proveedor}', 'Api\ProveedorController@activar');
 
+    // Rutas Proveedores - Simple
+    Route::get('/proveedorsimple/cargaProveedores', 'Api\ProveedorSimpleController@cargaProveedores');
+    Route::get('/proveedorsimple/devuelveDatosProveedor/{proveedor}', 'Api\ProveedorSimpleController@devuelveDatosProveedor');
+
+    Route::apiResources([
+        'proveedorsimple' => 'Api\ProveedorSimpleController'
+    ]);
+
+    Route::put('/proveedorsimple/desactivar/{proveedor}', 'Api\ProveedorSimpleController@desactivar');
+    Route::put('/proveedorsimple/activar/{proveedor}', 'Api\ProveedorSimpleController@activar');
+
     //Rutas Notas Pedidos
     Route::get('/notaPedido/NotaPedidoPDF/{nota_pedido}','Api\NotaPedidoController@NotaPedidoPDF');
     Route::get('/notaPedido/devuelveNotaPedido/{nota_pedido}', 'Api\NotaPedidoController@devuelveNotaPedido');

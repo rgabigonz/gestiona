@@ -311,7 +311,7 @@
                     this.fCerrar_Modal();
                     toast({
                         type: 'success',
-                        title: 'Se creo el producto correctamente!'
+                        title: 'Se creo el cliente correctamente!'
                     });
 
                 })

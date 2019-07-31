@@ -294,7 +294,7 @@
             },
             cargaProveedores() {
                 let me = this;                
-                var url = 'api/proveedor/cargaProveedores';
+                var url = 'api/proveedorsimple/cargaProveedores';
                 axios.get(url).then(data => {
                     var response = data.data;
                     me.lproveedores = response.proveedores;

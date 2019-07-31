@@ -13,7 +13,6 @@
                         <div class="col col-md-4">
                             <select class="form-control" v-model="sCriterio">
                                 <option value="nombre">Nombre</option>
-                                <option value="numero_documento">Documento</option>
                             </select>
                         </div>
                         <div class="col col-md-8">
@@ -24,7 +23,7 @@
             </div>
             <div class="card border-info mb-3">
               <div class="card-header border-light">
-                <h3 class="card-title">Lista de Proveedores</h3>
+                <h3 class="card-title">Lista de Proveedores (2)</h3>
                 <div class="card-tools">
                     <button class="btn btn-success" @click="nuevoModal()"><i class="fas fa-plus fa-fw"></i></button>
                 </div>
@@ -35,15 +34,13 @@
                     <tbody>
                         <tr>
                             <th style="width: 8%">#</th>
-                            <th style="width: 30%">Nombre</th>
-                            <th style="width: 45%">Direccion</th>
+                            <th style="width: 75%">Nombre</th>
                             <th style="width: 8%">Estado</th>
                             <th style="width: 9%"></th>
                         </tr>
                         <tr v-for="proveedor in proveedores" :key="proveedor.id">
                             <td>{{ proveedor.id }}</td>
                             <td>{{ proveedor.nombre }}</td>
-                            <td>{{ proveedor.direccion }}</td>
                             <td>
                                 <div v-if="proveedor.estado == 'A'">
                                     <span class="badge badge-success">Activo</span>
@@ -101,70 +98,13 @@
                     <form @submit.prevent="modoEdicion ? actualizaProveedor() : creaProveedor()">
                         <div class="modal-body">
                             <div class="form-group">
-                                <div class="input-group mb-3">
+                                <div class="input-group mb-12">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fa fa-address-book"></i></span>
                                     </div>                                
                                     <input v-model="form.nombre" type="text" name="nombre" placeholder="Nombre"
                                         class="form-control" :class="{ 'is-invalid': form.errors.has('nombre') }">
                                     <has-error :form="form" field="nombre"></has-error>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text"><i class="fa fa-map-marker-alt"></i></span>
-                                    </div>                                
-                                    <textarea v-model="form.direccion" type="text" name="direccion" placeholder="Direccion"
-                                        class="form-control" :class="{ 'is-invalid': form.errors.has('direccion') }"></textarea>
-                                    <has-error :form="form" field="direccion"></has-error>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text"><i class="fa fa-envelope"></i></span>
-                                    </div>                                
-                                    <input v-model="form.correo_electronico" type="email" name="correo_electronico" placeholder="Correo electronico"
-                                        class="form-control" :class="{ 'is-invalid': form.errors.has('correo_electronico') }">
-                                    <has-error :form="form" field="correo_electronico"></has-error>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text"><i class="fa fa-phone"></i></span>
-                                    </div>                                
-                                    <input v-model="form.telefono" type="text" name="telefono" placeholder="Telefono"
-                                        class="form-control" :class="{ 'is-invalid': form.errors.has('telefono') }">
-                                    <has-error :form="form" field="telefono"></has-error>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col col-md-6">
-                                    <div class="form-group">
-                                        <div class="input-group mb-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="fa fa-list-ol"></i></span>
-                                            </div>
-                                            <select v-model="form.tipo_documento" name="tipo_documento" class="form-control" :class="{ 'is-invalid': form.errors.has('tipo_documento') }">
-                                                <option v-for="tipoDocumento in tiposDocumento" :key="tipoDocumento.id" :value="tipoDocumento.id">{{ tipoDocumento.descripcion }}</option>
-                                            </select>
-                                            <has-error :form="form" field="tipo_documento"></has-error>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col col-md-6">
-                                  <div class="form-group">
-                                        <div class="input-group mb-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="fa fa-address-card"></i></span>
-                                            </div>
-                                            <input v-model="form.numero_documento" name="numero_documento" placeholder="Numero documento"
-                                                class="form-control" :class="{ 'is-invalid': form.errors.has('numero_documento') }">
-                                            <has-error :form="form" field="numero_documento"></has-error>
-                                        </div>
-                                  </div>
                                 </div>
                             </div>
                         </div>
@@ -186,15 +126,9 @@
             return {
                 modoEdicion: false,
                 proveedores: {},
-                tiposDocumento: {},
                 form: new Form({
                     id: 0,
-                    nombre: '',
-                    direccion: '',
-                    correo_electronico: '',
-                    telefono: '',
-                    tipo_documento: 1,
-                    numero_documento: ''
+                    nombre: ''
                 }),
                 pagination: {
                     'total': 0,
@@ -243,13 +177,11 @@
                 this.cargarProveedores(page, buscar, criterio);
             },
             nuevoModal() {
-                this.cargarTD();
                 this.modoEdicion = false;
                 this.form.reset();
                 $('#ventanaModal').modal('show');
             },
             editarModal(proveedor) {
-                this.cargarTD();
                 this.modoEdicion = true;
                 this.form.reset();
                 $('#ventanaModal').modal('show');
@@ -262,7 +194,7 @@
             },
             cargarProveedores(page, buscar, criterio) {
                 let me = this;                
-                var url = 'api/proveedor?page=' + page + '&buscar=' + buscar + '&criterio=' + criterio;
+                var url = 'api/proveedorsimple?page=' + page + '&buscar=' + buscar + '&criterio=' + criterio;
                 axios.get(url).then(data => {
                     var response = data.data;
                     me.proveedores = response.proveedores.data;
@@ -273,22 +205,10 @@
                     }
                 });
             },
-            cargarTD() {
-                let me = this;                
-                var url = 'api/tipodocumento/cargaTD';
-                axios.get(url).then(data => {
-                    var response = data.data;
-                    me.tiposDocumento = response.tiposDocumento;
-                }).catch((error) => {
-                    if (error.response.status == 401) {
-                        swal('Error!', 'La sesion ha caducado.', 'warning');
-                    }
-                });
-            },
             actualizaProveedor() {
                 this.$Progress.start();
                 
-                this.form.put('api/proveedor/'+this.form.id)
+                this.form.put('api/proveedorsimple/'+this.form.id)
                 .then(() => {
                     Fire.$emit('AfterAction');
                     this.cerrarModal();
@@ -305,7 +225,7 @@
             creaProveedor() {
                 this.$Progress.start();
                 
-                this.form.post('api/proveedor')
+                this.form.post('api/proveedorsimple')
                 .then(() => {
                     Fire.$emit('AfterAction');
                     this.cerrarModal();
@@ -333,7 +253,7 @@
                     cancelButtonText: 'Cancelar'
                 }).then((result) => {
                     if (result.value) {
-                        this.form.put('api/proveedor/activar/'+id)
+                        this.form.put('api/proveedorsimple/activar/'+id)
                         .then(() => {
                             swal(
                                 'ACTIVADO!',
@@ -360,7 +280,7 @@
                     cancelButtonText: 'Cancelar'
                 }).then((result) => {
                     if (result.value) {
-                        this.form.put('api/proveedor/desactivar/'+id)
+                        this.form.put('api/proveedorsimple/desactivar/'+id)
                         .then(() => {
                             swal(
                                 'DESACTIVADO!',

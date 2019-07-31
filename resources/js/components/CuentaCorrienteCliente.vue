@@ -72,7 +72,6 @@
                                 <th style="width:60%">Nota de Venta Cliente</th>                                
                                 <th style="width:20%">Fecha</th>
                                 <th style="width:20%">Importe</th>
-                                <!-- <th style="width:10%"></th> -->
                             </tr>
 
                         </thead>
@@ -104,7 +103,6 @@
                                 <th style="width:20%">Importe($)</th>
                                 <th style="width:20%">Dolar</th>
                                 <th style="width:20%">Importe(U$S)</th>
-                                <!-- <th style="width:10%"></th>                                 -->
                             </tr>
                         </thead>
                         <tbody style="font-size: 12px">
@@ -123,6 +121,13 @@
                                 <td></td>
                                 <td><b>Total: ${{ total_recibosDolares | currency }}</b></td>
                             </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td><h4><b>Saldo: ${{ saldo_ctacte | currency }}</b></h4></td>
+                            </tr>                            
                         </tbody>
                     </table>
                 </div>
@@ -237,7 +242,26 @@
                 }  
                 
                 return parseFloat(lTotal);
-            }                       
+            },
+            saldo_ctacte() {
+                var lTotalNV = 0;
+                var lTotalRecibo = 0;
+
+                for (var i = 0; i < this.cta_cte_notas_venta.length; i++) {
+                    lTotalNV += parseFloat(this.cta_cte_notas_venta[i].total);
+                }  
+
+                for (var i = 0; i < this.cta_cte_recibos.length; i++) {
+                    if (this.cta_cte_recibos[i].precio_dolar_manual && this.cta_cte_recibos[i].precio_dolar_manual > 0) {
+                        lTotalRecibo += parseFloat(this.cta_cte_recibos[i].total) / parseFloat(this.cta_cte_recibos[i].precio_dolar_manual);
+                    }
+                }
+
+                if (!lTotalRecibo)
+                    lTotalRecibo = 0;
+
+                return parseFloat(lTotalRecibo - lTotalNV);
+            } 
         },
         created() {
             this.cargaClientes();

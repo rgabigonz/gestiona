@@ -114,7 +114,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <i class="fas fa-user-alt nav-icon"></i>
                   <p>Proveedores</p>
                 </router-link>
-              </li>    
+              </li>
+              <li class="nav-item">
+                <router-link to="/proveedoressimple" class="nav-link">
+                  <i class="fas fa-user-alt nav-icon"></i>
+                  <p>Proveedores - 2</p>
+                </router-link>
+              </li> 
+              <hr>                
               <li class="nav-item">
                 <router-link to="/formaspago" class="nav-link">
                   <i class="fas fa-dollar-sign nav-icon"></i>

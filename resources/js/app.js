@@ -45,6 +45,7 @@ let routes = [
     { path: '/clientes', name: 'clientes', component: require('./components/Clientes.vue') },
     { path: '/vendedores', name: 'vendedores', component: require('./components/Vendedores.vue') },
     { path: '/proveedores', name: 'proveedores', component: require('./components/Proveedores.vue') },    
+    { path: '/proveedoressimple', name: 'proveedoressimple', component: require('./components/ProveedoresSimple.vue') },    
     { path: '/dashboard', name: 'dashboard', component: require('./components/Dashboard.vue') },
     { path: '/notaspedido', name: 'notaspedido', component: require('./components/NotasPedido.vue') },
     { path: '/notaspedidodetalle/:notaspedidoId', name: 'notaspedidodetalle', component: require('./components/NotasPedidoDetalle.vue') },
