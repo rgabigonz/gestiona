@@ -36,7 +36,8 @@
                     <tbody style="font-size: 14px;">
                         <tr>
                             <th style="width: 10%">#</th>
-                            <th style="width: 50%">Cliente</th>
+                            <th style="width: 40%">Cliente</th>
+                            <th style="width: 10%">N° Talonario</th>
                             <th style="width: 15%">Fecha</th>
                             <th style="width: 15%">Estado</th>
                             <th style="width: 10%"></th>
@@ -44,6 +45,7 @@
                         <tr v-for="recibo in recibos" :key="recibo.id">
                             <td>{{ recibo.punto_venta }} - {{ recibo.numero_recibo }}</td>
                             <td>{{ recibo.nombre_cliente }}</td>
+                            <td>{{ recibo.referencia_talonario }}</td>
                             <td>{{ recibo.fecha | formatDate }}</td>
                             <td>
                                 <div v-if="recibo.estado == 'PE'">

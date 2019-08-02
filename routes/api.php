@@ -174,5 +174,5 @@ Route::middleware('auth:api')->group( function () {
     Route::get('/cotizacion/devuelveCotizacion/','Api\CotizacionController@devuelveCotizacion');
 
     //Rutas Cta Cte
-    Route::get('/ctactecliente/devuelveCtaCte/','Api\CtaCteController@devuelveCtaCte');    
+    Route::get('/ctactecliente/devuelveCtaCte/','Api\CtaCteController@devuelveCtaCte');
 });

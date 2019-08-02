@@ -32,7 +32,7 @@
                         </div>
                         <!-- /.col -->
 
-                        <div class="col-sm-3 invoice-col">
+                        <!-- <div class="col-sm-3 invoice-col">
                             <label class="control-label">Fecha Desde</label>
                             <div class="form-group">
                                 <div class="input-group input-group-sm">
@@ -41,10 +41,10 @@
                                     </datepicker>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         <!-- /.col -->
 
-                        <div class="col-sm-3 invoice-col">
+                        <!-- <div class="col-sm-3 invoice-col">
                             <label class="control-label">Fecha Hasta</label>
                             <div class="form-group">
                                 <div class="input-group input-group-sm">
@@ -53,7 +53,7 @@
                                     </datepicker>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         <!-- /.col -->
 
                     </div>
@@ -62,10 +62,89 @@
               </div>
               <!-- /.row -->
 
+              <!-- Clientes row -->
+              <div v-for="cta_cte_cliente in cta_cte_clientes" :key="cta_cte_cliente.id" class="card">
+                <div class="card-header border-light bg-primary"><b>{{ cta_cte_cliente.nombre }}</b></div>
+                <div class="card-body">
+
+                    <!-- Debitos row -->
+                    <div class="card">
+                        <div class="card-header border-light bg-danger">Cuenta Corriente - Deudas</div>
+                        <div class="card-body">
+                            <table class="table table-striped table-sm">
+                                <thead>
+                                    <tr>
+                                        <th style="width:60%">Nota de Venta Cliente</th>                                
+                                        <th style="width:20%">Fecha</th>
+                                        <th style="width:20%">Importe</th>
+                                    </tr>
+
+                                </thead>
+                                <tbody style="font-size: 12px">
+                                    <tr v-for="cta_cte_nota_venta in filtroNV(cta_cte_cliente.id)" :key="cta_cte_nota_venta.id">
+                                        <td>{{ cta_cte_nota_venta.anio_id }} - {{ cta_cte_nota_venta.anio_actual }}</td>
+                                        <td>{{ cta_cte_nota_venta.fecha | formatDate }}</td>
+                                        <td>${{ cta_cte_nota_venta.total }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td><b>Total: ${{ total_nv(cta_cte_cliente.id) | currency }}</b></td>
+                                    </tr>                            
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Creditos row -->
+                    <div class="card">
+                        <div class="card-header border-light bg-info">Cuenta Corriente - Pagos</div>
+                        <div class="card-body">
+                            <table class="table table-striped table-sm">
+                                <thead>
+                                    <tr>
+                                        <th style="width:20%">Recibos Cliente</th>
+                                        <th style="width:20%">Fecha</th>
+                                        <th style="width:20%">Importe($)</th>
+                                        <th style="width:20%">Dolar</th>
+                                        <th style="width:20%">Importe(U$S)</th>
+                                    </tr>
+                                </thead>
+                                <tbody style="font-size: 12px">
+                                    <tr v-for="cta_cte_recibo in filtroRec(cta_cte_cliente.id)" :key="cta_cte_recibo.id">
+                                        <td>{{ cta_cte_recibo.punto_venta }} - {{ cta_cte_recibo.numero_recibo }}</td>
+                                        <td>{{ cta_cte_recibo.fecha | formatDate }}</td>
+                                        <td>${{ cta_cte_recibo.total }}</td>
+                                        <td>${{ cta_cte_recibo.precio_dolar_manual }}</td>
+                                        <td v-if="cta_cte_recibo.precio_dolar_manual && cta_cte_recibo.precio_dolar_manual > 0" >${{ (cta_cte_recibo.total / cta_cte_recibo.precio_dolar_manual) | currency }}</td>
+                                        <td v-else>$0</td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td><b>Total: ${{ total_recibos(cta_cte_cliente.id) | currency }}</b></td>
+                                        <td></td>
+                                        <td><b>Total: ${{ total_recibosDolares(cta_cte_cliente.id) | currency }}</b></td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><h4><b>Saldo: ${{ saldo_ctacte(cta_cte_cliente.id) | currency }}</b></h4></td>
+                                    </tr>                            
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>  
+
+                </div>
+              </div>
+
               <!-- Debitos row -->
-              <div class="card">
+              <!-- <div class="card">
                 <div class="card-header border-light bg-danger">Cuenta Corriente - Deudas</div>
-                <div class="card-body">              
+                <div class="card-body">
                     <table class="table table-striped table-sm">
                         <thead>
                             <tr>
@@ -89,12 +168,12 @@
                         </tbody>
                     </table>
                 </div>
-              </div>
+              </div> -->
 
               <!-- Creditos row -->
-              <div class="card">
+              <!-- <div class="card">
                 <div class="card-header border-light bg-info">Cuenta Corriente - Pagos</div>
-                <div class="card-body">              
+                <div class="card-body">
                     <table class="table table-striped table-sm">
                         <thead>
                             <tr>
@@ -131,7 +210,7 @@
                         </tbody>
                     </table>
                 </div>
-              </div>              
+              </div>               -->
 
             </div>
             <!-- /.invoice -->
@@ -145,7 +224,7 @@
         <!-- this row will not appear when printing -->
         <div class="row no-print">
             <div class="col-12">
-                <button type="button" class="btn btn-warning float-right" @click="consultarCtaCte()">
+                <button type="button" class="btn btn-warning float-right" @click="consultarCtaCte(codigo_cliente)">
                     <i class="fa fa-save fa-fw"></i> Consultar
                 </button>
             </div>
@@ -176,20 +255,32 @@
                 cliente: {},
                 codigo_cliente: 0,
                 cta_cte_notas_venta: {},
-                cta_cte_recibos: {}
+                cta_cte_recibos: {},
+                cta_cte_clientes: {}
             }
         },
         methods: {
+            filtroNV(cCliente) {
+                return this.cta_cte_notas_venta.filter(function(nv) {
+                    return nv.cliente_id == cCliente;
+                })
+            },
+            filtroRec(cCliente) {
+                return this.cta_cte_recibos.filter(function(rec) {
+                    return rec.cliente_id === cCliente;
+                })
+            },            
             consultarCtaCte() {
                 let me = this;         
-                var lfechaD = moment(this.fecha_cuenta_corriente_desde).format('YYYY-MM-DD');
-                var lfechaH = moment(this.fecha_cuenta_corriente_hasta).format('YYYY-MM-DD');
+                //var lfechaD = moment(this.fecha_cuenta_corriente_desde).format('YYYY-MM-DD');
+                //var lfechaH = moment(this.fecha_cuenta_corriente_hasta).format('YYYY-MM-DD');
 
-                var url = 'api/ctactecliente/devuelveCtaCte?cliente=' + this.codigo_cliente + '&fechaD=' + lfechaD + '&fechaH=' + lfechaH
+                var url = 'api/ctactecliente/devuelveCtaCte?cliente=' + this.codigo_cliente// + '&fechaD=' + lfechaD + '&fechaH=' + lfechaH
                 axios.get(url).then(data => {
                     var response = data.data;
                     me.cta_cte_recibos = response.ctacte_recibos;
                     me.cta_cte_notas_venta = response.ctacte_notas_venta;
+                    me.cta_cte_clientes = response.ctacte_clientes;
                 }).catch((error) => {
                     if (error.response.status == 401) {
                         swal('Error!', 'La sesion ha caducado.', 'warning');
@@ -208,15 +299,25 @@
                         swal('Error!', 'La sesion ha caducado.', 'warning');
                     }
                 });
-            }
-        },
-        computed: {
-            total_recibosDolares() {
+            },
+            total_recibos(cCliente) {
+                var lTotal = 0;
+
+                for (var i = 0; i < this.cta_cte_recibos.length; i++) {
+                    if(this.cta_cte_recibos[i].cliente_id == cCliente)
+                        lTotal += parseFloat(this.cta_cte_recibos[i].total);
+                }  
+                
+                return parseFloat(lTotal);
+            },
+            total_recibosDolares(cCliente) {
                 var lTotalDolares = 0;
 
                 for (var i = 0; i < this.cta_cte_recibos.length; i++) {
-                    if (this.cta_cte_recibos[i].precio_dolar_manual && this.cta_cte_recibos[i].precio_dolar_manual > 0) {
-                        lTotalDolares += parseFloat(this.cta_cte_recibos[i].total) / parseFloat(this.cta_cte_recibos[i].precio_dolar_manual);
+                    if(this.cta_cte_recibos[i].cliente_id == cCliente) {
+                        if (this.cta_cte_recibos[i].precio_dolar_manual && this.cta_cte_recibos[i].precio_dolar_manual > 0) {
+                            lTotalDolares += parseFloat(this.cta_cte_recibos[i].total) / parseFloat(this.cta_cte_recibos[i].precio_dolar_manual);
+                        }
                     }
                 }  
                 
@@ -225,35 +326,20 @@
                 else    
                     return 0;
             },
-            total_recibos() {
-                var lTotal = 0;
-
-                for (var i = 0; i < this.cta_cte_recibos.length; i++) {
-                    lTotal += parseFloat(this.cta_cte_recibos[i].total);
-                }  
-                
-                return parseFloat(lTotal);
-            },
-            total_nv() {
-                var lTotal = 0;
-
-                for (var i = 0; i < this.cta_cte_notas_venta.length; i++) {
-                    lTotal += parseFloat(this.cta_cte_notas_venta[i].total);
-                }  
-                
-                return parseFloat(lTotal);
-            },
-            saldo_ctacte() {
+            saldo_ctacte(cCliente) {
                 var lTotalNV = 0;
                 var lTotalRecibo = 0;
 
                 for (var i = 0; i < this.cta_cte_notas_venta.length; i++) {
-                    lTotalNV += parseFloat(this.cta_cte_notas_venta[i].total);
+                    if(this.cta_cte_notas_venta[i].cliente_id == cCliente) 
+                        lTotalNV += parseFloat(this.cta_cte_notas_venta[i].total);
                 }  
 
                 for (var i = 0; i < this.cta_cte_recibos.length; i++) {
-                    if (this.cta_cte_recibos[i].precio_dolar_manual && this.cta_cte_recibos[i].precio_dolar_manual > 0) {
-                        lTotalRecibo += parseFloat(this.cta_cte_recibos[i].total) / parseFloat(this.cta_cte_recibos[i].precio_dolar_manual);
+                    if(this.cta_cte_recibos[i].cliente_id == cCliente) {
+                        if (this.cta_cte_recibos[i].precio_dolar_manual && this.cta_cte_recibos[i].precio_dolar_manual > 0) {
+                            lTotalRecibo += parseFloat(this.cta_cte_recibos[i].total) / parseFloat(this.cta_cte_recibos[i].precio_dolar_manual);
+                        }
                     }
                 }
 
@@ -261,10 +347,21 @@
                     lTotalRecibo = 0;
 
                 return parseFloat(lTotalNV - lTotalRecibo);
-            } 
+            },
+            total_nv(cCliente) {
+                var lTotal = 0;
+
+                for (var i = 0; i < this.cta_cte_notas_venta.length; i++) {
+                    if(this.cta_cte_notas_venta[i].cliente_id == cCliente) 
+                        lTotal += parseFloat(this.cta_cte_notas_venta[i].total);
+                }  
+                
+                return parseFloat(lTotal);
+            }            
         },
         created() {
             this.cargaClientes();
+            this.consultarCtaCte();
         }
     }
 </script>
