@@ -23,7 +23,7 @@
                             <label class="control-label">Cliente</label>
                             <div class="form-group">
                                 <div class="input-group input-group-sm">
-                                    <select class="form-control" v-model="codigo_cliente">
+                                    <select class="form-control" v-model="codigo_cliente" @change="consultarCtaCte(codigo_cliente)">
                                         <option value=0>Cliente...</option>
                                         <option v-for="lcliente in lclientes" :key="lcliente.id" :value="lcliente.id">{{ lcliente.nombre }}</option>
                                     </select>
@@ -68,7 +68,7 @@
                 <div class="card-body">
 
                     <!-- Debitos row -->
-                    <div class="card">
+                    <div class="card" v-if="codigo_cliente > 0">
                         <div class="card-header border-light bg-danger">Cuenta Corriente - Deudas</div>
                         <div class="card-body">
                             <table class="table table-striped table-sm">
@@ -78,7 +78,6 @@
                                         <th style="width:20%">Fecha</th>
                                         <th style="width:20%">Importe</th>
                                     </tr>
-
                                 </thead>
                                 <tbody style="font-size: 12px">
                                     <tr v-for="cta_cte_nota_venta in filtroNV(cta_cte_cliente.id)" :key="cta_cte_nota_venta.id">
@@ -97,7 +96,7 @@
                     </div>
 
                     <!-- Creditos row -->
-                    <div class="card">
+                    <div class="card" v-if="codigo_cliente > 0">
                         <div class="card-header border-light bg-info">Cuenta Corriente - Pagos</div>
                         <div class="card-body">
                             <table class="table table-striped table-sm">
@@ -126,18 +125,24 @@
                                         <td></td>
                                         <td><b>Total: ${{ total_recibosDolares(cta_cte_cliente.id) | currency }}</b></td>
                                     </tr>
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td><h4><b>Saldo: ${{ saldo_ctacte(cta_cte_cliente.id) | currency }}</b></h4></td>
-                                    </tr>                            
                                 </tbody>
                             </table>
                         </div>
                     </div>  
-
+                    <table class="table table-sm">
+                        <tbody>
+                            <!-- <thead>
+                                <tr>
+                                    <th style="width:100%">Saldo(U$S)</th>
+                                </tr>
+                            </thead>                             -->
+                            <tr>
+                                <td style="width:100%">
+                                    <h4 class="text-right"><b>Saldo(U$S): {{ saldo_ctacte(cta_cte_cliente.id) | currency }}</b></h4>
+                                </td>
+                            </tr>                            
+                        </tbody>
+                    </table>
                 </div>
               </div>
 
@@ -222,13 +227,13 @@
         <!-- /.row -->
 
         <!-- this row will not appear when printing -->
-        <div class="row no-print">
+        <!-- <div class="row no-print">
             <div class="col-12">
                 <button type="button" class="btn btn-warning float-right" @click="consultarCtaCte(codigo_cliente)">
                     <i class="fa fa-save fa-fw"></i> Consultar
                 </button>
             </div>
-        </div>
+        </div> -->
 
       </div>
 </template>

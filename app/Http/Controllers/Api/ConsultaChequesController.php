@@ -54,6 +54,9 @@ class ConsultaChequesController extends Controller
         if (!empty($request->proveedor_id))
             $cheque->proveedor_id = $request->proveedor_id;
 
+        if (!empty($request->obs))
+            $cheque->obs = $request->obs;
+
         $cheque->update();
     }    
 }

@@ -138,10 +138,20 @@
                                 </div>
                             </div> 
 
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <textarea v-model="form.obs" type="text" name="obs" placeholder="Observacion"
+                                            class="form-control" :disabled="form.estado_cheque != 'PE' ? true : false">
+                                        </textarea>
+                                    </div>
+                                </div>
+                            </div> 
+
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger" @click="cerrarModal()">Cerrar</button>
-                            <button v-show="modoEdicion && form.estado_cheque == 'PE'" type="submit" class="btn btn-success">Cobrado</button>
+                            <button v-show="modoEdicion && form.estado_cheque == 'PE'" type="submit" class="btn btn-success">Entregar</button>
                         </div>
                     </form>
                 </div>
@@ -170,7 +180,8 @@
                     importe_cheque: 0,
                     estado_cheque: '',
                     fecha_cobro_cheque: '',
-                    proveedor_id: 0
+                    proveedor_id: 0,
+                    obs: ''
                 }),
                 pagination: {
                     'total': 0,
