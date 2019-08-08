@@ -19,7 +19,7 @@
                 <div class="card-header border-light bg-success">Filtros</div>
                 <div class="card-body">
                     <div class="row invoice-info">
-                        <div class="col-sm-6 invoice-col">
+                        <div class="col-sm-4 invoice-col">
                             <label class="control-label">Cliente</label>
                             <div class="form-group">
                                 <div class="input-group input-group-sm">
@@ -32,30 +32,50 @@
                         </div>
                         <!-- /.col -->
 
-                        <!-- <div class="col-sm-3 invoice-col">
+                        <div class="col-sm-2 invoice-col">
                             <label class="control-label">Fecha Desde</label>
                             <div class="form-group">
                                 <div class="input-group input-group-sm">
                                     <datepicker :bootstrap-styling="true" v-model="fecha_cuenta_corriente_desde" name="fecha_cuenta_corriente_desde" :language="es" 
-                                        :format="formato_fecha_cuenta_corriente" inputClass="form-control form-control-sm" placeholder="Fecha">
+                                        :format="formato_fecha_cuenta_corriente" inputClass="form-control form-control-sm">
                                     </datepicker>
                                 </div>
                             </div>
-                        </div> -->
+                        </div>
                         <!-- /.col -->
 
-                        <!-- <div class="col-sm-3 invoice-col">
+                        <div class="col-sm-2 invoice-col">
                             <label class="control-label">Fecha Hasta</label>
                             <div class="form-group">
                                 <div class="input-group input-group-sm">
                                     <datepicker :bootstrap-styling="true" v-model="fecha_cuenta_corriente_hasta" name="fecha_cuenta_corriente_hasta" :language="es" 
-                                        :format="formato_fecha_cuenta_corriente" inputClass="form-control form-control-sm" placeholder="Fecha">
+                                        :format="formato_fecha_cuenta_corriente" inputClass="form-control form-control-sm">
                                     </datepicker>
                                 </div>
                             </div>
-                        </div> -->
+                        </div>
                         <!-- /.col -->
 
+                        <div class="col-sm-2 invoice-col">
+                            <label class="control-label">Usar fechas</label>
+                            <div class="form-group">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" v-model="usa_fecha">
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.col -->
+
+                        <div class="col-sm-2 invoice-col">
+                            <label class="control-label"></label>
+                            <div class="form-group">
+                                <button type="button" class="btn btn-warning float-right" @click="consultarCtaCte(codigo_cliente)">
+                                    <i class="fa fa-save fa-fw"></i> Actualizar
+                                </button>                                
+                            </div>
+                        </div>
+                        <!-- /.col -->
+                        
                     </div>
                 </div>
 
@@ -146,77 +166,6 @@
                 </div>
               </div>
 
-              <!-- Debitos row -->
-              <!-- <div class="card">
-                <div class="card-header border-light bg-danger">Cuenta Corriente - Deudas</div>
-                <div class="card-body">
-                    <table class="table table-striped table-sm">
-                        <thead>
-                            <tr>
-                                <th style="width:60%">Nota de Venta Cliente</th>                                
-                                <th style="width:20%">Fecha</th>
-                                <th style="width:20%">Importe</th>
-                            </tr>
-
-                        </thead>
-                        <tbody style="font-size: 12px">
-                            <tr v-for="cta_cte_nota_venta in cta_cte_notas_venta" :key="cta_cte_nota_venta.id">
-                                <td>{{ cta_cte_nota_venta.anio_id }} - {{ cta_cte_nota_venta.anio_actual }}</td>
-                                <td>{{ cta_cte_nota_venta.fecha | formatDate }}</td>
-                                <td>${{ cta_cte_nota_venta.total }}</td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td><b>Total: ${{ total_nv | currency }}</b></td>
-                            </tr>                            
-                        </tbody>
-                    </table>
-                </div>
-              </div> -->
-
-              <!-- Creditos row -->
-              <!-- <div class="card">
-                <div class="card-header border-light bg-info">Cuenta Corriente - Pagos</div>
-                <div class="card-body">
-                    <table class="table table-striped table-sm">
-                        <thead>
-                            <tr>
-                                <th style="width:20%">Recibos Cliente</th>
-                                <th style="width:20%">Fecha</th>
-                                <th style="width:20%">Importe($)</th>
-                                <th style="width:20%">Dolar</th>
-                                <th style="width:20%">Importe(U$S)</th>
-                            </tr>
-                        </thead>
-                        <tbody style="font-size: 12px">
-                            <tr v-for="cta_cte_recibo in cta_cte_recibos" :key="cta_cte_recibo.id">
-                                <td>{{ cta_cte_recibo.punto_venta }} - {{ cta_cte_recibo.numero_recibo }}</td>
-                                <td>{{ cta_cte_recibo.fecha | formatDate }}</td>
-                                <td>${{ cta_cte_recibo.total }}</td>
-                                <td>${{ cta_cte_recibo.precio_dolar_manual }}</td>
-                                <td v-if="cta_cte_recibo.precio_dolar_manual && cta_cte_recibo.precio_dolar_manual > 0" >${{ (cta_cte_recibo.total / cta_cte_recibo.precio_dolar_manual) | currency }}</td>
-                                <td v-else>$0</td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td><b>Total: ${{ total_recibos | currency }}</b></td>
-                                <td></td>
-                                <td><b>Total: ${{ total_recibosDolares | currency }}</b></td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td><h4><b>Saldo: ${{ saldo_ctacte | currency }}</b></h4></td>
-                            </tr>                            
-                        </tbody>
-                    </table>
-                </div>
-              </div>               -->
-
             </div>
             <!-- /.invoice -->
 
@@ -225,16 +174,6 @@
 
         </div>
         <!-- /.row -->
-
-        <!-- this row will not appear when printing -->
-        <!-- <div class="row no-print">
-            <div class="col-12">
-                <button type="button" class="btn btn-warning float-right" @click="consultarCtaCte(codigo_cliente)">
-                    <i class="fa fa-save fa-fw"></i> Consultar
-                </button>
-            </div>
-        </div> -->
-
       </div>
 </template>
 
@@ -257,8 +196,9 @@
                 fecha_cuenta_corriente_hasta: new Date(),
                 formato_fecha_cuenta_corriente: "dd-MM-yyyy",
                 es: es,
-                cliente: {},
+                usa_fecha: false,
                 codigo_cliente: 0,
+                cliente: {},
                 cta_cte_notas_venta: {},
                 cta_cte_recibos: {},
                 cta_cte_clientes: {}
@@ -277,10 +217,17 @@
             },            
             consultarCtaCte() {
                 let me = this;         
-                //var lfechaD = moment(this.fecha_cuenta_corriente_desde).format('YYYY-MM-DD');
-                //var lfechaH = moment(this.fecha_cuenta_corriente_hasta).format('YYYY-MM-DD');
+                var lfechaD = moment(me.fecha_cuenta_corriente_desde).format('YYYY-MM-DD');
+                var lfechaH = moment(me.fecha_cuenta_corriente_hasta).format('YYYY-MM-DD');
+                var lusaFecha = 0;
 
-                var url = 'api/ctactecliente/devuelveCtaCte?cliente=' + this.codigo_cliente// + '&fechaD=' + lfechaD + '&fechaH=' + lfechaH
+                if(me.usa_fecha == true)
+                    lusaFecha = 1;
+
+                var url = 'api/ctactecliente/devuelveCtaCte?cliente=' + me.codigo_cliente
+                                                                      + '&fechaD=' + lfechaD
+                                                                      + '&fechaH=' + lfechaH
+                                                                      + '&usaFecha=' + lusaFecha
                 axios.get(url).then(data => {
                     var response = data.data;
                     me.cta_cte_recibos = response.ctacte_recibos;
