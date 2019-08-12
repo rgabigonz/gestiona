@@ -27,7 +27,7 @@ class OrdenCompraController extends Controller
             ->select('ordenes_compras.*', 'proveedores.nombre as nombre_proveedor', 
                      'clientes.nombre as nombre_cliente',
                      'vendedores.nombre as nombre_vendedor')
-            ->orderBy('created_at', 'asc')
+            ->orderBy('created_at', 'desc')
             ->paginate(15);//where('state', '=', 'A')
         } 
         else {
@@ -38,7 +38,7 @@ class OrdenCompraController extends Controller
                      'clientes.nombre as nombre_cliente',
                      'vendedores.nombre as nombre_vendedor')
             ->where($sCriterio, 'like', '%' . $sBuscar . '%')
-            ->orderBy('created_at', 'asc')
+            ->orderBy('created_at', 'desc')
             ->paginate(15);//where('state', '=', 'A')
         }
 

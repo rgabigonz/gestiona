@@ -25,7 +25,7 @@ class NotaPedidoController extends Controller
             $notas_pedidos = NotaPedido::join('clientes', 'notas_pedidos.cliente_id', '=', 'clientes.id')
             ->leftjoin('vendedores', 'notas_pedidos.vendedor_venta_id', '=', 'vendedores.id')
             ->select('notas_pedidos.*', 'clientes.nombre as nombre_cliente', 'vendedores.nombre as nombre_vendedor')
-            ->orderBy('created_at', 'asc')
+            ->orderBy('created_at', 'desc')
             ->paginate(15);//where('state', '=', 'A')
         } 
         else {
@@ -33,7 +33,7 @@ class NotaPedidoController extends Controller
             ->leftjoin('vendedores', 'notas_pedidos.vendedor_venta_id', '=', 'vendedores.id')
             ->select('notas_pedidos.*', 'clientes.nombre as nombre_cliente','vendedores.nombre as nombre_vendedor')
             ->where($sCriterio, 'like', '%' . $sBuscar . '%')//where('state', '=', 'A')
-            ->orderBy('created_at', 'asc')
+            ->orderBy('created_at', 'desc')
             ->paginate(15);
         }
 
