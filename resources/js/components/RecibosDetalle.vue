@@ -76,8 +76,7 @@
                             <label class="control-label">Cliente</label>
                             <div class="form-group">
                                 <div class="input-group input-group-sm">
-                                    <select class="form-control" v-model="codigo_cliente" @change="cargarCliente(codigo_cliente)"
-                                            :disabled="modoEdicion ? true : false">
+                                    <select class="form-control" v-model="codigo_cliente" @change="cargarCliente(codigo_cliente)">
                                         <option value=0>Cliente...</option>
                                         <option v-for="lcliente in lclientes" :key="lcliente.id" :value="lcliente.id">{{ lcliente.nombre }}</option>
                                     </select>

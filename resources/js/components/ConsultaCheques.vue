@@ -32,13 +32,14 @@
                 <table class="table table-hover table-sm">
                     <tbody style="font-size: 14px;">
                         <tr>
-                            <th style="width: 25%">Cliente</th>
+                            <th style="width: 23%">Cliente</th>
                             <th style="width: 12%">N° Recibo</th>
-                            <th style="width: 12%">N° Cheque</th>
-                            <th style="width: 13%">Importe</th>
+                            <th style="width: 10%">N° Cheque</th>
+                            <th style="width: 10%">Importe</th>
                             <th style="width: 13%">Fecha Cobro</th>
+                            <th style="width: 10%">Dolar</th>
                             <th style="width: 15%">Estado</th>
-                            <th style="width: 10%"></th>
+                            <th style="width: 7%"></th>
                         </tr>
                         <tr v-for="cheque in cheques" :key="cheque.id">
                             <td>{{ cheque.nombre_cliente }}</td>
@@ -46,6 +47,11 @@
                             <td>{{ cheque.numero_cheque }}</td>
                             <td>${{ cheque.importe }}</td>
                             <td>{{ cheque.fecha_cobro_cheque | formatDate}}</td>
+                            <td v-if="cheque.precio_dolar_cheque == 0">
+                                <input v-model="cheque.precio_dolar" type="number" name="precio_dolar" 
+                                       step=".1" class="form-control form-control-sm">
+                            </td>
+                            <td v-else>${{ cheque.precio_dolar_cheque }}</td>                            
                             <td>
                                 <div v-if="cheque.estado_cheque == 'PE'">
                                     <span class="badge badge-info">En cartera</span>
@@ -58,9 +64,9 @@
                                 <a href="#" @click="editarModal(cheque)">
                                     <i class="fa fa-edit blue"></i>
                                 </a>
-                                <!-- <a href="#" v-if="cheque.estado_cheque == 'PE'" @click="cobrarCheque(cheque.id)">
+                                <a href="#" v-if="cheque.precio_dolar_cheque == 0" @click="dolarCheque(cheque.id, cheque.precio_dolar)">
                                     <i class="fas fa-dollar-sign green"></i>
-                                </a> -->
+                                </a>
                             </td>
                         </tr>
                     </tbody>
@@ -180,6 +186,7 @@
                     importe_cheque: 0,
                     estado_cheque: '',
                     fecha_cobro_cheque: '',
+                    precio_dolar_cheque:0,
                     proveedor_id: 0,
                     obs: ''
                 }),
@@ -292,24 +299,23 @@
                 }
 
                 this.$Progress.finish();
-            }/*,
-            cobrarCheque(id) {
+            },
+            dolarCheque(id, dolar) {
                 swal({
                     title: 'Esta seguro?',
-                    //text: "Activar Condicion de Pago!",
                     type: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: 'Si, ENTREGADO',
+                    confirmButtonText: 'Si, ASIGNAR DOLAR',
                     cancelButtonText: 'Cancelar'
                 }).then((result) => {
                     if (result.value) {
-                        this.form.put('api/cheque/cobrarCheque/'+id)
+                        this.form.put('api/cheque/dolarCheque/'+id+'/dolar/'+dolar)
                         .then(() => {
                             swal(
-                                'ENTREGADO!',
-                                'El cheque a sido Entregado.',
+                                'ASIGNADO!',
+                                'Se le asigno el precio del DOLAR de la fecha al cheque.',
                                 'success'
                             );
                             Fire.$emit('AfterAction');
@@ -319,7 +325,7 @@
                 .catch(() => {
                     swal('Fallo!', 'Hubo un error al procesar la transaccion.', 'warning');                    
                 });
-            }*/,
+            },
             cargaProveedores() {
                 let me = this;                
                 var url = 'api/proveedorsimple/cargaProveedores';

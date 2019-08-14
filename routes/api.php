@@ -169,6 +169,7 @@ Route::middleware('auth:api')->group( function () {
     ]);    
 
     Route::put('/cheque/cobrarCheque/{item}', 'Api\ConsultaChequesController@cobrarCheque');
+    Route::put('/cheque/dolarCheque/{item}/dolar/{dolar}', 'Api\ConsultaChequesController@dolarCheque');
 
     //Rutas Cotizaciones
     Route::get('/cotizacion/devuelveCotizacion/','Api\CotizacionController@devuelveCotizacion');

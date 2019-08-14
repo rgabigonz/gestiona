@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\ReciboDetalle;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 
 class ConsultaChequesController extends Controller
 {
@@ -16,8 +17,9 @@ class ConsultaChequesController extends Controller
         if(empty($sBuscar)) {
             $cheques = ReciboDetalle::join('recibos', 'recibos_detalles.recibo_id', '=', 'recibos.id')
             ->join('clientes', 'recibos.cliente_id', '=', 'clientes.id')
+            ->leftJoin('cotizaciones', 'recibos_detalles.fecha_cobro_cheque', '=', 'cotizaciones.fecha')
             ->select('recibos_detalles.*', 'recibos_detalles.importe as importe_cheque', 'clientes.nombre as nombre_cliente', 
-                     'recibos.referencia_talonario as referencia_talonario')
+                     'recibos.referencia_talonario as referencia_talonario', DB::raw('COALESCE(cotizaciones.precio_dolar, 0) as precio_dolar'))
             ->where('recibos.estado', '=', 'CO')
             ->where('recibos_detalles.tipo_pago', '=', 'CH')
             ->orderBy('fecha_cobro_cheque', 'asc', 'lol')->paginate(15);
@@ -25,8 +27,9 @@ class ConsultaChequesController extends Controller
         else {
             $cheques = ReciboDetalle::join('recibos', 'recibos_detalles.recibo_id', '=', 'recibos.id')
             ->join('clientes', 'recibos.cliente_id', '=', 'clientes.id')
+            ->leftJoin('cotizaciones', 'recibos_detalles.fecha_cobro_cheque', '=', 'cotizaciones.fecha')
             ->select('recibos_detalles.*', 'recibos_detalles.importe as importe_cheque', 'clientes.nombre as nombre_cliente', 
-                     'recibos.referencia_talonario as referencia_talonario')
+                     'recibos.referencia_talonario as referencia_talonario', DB::raw('COALESCE(cotizaciones.precio_dolar, 0) as precio_dolar'))
             ->where('recibos.estado', '=', 'CO')
             ->where('recibos_detalles.tipo_pago', '=', 'CH')
             ->where($sCriterio, 'like', '%' . $sBuscar . '%')
@@ -58,5 +61,15 @@ class ConsultaChequesController extends Controller
             $cheque->obs = $request->obs;
 
         $cheque->update();
+    }
+
+    public function dolarCheque(Request $request, $id, $dolar)
+    {
+        if ($dolar > 0) {
+            $cheque = ReciboDetalle::findOrFail($id);
+            $cheque->precio_dolar_cheque = $dolar;
+
+            $cheque->update();
+        }
     }    
 }
