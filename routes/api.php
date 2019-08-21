@@ -97,8 +97,16 @@ Route::middleware('auth:api')->group( function () {
         'producto' => 'Api\ProductoController'
     ]);
 
-    Route::put('/producto/desactivar/{producto}', 'Api\ProductoController@desactivar');
-    Route::put('/producto/activar/{producto}', 'Api\ProductoController@activar');
+    // Rutas Conceptos
+    Route::get('/concepto/cargaConceptos', 'Api\ConceptoController@cargaConceptos');
+    Route::get('/concepto/devuelveDatosConcepto/{concepto}', 'Api\ConceptoController@devuelveDatosConcepto');
+
+    Route::apiResources([
+        'concepto' => 'Api\ConceptoController'
+    ]);
+
+    Route::put('/concepto/desactivar/{concepto}', 'Api\ConceptoController@desactivar');
+    Route::put('/concepto/activar/{concepto}', 'Api\ConceptoController@activar');
 
     // Rutas Clientes
     Route::get('/cliente/cargaClientes', 'Api\ClienteController@cargaClientes');
@@ -154,13 +162,22 @@ Route::middleware('auth:api')->group( function () {
     ]);    
 
     //Rutas Recibos
-    Route::get('/recibo/ReciboPDF/{recibo}','Api\ReciboController@ReciboPDF');
+    //Route::get('/recibo/ReciboPDF/{recibo}','Api\ReciboController@ReciboPDF');
     Route::get('/recibo/devuelveRecibo/{recibo}', 'Api\ReciboController@devuelveRecibo');
     Route::put('/recibo/anulaRecibo/{recibo}', 'Api\ReciboController@anulaRecibo');
     Route::put('/recibo/confirmaRecibo/{recibo}', 'Api\ReciboController@confirmaRecibo');
 
     Route::apiResources([
         'recibo' => 'Api\ReciboController'
+    ]);
+
+    //Rutas Notas Debito
+    Route::get('/notadebito/devuelveNotaDebito/{notadebito}', 'Api\NotaDebitoController@devuelveNotaDebito');
+    Route::put('/notadebito/anulaNotaDebito/{notadebito}', 'Api\NotaDebitoController@anulaNotaDebito');
+    Route::put('/notadebito/confirmaNotaDebito/{notadebito}', 'Api\NotaDebitoController@confirmaNotaDebito');
+
+    Route::apiResources([
+        'notadebito' => 'Api\NotaDebitoController'
     ]);
 
     //Rutas Consultas cheques

@@ -10,7 +10,7 @@
                   <h4>
                     <i class="fa fa-globe"></i> Agro Proyecciones SRL
                   </h4>
-                  <div>Recibo N° {{ punto_venta }} - {{ numero_recibo }}</div>
+                  <div>Nota de Debito N° {{ nota_debito_id_edicion }}</div>
                 </div>
                 <!-- /.col -->
               </div>
@@ -28,36 +28,16 @@
 
               <!-- Datos NV row -->
               <div class="card">
-                <div class="card-header border-light bg-secondary">Datos Recibo</div>
+                <div class="card-header border-light bg-secondary">Datos Nota de Credito</div>
                 <div class="card-body">
                     <div class="row invoice-info">
-                        <div class="col-sm-3 invoice-col">
+                        <div class="col-sm-12 invoice-col">
                             <div class="form-group">
                                 <div class="input-group input-group-sm">
-                                    <datepicker :bootstrap-styling="true" v-model="fecha_recibo" name="fecha_recibo" :language="es" 
-                                        :format="formato_fecha_recibo" inputClass="form-control form-control-sm" placeholder="Fecha" 
+                                    <datepicker :bootstrap-styling="true" v-model="fecha_nota_debito" name="fecha_nota_debito" :language="es" 
+                                        :format="formato_fecha_nota_debito" inputClass="form-control form-control-sm" placeholder="Fecha" 
                                         :disabled="modoEdicion ? true : false">
                                     </datepicker>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- /.col -->
-
-                        <div class="col-sm-3 invoice-col">
-                            <div class="form-group">
-                                <div class="input-group input-group-sm">
-                                    <input v-model="precio_dolar_manual" type="number" name="precio_dolar_manual" placeholder="Dolar" step=".1"
-                                        class="form-control form-control-sm">
-                                </div>
-                            </div>
-                        </div>
-                        <!-- /.col -->                        
-
-                        <div class="col-sm-6 invoice-col">
-                            <div class="form-group">
-                                <div class="input-group input-group-sm">
-                                    <input v-model="referencia_talonario" type="text" name="referencia_talonario" placeholder="N° Recibo Talonario"
-                                        class="form-control form-control-sm">
                                 </div>
                             </div>
                         </div>
@@ -103,39 +83,24 @@
 
               <!-- Items row -->
               <div class="card">
-                <div class="card-header border-light bg-dark">Items Recibo</div>
+                <div class="card-header border-light bg-dark">Items Nota de Credito</div>
                 <div class="card-body">              
                     <div class="row invoice-info">
                         <div class="col-12 invoice-col">
-                        <table class="table table-striped table-sm table-responsive">
+                        <table class="table table-striped table-sm">
                             <thead>
                                 <tr>
-                                    <th style="width:25%">Tipo Pago</th>
-                                    <th style="width:30%">Banco</th>
-                                    <th style="width:10%">Fecha Cobro</th>
-                                    <th style="width:15%">N° Cheque</th>
-                                    <th style="width:15%">Importe</th>
+                                    <th style="width:55%">Concepto</th>
+                                    <th style="width:40%">Importe</th>
                                     <th style="width:5%"></th>
                                 </tr>
                                 <tr>
                                     <td class="invoice-col">
                                         <div class="form-group">
                                             <div class="input-group input-group-sm">
-                                                <select class="form-control" v-model="tipo_pago" ref="tipo_pago">
-                                                    <option value="">Forma Pago...</option>
-                                                    <option v-for="ltipos_pago in ltipos_pagos" :key="ltipos_pago.id" :value="{ id: ltipos_pago.id, text: ltipos_pago.nombre }">{{ ltipos_pago.nombre }}</option>
-                                                </select>                                                    
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <!-- /.col -->
-                                    
-                                    <td class="invoice-col">
-                                        <div class="form-group">
-                                            <div class="input-group input-group-sm">
-                                                <select class="form-control" v-model="codigo_banco" :disabled="tipo_pago.id != 'CH' ? true : false">
-                                                    <option value=0>Banco...</option>
-                                                    <option v-for="lbanco in lbancos" :key="lbanco.id" :value="{ id: lbanco.id, text: lbanco.nombre }">{{ lbanco.nombre }}</option>
+                                                <select class="form-control" v-model="codigo_concepto">
+                                                    <option value=0>Concepto...</option>
+                                                    <option v-for="lconcepto in lconceptos" :key="lconcepto.id" :value="{ id: lconcepto.id, text: lconcepto.descripcion }">{{ lconcepto.descripcion }}</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -145,27 +110,7 @@
                                     <td class="invoice-col">
                                         <div class="form-group">
                                             <div class="input-group input-group-sm">
-                                                <input v-model="fecha_cobro_cheque" type="date" name="fecha_cobro_cheque"
-                                                    class="form-control form-control-sm" :disabled="tipo_pago.id != 'CH' ? true : false">
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <!-- /.col -->
-
-                                    <td class="invoice-col">
-                                        <div class="form-group">
-                                            <div class="input-group input-group-sm">
-                                                <input v-model="numero_cheque" type="number" name="numero_cheque"
-                                                    class="form-control form-control-sm" :disabled="tipo_pago.id != 'CH' ? true : false">
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <!-- /.col -->
-
-                                    <td class="invoice-col">
-                                        <div class="form-group">
-                                            <div class="input-group input-group-sm">
-                                                <input v-model="importe_item_recibo" type="number" name="importe_item_recibo"  step=".1"
+                                                <input v-model="importe_item_nota_debito" type="number" name="importe_item_nota_debito"  step=".1"
                                                     @keydown ="keyMonitor" class="form-control form-control-sm">
                                             </div>
                                         </div>
@@ -176,21 +121,15 @@
                             </thead>
                             <tbody>
                                 <tr class="item" v-for="(item, index) in items" :key="item.cod">
-                                    <td>{{ item.tipo_pago_descripcion}}</td>
-                                    <td>{{ item.codigo_banco_nombre }}</td>
-                                    <td>{{ item.fecha_cobro_cheque | formatDate }}</td>
-                                    <td>{{ item.numero_cheque }}</td>
+                                    <td>{{ item.codigo_concepto_descripcion }}</td>
                                     <td>${{ item.importe }}</td>
                                     <td>
-                                        <a href="#" @click="removerItemRecibo(index)">
+                                        <a href="#" @click="removerItemNotaDebito(index)">
                                             <i class="fa fa-trash-alt red"></i>
                                         </a>                            
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
                                     <td>Total:</td>
                                     <td>${{ total | currency }}</td>
                                     <td></td>
@@ -207,7 +146,7 @@
                     <div class="row">
                         <div class="col col-md-12">
                             <div class="form-group">
-                                <textarea v-model="observacion" type="text" name="descripcion" placeholder="Observacion"
+                                <textarea v-model="observacion" type="text" name="observacion" placeholder="Observacion"
                                     class="form-control"></textarea>
                             </div>
                         </div>
@@ -229,10 +168,10 @@
         <!-- this row will not appear when printing -->
         <div class="row no-print">
             <div class="col-12">
-                <button v-if="!modoEdicion" type="button" class="btn btn-success float-right" @click="creaRecibo()">
+                <button v-if="!modoEdicion" type="button" class="btn btn-success float-right" @click="creaNotaDebito()">
                     <i class="fa fa-save fa-fw"></i> Guardar
                 </button>
-                <button v-if="modoEdicion" type="button" class="btn btn-success float-right" @click="actualizaRecibo()">
+                <button v-if="modoEdicion" type="button" class="btn btn-success float-right" @click="actualizaNotaDebito()">
                     <i class="fa fa-save fa-fw"></i> Modificar
                 </button>
                 <router-link to="/recibos" class="btn btn-primary float-right" style="margin-right: 5px;">
@@ -253,26 +192,10 @@
             Datepicker
         },        
         data() {
-            return {
-                ltipos_pagos: [
-                    {id: 'CH', nombre: 'CHEQUE'},
-                    {id: 'EF', nombre: 'EFECTIVO'},
-                    {id: 'ED', nombre: 'EFECTIVO DOLARES'}
-                ],                
+            return {              
                 //Lista de Seleccion clientes y productos
                 lclientes: {},
-                lbancos: {},
-                pagination: {
-                    'total': 0,
-                    'current_page': 0,
-                    'per_page': 0,
-                    'last_page': 0,
-                    'from': 0,
-                    'to': 0
-                },
-                offset: 3,
-                sCriterio: 'nombre',
-                sBuscar: '',
+                lconceptos: {},
                 //Lista de Seleccion clientes y productos   
 
                 // Errores
@@ -280,25 +203,18 @@
 
                 modoEdicion: false,
                 estado: '',
-                recibo_id_edicion: 0,
-                fecha_recibo: new Date(),
-                formato_fecha_recibo: "dd-MM-yyyy",
+                nota_debito_id_edicion: 0,
+                fecha_nota_debito: new Date(),
+                formato_fecha_nota_debito: "dd-MM-yyyy",
                 es: es,
                 cliente: {},
                 codigo_cliente: 0,
-                punto_venta: '',
-                numero_recibo: 0,
                 items: [],
-                tipo_pago: '',
-                codigo_banco: 0,
-                fecha_cobro_cheque: '',
-                numero_cheque: 0,
-                importe_item_recibo: 0,
+                codigo_concepto: 0,
+                importe_item_nota_debito: 0,
                 observacion:'',
-                referencia_talonario: '',
-                precio_dolar_manual: 0,
-                recibo: {},
-                recibo_detalle: {}
+                nota_debito: {},
+                nota_debito_detalle: {}
             }
         },
         methods: {
@@ -313,10 +229,10 @@
                 let origenKey = event.key || String.fromCharCode(event.keyCode);
 
                 switch(origenInput) {
-                    case 'importe_item_recibo':
+                    case 'importe_item_nota_debito':
                         switch(origenKey) {
                             case 'Tab':    
-                                this.agregaItemRecibo();
+                                this.agregaItemNotaDebito();
                                 break;
                             default:
                                 //code block
@@ -340,12 +256,12 @@
                     }
                 });
             },
-            cargaBancos() {
+            cargaConceptos() {
                 let me = this;                
-                var url = 'api/banco/cargaBancos';
+                var url = 'api/concepto/cargaConceptos';
                 axios.get(url).then(data => {
                     var response = data.data;
-                    me.lbancos = response.bancos;
+                    me.lconceptos = response.conceptos;
                 }).catch((error) => {
                     if (error.response.status == 401) {
                         swal('Error!', 'La sesion ha caducado.', 'warning');
@@ -369,25 +285,17 @@
             },
 
             // Operaciones con productos
-            agregaItemRecibo() {
-                if (this.importe_item_recibo > 0) {
+            agregaItemNotaDebito() {
+                if (this.importe_item_nota_debito > 0) {
 
-                    if (this.existeItemRecibo(this.tipo_pago.id, this.codigo_banco.id, this.fecha_cobro_cheque, 
-                                            this.numero_cheque, this.importe_item_recibo) === false) {
-                        this.items.push({tipo_pago: this.tipo_pago.id, 
-                                        tipo_pago_descripcion: this.tipo_pago.text, 
-                                        banco_id: this.codigo_banco.id, 
-                                        codigo_banco_nombre: this.codigo_banco.text, 
-                                        fecha_cobro_cheque: this.fecha_cobro_cheque, 
-                                        numero_cheque: this.numero_cheque,
-                                        importe: this.importe_item_recibo
+                    if (this.existeItemNotaDebito(this.codigo_concepto.id, this.importe_item_nota_debito) === false) {
+                        this.items.push({concepto_id: this.codigo_concepto.id, 
+                                        codigo_concepto_descripcion: this.codigo_concepto.text, 
+                                        importe: this.importe_item_nota_debito
                         });
                     }
-                    this.tipo_pago = '';
-                    this.codigo_banco = 0;
-                    this.fecha_cobro_cheque = '';
-                    this.numero_cheque = 0;
-                    this.importe_item_recibo = 0;
+                    this.codigo_concepto = 0;
+                    this.importe_item_nota_debito = 0;
 
                 } /*else {
                     toast({
@@ -396,16 +304,14 @@
                     });                      
                 }*/
             },
-            removerItemRecibo(index) {
+            removerItemNotaDebito(index) {
                 this.items.splice(index, 1);
             },
-            existeItemRecibo(tp_id, bco_id, fec_ch, num_ch, imp) {
-                this.focusInput('tipo_pago');
+            existeItemNotaDebito(cpt_id, imp) {
+                //this.focusInput('codigo_concepto');
 
                 for (var i = 0; i < this.items.length; i++) {
-                    if (this.items[i].tipo_pago === tp_id && this.items[i].banco_id === bco_id && 
-                        this.items[i].numero_cheque === num_ch ) {
-                            this.items[i].fecha_cobro_cheque = fec_ch;
+                    if (this.items[i].concepto_id === cpt_id) {
                             this.items[i].importe = imp;
                             return true;
                     }
@@ -414,7 +320,7 @@
             },
 
             // Operaciones con NP Proveedores (OC)
-            validaRecibo() {
+            validaNotaDebito() {
                 var resultado = false;
 
                 if (this.codigo_cliente && this.items.length) {
@@ -427,32 +333,30 @@
                     this.errors.push('Debe ingresar un cliente');
                 }
                 if (this.items.length == 0) {
-                    this.errors.push('Debe ingresar al menos un item de recibo');
+                    this.errors.push('Debe ingresar al menos un item de la nota de debito');
                 }
 
                 return resultado;
             },
 
             // Operaciones con Recibo
-            creaRecibo() {
+            creaNotaDebito() {
                 this.$Progress.start();
                 
-                if (this.validaRecibo()) {
-                    axios.post('api/recibo', {
+                if (this.validaNotaDebito()) {
+                    axios.post('api/notadebito', {
                         codigo_cliente: this.codigo_cliente, 
                         fecha_recibo: this.fecha_recibo,
                         total_recibo: this.total,
                         obs: this.observacion,
-                        referencia_talonario: this.referencia_talonario,
-                        precio_dolar_manual: this.precio_dolar_manual,
                         items: this.items})
                     .then(() => {
                         Fire.$emit('AfterAction');
                         toast({
                             type: 'success',
-                            title: 'Se genero el recibo correctamente!'
+                            title: 'Se genero la nota de debito correctamente!'
                         });
-                        this.$router.push('/recibos');
+                        this.$router.push('/notasdebito');
                     })
                     .catch(() => {
                         this.$Progress.fail();
@@ -468,23 +372,21 @@
                 this.$Progress.finish();
                 
             },
-            actualizaRecibo() {
+            actualizaNotaDebito() {
                 this.$Progress.start();
                 
-                if (this.validaRecibo()) {
-                    axios.put('api/recibo/'+this.recibo_id_edicion, {
+                if (this.validaNotaDebito()) {
+                    axios.put('api/notadebito/'+this.nota_debito_id_edicion, {
                             total_recibo: this.total,
                             obs: this.observacion,
-                            referencia_talonario: this.referencia_talonario,
-                            precio_dolar_manual: this.precio_dolar_manual,
                             items: this.items})
                     .then(() => {
                         Fire.$emit('AfterAction');
                         toast({
                             type: 'success',
-                            title: 'Se actualizo el recibo correctamente!'
+                            title: 'Se actualizo la nota de debito correctamente!'
                         });
-                        this.$router.push('/recibos');
+                        this.$router.push('/notasdebito');
                     })
                     .catch(() => {
                         this.$Progress.fail();
@@ -492,52 +394,37 @@
                 }
                 this.$Progress.finish();
             },
-            cargarRecibo(rCod) {
+            cargarNotaDebito(ndCod) {
                 let me = this;                
-                var url = 'api/recibo/devuelveRecibo/'+rCod;
+                var url = 'api/notadebito/devuelveNotaDebito/'+ndCod;
                 axios.get(url).then(data => {
                     var response = data.data;
-                    me.recibo = response.datoRecibo;
-                    me.recibo_detalle = response.datoReciboD;
+                    me.nota_debito = response.datoNotaDebito;
+                    me.nota_debito_detalle = response.datoNotaDebitoD;
 
-                    //Datos Recibo
-                    me.codigo_cliente = me.recibo[0].cliente_id;
+                    //Datos ND
+                    me.codigo_cliente = me.nota_debito[0].cliente_id;
 
-                    me.fecha_recibo = new Date(me.recibo[0].fecha);
-                    me.fecha_recibo = me.fecha_recibo.setDate(me.fecha_recibo.getDate() + 1);
+                    me.fecha_nota_debito = new Date(me.nota_debito[0].fecha);
+                    me.fecha_nota_debito = me.fecha_nota_debito.setDate(me.fecha_nota_debito.getDate() + 1);
 
-                    me.referencia_talonario = me.recibo[0].referencia_talonario;
-                    me.precio_dolar_manual = me.recibo[0].precio_dolar_manual;
-
-                    me.estado = me.recibo[0].estado;
-
-                    me.numero_recibo = me.recibo[0].numero_recibo;
-                    me.punto_venta = me.recibo[0].punto_venta;
+                    me.estado = me.nota_debito[0].estado;
 
                     me.cargarCliente(me.codigo_cliente);
 
-                    for (var i = 0; i < me.recibo_detalle.length; i++) {
+                    me.observacion = me.nota_debito[0].obs;
 
-                        if (me.recibo_detalle[i].tipo_pago == 'CH' )
-                            me.tipo_pago_descripcion = 'CHEQUE';
-                        if (me.recibo_detalle[i].tipo_pago == 'EF' )
-                            me.tipo_pago_descripcion = 'EFECTIVO';
-                        if (me.recibo_detalle[i].tipo_pago == 'ED' )
-                            me.tipo_pago_descripcion = 'EFECTIVO DOLARES';
+                    for (var i = 0; i < me.nota_debito_detalle.length; i++) {
 
-                        me.items.push({ tipo_pago: me.recibo_detalle[i].tipo_pago, 
-                                        tipo_pago_descripcion: me.tipo_pago_descripcion,
-                                        banco_id: me.recibo_detalle[i].banco_id, 
-                                        codigo_banco_nombre: me.recibo_detalle[i].nombre_banco,
-                                        fecha_cobro_cheque: me.recibo_detalle[i].fecha_cobro_cheque,
-                                        numero_cheque: me.recibo_detalle[i].numero_cheque,
-                                        importe: me.recibo_detalle[i].importe
+                        me.items.push({ concepto_id: me.nota_debito_detalle[i].concepto_id, 
+                                        codigo_concepto_descripcion: me.nota_debito_detalle[i].descripcion_concepto,
+                                        importe: me.nota_debito_detalle[i].importe
                         });
                     }
 
                 }).catch((error) => {
-                    me.recibo = {};
-                    me.recibo_detalle = {};
+                    me.nota_debito = {};
+                    me.nota_debito_detalle = {};
                 });
             }
         },
@@ -550,13 +437,14 @@
             }            
         },
         created() {
-            this.recibo_id_edicion = this.$route.params.reciboId;
-            this.cargaClientes();
-            this.cargaBancos();
+            this.nota_debito_id_edicion = this.$route.params.notadebitoId;
 
-            if(this.recibo_id_edicion > 0) {
+            this.cargaClientes();
+            this.cargaConceptos();
+
+            if(this.nota_debito_id_edicion > 0) {
                 this.modoEdicion = true;
-                this.cargarRecibo(this.recibo_id_edicion);
+                this.cargarNotaDebito(this.nota_debito_id_edicion);
             }
         }
     }

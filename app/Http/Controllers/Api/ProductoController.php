@@ -38,7 +38,6 @@ class ProductoController extends Controller
             ],
             'productos' => $productos
         ];
-
     }
 
     /**

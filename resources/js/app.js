@@ -37,6 +37,7 @@ Vue.use(VueRouter)
 
 let routes = [
     { path: '/productos', name: 'productos', component: require('./components/Productos.vue') },
+    { path: '/conceptos', name: 'conceptos', component: require('./components/Conceptos.vue') },
     { path: '/depositos', name: 'depositos', component: require('./components/Depositos.vue') },
     { path: '/bancos', name: 'bancos', component: require('./components/Bancos.vue') },
     { path: '/formasventa', name: 'formasventa', component: require('./components/FormasVenta.vue') },
@@ -53,6 +54,8 @@ let routes = [
     { path: '/ordenescompradetalle/:ordenescompraId', name: 'ordenescompradetalle', component: require('./components/OrdenesCompraDetalle.vue') },
     { path: '/recibos', name: 'recibos', component: require('./components/Recibos.vue') },
     { path: '/recibosdetalle/:reciboId', name: 'recibosdetalle', component: require('./components/RecibosDetalle.vue') },
+    { path: '/notasdebito', name: 'notasdebito', component: require('./components/NotasDebito.vue') },
+    { path: '/notasdebitodetalle/:notadebitoId', name: 'notasdebitodetalle', component: require('./components/NotasDebitoDetalle.vue') },
     { path: '/consultacheques', name: 'consultacheques', component: require('./components/ConsultaCheques.vue') },
     { path: '/ctactecliente', name: 'ctactecliente', component: require('./components/CuentaCorrienteCliente.vue') }
 ]

@@ -97,6 +97,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </router-link>
               </li>
               <li class="nav-item">
+                <router-link to="/conceptos" class="nav-link">
+                  <i class="fas fa-align-justify nav-icon"></i>
+                  <p>Conceptos</p>
+                </router-link>
+              </li>              
+              <li class="nav-item">
                 <router-link to="/depositos" class="nav-link">
                   <i class="fas fa-archive nav-icon"></i>
                   <p>Depositos</p>
@@ -193,6 +199,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <p>Recibos</p>
                 </router-link>
               </li>
+              <li class="nav-item">
+                <router-link to="/notasdebito" class="nav-link">
+                  <i class="fas fa-file-invoice-dollar nav-icon"></i>
+                  <p>Notas de Debito</p>
+                </router-link>
+              </li>              
             </ul>
           </li>
           <li class="nav-item has-treeview">
