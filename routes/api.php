@@ -98,7 +98,8 @@ Route::middleware('auth:api')->group( function () {
     ]);
 
     // Rutas Conceptos
-    Route::get('/concepto/cargaConceptos', 'Api\ConceptoController@cargaConceptos');
+    Route::get('/concepto/cargaConceptosND', 'Api\ConceptoController@cargaConceptosND');
+    Route::get('/concepto/cargaConceptosNC', 'Api\ConceptoController@cargaConceptosNC');
     Route::get('/concepto/devuelveDatosConcepto/{concepto}', 'Api\ConceptoController@devuelveDatosConcepto');
 
     Route::apiResources([

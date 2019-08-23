@@ -12,7 +12,7 @@
                     <div class="row">
                         <div class="col col-md-4">
                             <select class="form-control" v-model="sCriterio">
-                                <option value="recibos.id">Numero nota debito</option>
+                                <option value="notas_debitos.id">Numero nota debito</option>
                             </select>
                         </div>
                         <div class="col col-md-8">

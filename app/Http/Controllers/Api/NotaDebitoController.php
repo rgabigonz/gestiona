@@ -6,6 +6,7 @@ use App\NotaDebito;
 use App\NotaDebitoDetalle;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 
 class NotaDebitoController extends Controller
 {
@@ -47,16 +48,6 @@ class NotaDebitoController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -64,52 +55,64 @@ class NotaDebitoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = auth('api')->user();
+        $fecha_nota_debito = \Carbon\Carbon::parse($request->fecha_nota_debito);
+        
+        $cantidad_items = count($request->items);
+
+        $nota_debito = new NotaDebito();
+
+        $nota_debito->cliente_id = $request->codigo_cliente;
+        $nota_debito->user_id = $user->id;
+        $nota_debito->total = $request->total_nota_debito;
+        $nota_debito->obs = $request->obs;
+
+        $nota_debito->fecha = $fecha_nota_debito->format('Y-m-d');
+
+        $nota_debito->save();
+
+        for($i = 0; $i < $cantidad_items; $i++)
+        {
+            $nota_debito_item = new NotaDebitoDetalle();
+
+            if (!empty($request->items[$i]['concepto_id']))
+                $nota_debito_item->concepto_id = $request->items[$i]['concepto_id'];
+
+            $nota_debito_item->importe = $request->items[$i]['importe'];
+            $nota_debito->notaDebitoDetalle()->save($nota_debito_item);
+        }
+                
+        return $nota_debito;
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\NotaDebito  $notaDebito
-     * @return \Illuminate\Http\Response
-     */
-    public function show(NotaDebito $notaDebito)
+    public function update(Request $request, $id)
     {
-        //
-    }
+        $NotaDebito = NotaDebito::findOrFail($id);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\NotaDebito  $notaDebito
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(NotaDebito $notaDebito)
-    {
-        //
-    }
+        $NotaDebito->total = $request->total_nota_debito;
+        $NotaDebito->obs = $request->obs;
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\NotaDebito  $notaDebito
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, NotaDebito $notaDebito)
-    {
-        //
-    }
+        $NotaDebito->update();
+        
+        $NotaDebitoDetalle = NotaDebitoDetalle::where('nota_debito_id', $id)->delete();
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\NotaDebito  $notaDebito
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(NotaDebito $notaDebito)
-    {
-        //
+        $cantidad_items = count($request->items);
+
+        for($i = 0; $i < $cantidad_items; $i++)
+        {
+            $nota_debito_item = new NotaDebitoDetalle();
+
+            $nota_debito_item->nota_debito_id = $id;
+
+            if (!empty($request->items[$i]['concepto_id']))
+                $nota_debito_item->concepto_id = $request->items[$i]['concepto_id'];
+
+            $nota_debito_item->importe = $request->items[$i]['importe'];
+
+            $nota_debito_item->save();
+        }
+        
+        return $request->items;
     }
 
     public function devuelveNotaDebito(Request $request, $id)
@@ -126,4 +129,18 @@ class NotaDebitoController extends Controller
             'datoNotaDebitoD' => $datoNotaDebitoD,
         ];
     }    
+
+    public function confirmaNotaDebito(Request $request, $id)
+    {
+        $NotaDebito = NotaDebito::findOrFail($id);
+        $NotaDebito->estado = 'CO';
+        $NotaDebito->update();
+    }    
+
+    public function anulaNotaDebito(Request $request, $id)
+    {
+        $NotaDebito = NotaDebito::findOrFail($id);
+        $NotaDebito->estado = 'AN';
+        $NotaDebito->update();
+    }        
 }

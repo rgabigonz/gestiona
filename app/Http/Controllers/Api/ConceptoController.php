@@ -94,11 +94,25 @@ class ConceptoController extends Controller
         $concepto->update();
     }
     
-    public function cargaConceptos()
+    public function cargaConceptosND()
     {
-        $conceptos = Concepto::orderBy('descripcion', 'asc')->where('estado', '=', 'A')->get();
+        $conceptos = Concepto::orderBy('descripcion', 'asc')
+        ->where('estado', '=', 'A')
+        ->where('tipo_comprobante', '=', 'ND')
+        ->get();
         return [
             'conceptos' => $conceptos
         ];
-    }             
+    }
+
+    public function cargaConceptosNC()
+    {
+        $conceptos = Concepto::orderBy('descripcion', 'asc')
+        ->where('estado', '=', 'A')
+        ->where('tipo_comprobante', '=', 'NC')
+        ->get();
+        return [
+            'conceptos' => $conceptos
+        ];
+    }    
 }

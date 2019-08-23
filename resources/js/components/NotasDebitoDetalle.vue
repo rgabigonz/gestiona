@@ -28,7 +28,7 @@
 
               <!-- Datos NV row -->
               <div class="card">
-                <div class="card-header border-light bg-secondary">Datos Nota de Credito</div>
+                <div class="card-header border-light bg-secondary">Datos Nota de Debito</div>
                 <div class="card-body">
                     <div class="row invoice-info">
                         <div class="col-sm-12 invoice-col">
@@ -83,7 +83,7 @@
 
               <!-- Items row -->
               <div class="card">
-                <div class="card-header border-light bg-dark">Items Nota de Credito</div>
+                <div class="card-header border-light bg-dark">Items Nota de Debito</div>
                 <div class="card-body">              
                     <div class="row invoice-info">
                         <div class="col-12 invoice-col">
@@ -174,7 +174,7 @@
                 <button v-if="modoEdicion" type="button" class="btn btn-success float-right" @click="actualizaNotaDebito()">
                     <i class="fa fa-save fa-fw"></i> Modificar
                 </button>
-                <router-link to="/recibos" class="btn btn-primary float-right" style="margin-right: 5px;">
+                <router-link to="/notasdebito" class="btn btn-primary float-right" style="margin-right: 5px;">
                     <i class="fa fa-hand-point-left fa-fw"></i>Volver
                 </router-link>                
             </div>
@@ -196,30 +196,33 @@
                 //Lista de Seleccion clientes y productos
                 lclientes: {},
                 lconceptos: {},
-                //Lista de Seleccion clientes y productos   
 
                 // Errores
                 errors: [],
 
+                // Variables
                 modoEdicion: false,
-                estado: '',
-                nota_debito_id_edicion: 0,
+
                 fecha_nota_debito: new Date(),
                 formato_fecha_nota_debito: "dd-MM-yyyy",
                 es: es,
-                cliente: {},
+
+                estado: '',
+                observacion:'',                
+                nota_debito_id_edicion: 0,
                 codigo_cliente: 0,
-                items: [],
                 codigo_concepto: 0,
                 importe_item_nota_debito: 0,
-                observacion:'',
+
+                //Objetos 
+                items: [],                
+                cliente: {},
                 nota_debito: {},
                 nota_debito_detalle: {}
             }
         },
         methods: {
             focusInput(inputRef) {
-                // $refs is an object that holds the DOM references to your inputs
                 this.$nextTick(function(){
                     this.$refs[inputRef].focus();
                 });                
@@ -258,7 +261,7 @@
             },
             cargaConceptos() {
                 let me = this;                
-                var url = 'api/concepto/cargaConceptos';
+                var url = 'api/concepto/cargaConceptosND';
                 axios.get(url).then(data => {
                     var response = data.data;
                     me.lconceptos = response.conceptos;
@@ -284,7 +287,7 @@
                 });
             },
 
-            // Operaciones con productos
+            // Operaciones con conceptos
             agregaItemNotaDebito() {
                 if (this.importe_item_nota_debito > 0) {
 
@@ -297,12 +300,7 @@
                     this.codigo_concepto = 0;
                     this.importe_item_nota_debito = 0;
 
-                } /*else {
-                    toast({
-                        type: 'error',
-                        title: 'Debe ingresar producto, cantidad y precio'
-                    });                      
-                }*/
+                }
             },
             removerItemNotaDebito(index) {
                 this.items.splice(index, 1);
@@ -319,7 +317,7 @@
                 return false;
             },
 
-            // Operaciones con NP Proveedores (OC)
+            // Operaciones con ND
             validaNotaDebito() {
                 var resultado = false;
 
@@ -338,16 +336,14 @@
 
                 return resultado;
             },
-
-            // Operaciones con Recibo
             creaNotaDebito() {
                 this.$Progress.start();
                 
                 if (this.validaNotaDebito()) {
                     axios.post('api/notadebito', {
                         codigo_cliente: this.codigo_cliente, 
-                        fecha_recibo: this.fecha_recibo,
-                        total_recibo: this.total,
+                        fecha_nota_debito: this.fecha_nota_debito,
+                        total_nota_debito: this.total,
                         obs: this.observacion,
                         items: this.items})
                     .then(() => {
@@ -377,7 +373,7 @@
                 
                 if (this.validaNotaDebito()) {
                     axios.put('api/notadebito/'+this.nota_debito_id_edicion, {
-                            total_recibo: this.total,
+                            total_nota_debito: this.total,
                             obs: this.observacion,
                             items: this.items})
                     .then(() => {
