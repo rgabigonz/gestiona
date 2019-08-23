@@ -199,10 +199,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <p>Recibos</p>
                 </router-link>
               </li>
+              <hr>
               <li class="nav-item">
                 <router-link to="/notasdebito" class="nav-link">
-                  <i class="fas fa-file-invoice-dollar nav-icon"></i>
+                <i class="fas fa-sticky-note nav-icon"></i>
                   <p>Notas de Debito</p>
+                </router-link>
+              </li>
+              <li class="nav-item">
+                <router-link to="/notascredito" class="nav-link">
+                  <i class="fas fa-sticky-note nav-icon"></i>
+                  <p>Notas de Credito</p>
                 </router-link>
               </li>              
             </ul>
@@ -287,4 +294,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="/js/app.js"></script>
 <script src="/js/Chart.min.js"></script>
 </body>
+<style>
+    hr{ 
+      height: 1px;
+      color: white;
+      background-color: white;
+      border: none;
+    }
+</style>
 </html>

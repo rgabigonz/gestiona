@@ -181,6 +181,15 @@ Route::middleware('auth:api')->group( function () {
         'notadebito' => 'Api\NotaDebitoController'
     ]);
 
+    //Rutas Notas Credito
+    Route::get('/notacredito/devuelveNotaCredito/{notacredito}', 'Api\NotaCreditoController@devuelveNotaCredito');
+    Route::put('/notacredito/anulaNotaCredito/{notacredito}', 'Api\NotaCreditoController@anulaNotaCredito');
+    Route::put('/notacredito/confirmaNotaCredito/{notacredito}', 'Api\NotaCreditoController@confirmaNotaCredito');
+
+    Route::apiResources([
+        'notacredito' => 'Api\NotaCreditoController'
+    ]);
+
     //Rutas Consultas cheques
     Route::apiResources([
         'cheque' => 'Api\ConsultaChequesController'

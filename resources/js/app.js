@@ -56,6 +56,8 @@ let routes = [
     { path: '/recibosdetalle/:reciboId', name: 'recibosdetalle', component: require('./components/RecibosDetalle.vue') },
     { path: '/notasdebito', name: 'notasdebito', component: require('./components/NotasDebito.vue') },
     { path: '/notasdebitodetalle/:notadebitoId', name: 'notasdebitodetalle', component: require('./components/NotasDebitoDetalle.vue') },
+    { path: '/notascredito', name: 'notascredito', component: require('./components/NotasCredito.vue') },
+    { path: '/notascreditodetalle/:notacreditoId', name: 'notascreditodetalle', component: require('./components/NotasCreditoDetalle.vue') },    
     { path: '/consultacheques', name: 'consultacheques', component: require('./components/ConsultaCheques.vue') },
     { path: '/ctactecliente', name: 'ctactecliente', component: require('./components/CuentaCorrienteCliente.vue') }
 ]
