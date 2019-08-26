@@ -112,6 +112,28 @@
                                     </tr>                            
                                 </tbody>
                             </table>
+
+                            <table class="table table-striped table-sm">
+                                <thead>
+                                    <tr>
+                                        <th style="width:60%">Nota de Debito Cliente</th>                                
+                                        <th style="width:20%">Fecha</th>
+                                        <th style="width:20%">Importe</th>
+                                    </tr>
+                                </thead>
+                                <tbody style="font-size: 12px">
+                                    <tr v-for="cta_cte_nota_debito in filtroND(cta_cte_cliente.id)" :key="cta_cte_nota_debito.id">
+                                        <td>{{ cta_cte_nota_debito.id }}</td>
+                                        <td>{{ cta_cte_nota_debito.fecha | formatDate }}</td>
+                                        <td>${{ cta_cte_nota_debito.total }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td><b>Total: ${{ total_nd(cta_cte_cliente.id) | currency }}</b></td>
+                                    </tr>                            
+                                </tbody>
+                            </table>                            
                         </div>
                     </div>
 
@@ -200,6 +222,7 @@
                 codigo_cliente: 0,
                 cliente: {},
                 cta_cte_notas_venta: {},
+                cta_cte_notas_debito: {},                
                 cta_cte_recibos: {},
                 cta_cte_clientes: {}
             }
@@ -210,13 +233,19 @@
                     return nv.cliente_id == cCliente;
                 })
             },
+            filtroND(cCliente) {
+                return this.cta_cte_notas_debito.filter(function(nd) {
+                    return nd.cliente_id == cCliente;
+                })
+            },            
             filtroRec(cCliente) {
                 return this.cta_cte_recibos.filter(function(rec) {
                     return rec.cliente_id === cCliente;
                 })
             },            
             consultarCtaCte() {
-                let me = this;         
+                let me = this;    
+
                 var lfechaD = moment(me.fecha_cuenta_corriente_desde).format('YYYY-MM-DD');
                 var lfechaH = moment(me.fecha_cuenta_corriente_hasta).format('YYYY-MM-DD');
                 var lusaFecha = 0;
@@ -232,6 +261,7 @@
                     var response = data.data;
                     me.cta_cte_recibos = response.ctacte_recibos;
                     me.cta_cte_notas_venta = response.ctacte_notas_venta;
+                    me.cta_cte_notas_debito = response.ctacte_notas_debito;
                     me.cta_cte_clientes = response.ctacte_clientes;
                 }).catch((error) => {
                     if (error.response.status == 401) {
@@ -280,11 +310,17 @@
             },
             saldo_ctacte(cCliente) {
                 var lTotalNV = 0;
+                var lTotalND = 0;
                 var lTotalRecibo = 0;
 
                 for (var i = 0; i < this.cta_cte_notas_venta.length; i++) {
                     if(this.cta_cte_notas_venta[i].cliente_id == cCliente) 
                         lTotalNV += parseFloat(this.cta_cte_notas_venta[i].total);
+                }
+
+                for (var i = 0; i < this.cta_cte_notas_debito.length; i++) {
+                    if(this.cta_cte_notas_debito[i].cliente_id == cCliente) 
+                        lTotalNV += parseFloat(this.cta_cte_notas_debito[i].total);
                 }  
 
                 for (var i = 0; i < this.cta_cte_recibos.length; i++) {
@@ -298,7 +334,7 @@
                 if (!lTotalRecibo)
                     lTotalRecibo = 0;
 
-                return parseFloat(lTotalNV - lTotalRecibo);
+                return parseFloat((lTotalNV + lTotalND) - lTotalRecibo);
             },
             total_nv(cCliente) {
                 var lTotal = 0;
@@ -309,7 +345,17 @@
                 }  
                 
                 return parseFloat(lTotal);
-            }            
+            },
+            total_nd(cCliente) {
+                var lTotal = 0;
+
+                for (var i = 0; i < this.cta_cte_notas_debito.length; i++) {
+                    if(this.cta_cte_notas_debito[i].cliente_id == cCliente) 
+                        lTotal += parseFloat(this.cta_cte_notas_debito[i].total);
+                }  
+                
+                return parseFloat(lTotal);
+            }
         },
         created() {
             this.cargaClientes();
