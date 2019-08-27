@@ -20,6 +20,7 @@ class CreateNotasDebitosDetalleTable extends Migration
             $table->timestamps();
 
             $table->foreign('concepto_id')->references('id')->on('conceptos');
+            $table->foreign('nota_debito_id')->references('id')->on('notas_debitos');
         });
     }
 

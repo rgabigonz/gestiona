@@ -42,7 +42,7 @@
                             <th style="width: 10%"></th>
                         </tr>
                         <tr v-for="notadebito in notasdebitos" :key="notadebito.id">
-                            <td>{{ notadebito.id }}</td>
+                            <td>{{ notadebito.punto_venta }} - {{ notadebito.numero_nota_debito }}</td>
                             <td>{{ notadebito.nombre_cliente }}</td>
                             <td>{{ notadebito.fecha | formatDate }}</td>
                             <td>

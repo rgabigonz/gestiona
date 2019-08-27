@@ -35,7 +35,8 @@ class CtaCteController extends Controller
                 ->orderBy('created_at', 'asc')->get();
 
                 $ctacte_notas_debito = NotaDebito::join('clientes', 'notas_debitos.cliente_id', '=', 'clientes.id')
-                ->select('notas_debitos.*', 'clientes.nombre as nombre_cliente')
+                ->join('sucursales', 'notas_debitos.sucursal_id', '=', 'sucursales.id')
+                ->select('notas_debitos.*', 'clientes.nombre as nombre_cliente', 'sucursales.punto_venta as punto_venta')
                 ->where('notas_debitos.cliente_id', '=', $sCliente)
                 ->where('notas_debitos.estado', '=', 'CO')
                 ->orderBy('created_at', 'asc')->get();                
@@ -76,7 +77,8 @@ class CtaCteController extends Controller
                 ->orderBy('created_at', 'asc')->get();
 
                 $ctacte_notas_debito = NotaDebito::join('clientes', 'notas_debitos.cliente_id', '=', 'clientes.id')
-                ->select('notas_debitos.*', 'clientes.nombre as nombre_cliente')
+                ->join('sucursales', 'notas_debitos.sucursal_id', '=', 'sucursales.id')
+                ->select('notas_debitos.*', 'clientes.nombre as nombre_cliente', 'sucursales.punto_venta as punto_venta')
                 ->where('notas_debitos.cliente_id', '=', $sCliente)
                 ->where('notas_debitos.estado', '=', 'CO')
                 ->whereDate('fecha', '>=', $sFechaD)
@@ -120,7 +122,8 @@ class CtaCteController extends Controller
                 ->orderBy('created_at', 'asc')->get();
 
                 $ctacte_notas_debito = NotaDebito::join('clientes', 'notas_debitos.cliente_id', '=', 'clientes.id')
-                ->select('notas_debitos.*', 'clientes.nombre as nombre_cliente')
+                ->join('sucursales', 'notas_debitos.sucursal_id', '=', 'sucursales.id')
+                ->select('notas_debitos.*', 'clientes.nombre as nombre_cliente', 'sucursales.punto_venta as punto_venta')
                 ->where('notas_debitos.estado', '=', 'CO')
                 ->orderBy('created_at', 'asc')->get();
 
@@ -154,7 +157,8 @@ class CtaCteController extends Controller
                 ->orderBy('created_at', 'asc')->get();
 
                 $ctacte_notas_debito = NotaDebito::join('clientes', 'notas_debitos.cliente_id', '=', 'clientes.id')
-                ->select('notas_debitos.*', 'clientes.nombre as nombre_cliente')
+                ->join('sucursales', 'notas_debitos.sucursal_id', '=', 'sucursales.id')
+                ->select('notas_debitos.*', 'clientes.nombre as nombre_cliente', 'sucursales.punto_venta as punto_venta')
                 ->where('notas_debitos.estado', '=', 'CO')
                 ->whereDate('fecha', '>=', $sFechaD)
                 ->whereDate('fecha', '<=', $sFechaH)

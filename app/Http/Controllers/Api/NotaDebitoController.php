@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\NotaDebito;
 use App\NotaDebitoDetalle;
+use App\Configuracion;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
@@ -22,13 +23,15 @@ class NotaDebitoController extends Controller
 
         if(empty($sBuscar)) {
             $notasdebitos = NotaDebito::join('clientes', 'notas_debitos.cliente_id', '=', 'clientes.id')
-            ->select('notas_debitos.*', 'clientes.nombre as nombre_cliente')
+            ->join('sucursales', 'notas_debitos.sucursal_id', '=', 'sucursales.id')
+            ->select('notas_debitos.*', 'clientes.nombre as nombre_cliente', 'sucursales.punto_venta as punto_venta')
             ->orderBy('created_at', 'desc')
             ->paginate(15);
         } 
         else {
             $notasdebitos = NotaDebito::join('clientes', 'notas_debitos.cliente_id', '=', 'clientes.id')
-            ->select('notas_debitos.*', 'clientes.nombre as nombre_cliente')
+            ->join('sucursales', 'notas_debitos.sucursal_id', '=', 'sucursales.id')
+            ->select('notas_debitos.*', 'clientes.nombre as nombre_cliente', 'sucursales.punto_venta as punto_venta')
             ->where($sCriterio, 'like', '%' . $sBuscar . '%')
             ->orderBy('created_at', 'desc')
             ->paginate(15);
@@ -60,8 +63,14 @@ class NotaDebitoController extends Controller
         
         $cantidad_items = count($request->items);
 
+        $configuracion = Configuracion::get();
+        $numero_nota_debito = NotaDebito::where('sucursal_id', $configuracion[0]->sucursal_id)->max('numero_nota_debito') + 1;
+
         $nota_debito = new NotaDebito();
 
+        $nota_debito->numero_nota_debito = $numero_nota_debito;
+
+        $nota_debito->sucursal_id = $configuracion[0]->sucursal_id;
         $nota_debito->cliente_id = $request->codigo_cliente;
         $nota_debito->user_id = $user->id;
         $nota_debito->total = $request->total_nota_debito;
@@ -117,7 +126,8 @@ class NotaDebitoController extends Controller
 
     public function devuelveNotaDebito(Request $request, $id)
     {
-        $datoNotaDebito = NotaDebito::select('notas_debitos.*')
+        $datoNotaDebito = NotaDebito::join('sucursales', 'notas_debitos.sucursal_id', '=', 'sucursales.id')
+        ->select('notas_debitos.*', 'sucursales.punto_venta as punto_venta')
         ->where('notas_debitos.id', '=', $id)->get();        
         
         $datoNotaDebitoD = NotaDebitoDetalle::leftjoin('conceptos', 'notas_debitos_detalle.concepto_id', '=', 'conceptos.id')

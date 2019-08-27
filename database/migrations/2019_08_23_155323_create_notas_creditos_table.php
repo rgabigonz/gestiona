@@ -15,6 +15,8 @@ class CreateNotasCreditosTable extends Migration
     {
         Schema::create('notas_creditos', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('sucursal_id');
+            $table->unsignedInteger('numero_nota_credito');
             $table->unsignedInteger('cliente_id');
             $table->unsignedInteger('user_id');
             $table->char('estado', 2)->default('PE'); //PE = Pendiente, AN = Anulado, CO = Confirmado
@@ -23,6 +25,7 @@ class CreateNotasCreditosTable extends Migration
             $table->string('obs')->nullable();            
             $table->timestamps();
 
+            $table->foreign('sucursal_id')->references('id')->on('sucursales');
             $table->foreign('cliente_id')->references('id')->on('clientes');
             $table->foreign('user_id')->references('id')->on('users'); 
         });

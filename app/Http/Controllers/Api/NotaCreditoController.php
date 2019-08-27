@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\NotaCredito;
 use App\NotaCreditoDetalle;
+use App\Configuracion;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
@@ -22,13 +23,15 @@ class NotaCreditoController extends Controller
 
         if(empty($sBuscar)) {
             $notascreditos = NotaCredito::join('clientes', 'notas_creditos.cliente_id', '=', 'clientes.id')
-            ->select('notas_creditos.*', 'clientes.nombre as nombre_cliente')
+            ->join('sucursales', 'notas_creditos.sucursal_id', '=', 'sucursales.id')
+            ->select('notas_creditos.*', 'clientes.nombre as nombre_cliente', 'sucursales.punto_venta as punto_venta')
             ->orderBy('created_at', 'desc')
             ->paginate(15);
         } 
         else {
             $notascreditos = NotaCredito::join('clientes', 'notas_creditos.cliente_id', '=', 'clientes.id')
-            ->select('notas_creditos.*', 'clientes.nombre as nombre_cliente')
+            ->select('notas_creditos.*', 'clientes.nombre as nombre_cliente', 'sucursales.punto_venta as punto_venta')
+            ->join('sucursales', 'notas_creditos.sucursal_id', '=', 'sucursales.id')
             ->where($sCriterio, 'like', '%' . $sBuscar . '%')
             ->orderBy('created_at', 'desc')
             ->paginate(15);
@@ -60,8 +63,14 @@ class NotaCreditoController extends Controller
         
         $cantidad_items = count($request->items);
 
+        $configuracion = Configuracion::get();
+        $numero_nota_credito = NotaCredito::where('sucursal_id', $configuracion[0]->sucursal_id)->max('numero_nota_credito') + 1;
+
         $nota_credito = new NotaCredito();
 
+        $nota_credito->numero_nota_credito = $numero_nota_credito;
+
+        $nota_credito->sucursal_id = $configuracion[0]->sucursal_id;
         $nota_credito->cliente_id = $request->codigo_cliente;
         $nota_credito->user_id = $user->id;
         $nota_credito->total = $request->total_nota_credito;
@@ -117,7 +126,8 @@ class NotaCreditoController extends Controller
 
     public function devuelveNotaCredito(Request $request, $id)
     {
-        $datoNotaCredito = NotaCredito::select('notas_creditos.*')
+        $datoNotaCredito = NotaCredito::join('sucursales', 'notas_creditos.sucursal_id', '=', 'sucursales.id')
+        ->select('notas_creditos.*', 'sucursales.punto_venta as punto_venta')
         ->where('notas_creditos.id', '=', $id)->get();        
         
         $datoNotaCreditoD = NotaCreditoDetalle::leftjoin('conceptos', 'notas_creditos_detalle.concepto_id', '=', 'conceptos.id')

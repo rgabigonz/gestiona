@@ -123,7 +123,7 @@
                                 </thead>
                                 <tbody style="font-size: 12px">
                                     <tr v-for="cta_cte_nota_debito in filtroND(cta_cte_cliente.id)" :key="cta_cte_nota_debito.id">
-                                        <td>{{ cta_cte_nota_debito.id }}</td>
+                                        <td>{{ cta_cte_nota_debito.punto_venta }} - {{ cta_cte_nota_debito.numero_nota_debito }}</td>
                                         <td>{{ cta_cte_nota_debito.fecha | formatDate }}</td>
                                         <td>${{ cta_cte_nota_debito.total }}</td>
                                     </tr>

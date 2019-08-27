@@ -10,7 +10,7 @@
                   <h4>
                     <i class="fa fa-globe"></i> Agro Proyecciones SRL
                   </h4>
-                  <div>Nota de Credito N° {{ nota_credito_id_edicion }}</div>
+                  <div>Nota de Credito N° {{ punto_venta }} - {{ numero_nota_credito }}</div>
                 </div>
                 <!-- /.col -->
               </div>
@@ -211,6 +211,8 @@
                 observacion:'',                
                 nota_credito_id_edicion: 0,
                 codigo_cliente: 0,
+                punto_venta: '',
+                numero_nota_credito: 0,
                 codigo_concepto: 0,
                 importe_item_nota_credito: 0,
 
@@ -405,6 +407,9 @@
                     me.fecha_nota_credito = me.fecha_nota_credito.setDate(me.fecha_nota_credito.getDate() + 1);
 
                     me.estado = me.nota_credito[0].estado;
+
+                    me.numero_nota_credito = me.nota_credito[0].numero_nota_credito;
+                    me.punto_venta = me.nota_credito[0].punto_venta;
 
                     me.cargarCliente(me.codigo_cliente);
 

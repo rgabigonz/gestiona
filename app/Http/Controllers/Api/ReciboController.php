@@ -65,7 +65,6 @@ class ReciboController extends Controller
         $cantidad_items = count($request->items);
 
         $configuracion = Configuracion::get();
-
         $numero_recibo = Recibo::where('sucursal_id', $configuracion[0]->sucursal_id)->max('numero_recibo') + 1;
 
         $recibo = new Recibo();
