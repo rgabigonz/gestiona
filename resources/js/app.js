@@ -59,7 +59,8 @@ let routes = [
     { path: '/notascredito', name: 'notascredito', component: require('./components/NotasCredito.vue') },
     { path: '/notascreditodetalle/:notacreditoId', name: 'notascreditodetalle', component: require('./components/NotasCreditoDetalle.vue') },    
     { path: '/consultacheques', name: 'consultacheques', component: require('./components/ConsultaCheques.vue') },
-    { path: '/ctactecliente', name: 'ctactecliente', component: require('./components/CuentaCorrienteCliente.vue') }
+    { path: '/ctactecliente', name: 'ctactecliente', component: require('./components/CuentaCorrienteCliente.vue') },
+    { path: '/stockproductos', name: 'stockproductos', component: require('./components/StockProducto.vue') }
 ]
 
 const router = new VueRouter({
