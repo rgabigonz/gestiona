@@ -203,4 +203,7 @@ Route::middleware('auth:api')->group( function () {
 
     //Rutas Cta Cte
     Route::get('/ctactecliente/devuelveCtaCte/','Api\CtaCteController@devuelveCtaCte');
+
+    //Rutas Stock
+    Route::get('/stockproducto/devuelveStock/','Api\StockProductoController@devuelveStock');    
 });

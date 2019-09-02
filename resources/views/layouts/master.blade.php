@@ -216,7 +216,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           </li>
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-money-check-alt red"></i>
+              <i class="nav-icon fas fa-truck-loading pink"></i>
               <p>
                 Stock
                 <i class="right fa fa-angle-left"></i>
@@ -225,7 +225,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <ul class="nav nav-treeview">
               <li class="nav-item">
                 <router-link to="/stockproductos" class="nav-link">
-                  <i class="fas fa-file-invoice nav-icon"></i>
+                  <i class="fas fa-boxes nav-icon"></i>
                   <p>Stock Productos</p>
                 </router-link>
               </li>
