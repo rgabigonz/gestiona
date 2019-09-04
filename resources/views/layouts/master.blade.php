@@ -223,12 +223,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </p>
             </a>
             <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <router-link to="/stockproductos" class="nav-link">
-                  <i class="fas fa-boxes nav-icon"></i>
-                  <p>Stock Productos</p>
+            <li class="nav-item">
+                <router-link to="/movimientostock" class="nav-link">
+                  <i class="fas fa-people-carry nav-icon"></i>
+                  <p>Movimientos Stock</p>
                 </router-link>
-              </li>
+              </li>            
             </ul>
           </li>           
           <li class="nav-item has-treeview">
@@ -250,6 +250,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <router-link to="/ctactecliente" class="nav-link">
                   <i class="fas fa-hand-holding-usd"></i>
                   <p>Cta Cte Clientes</p>
+                </router-link>
+              </li>
+              <li class="nav-item">
+                <router-link to="/stockproductos" class="nav-link">
+                  <i class="fas fa-boxes nav-icon"></i>
+                  <p>Stock</p>
                 </router-link>
               </li>              
             </ul>

@@ -20,7 +20,6 @@
                 <div class="card-body">
                     <div class="row invoice-info">
                         <div class="col-sm-5 invoice-col">
-                            <label class="control-label">Deposito</label>
                             <div class="form-group">
                                 <div class="input-group input-group-sm">
                                     <select class="form-control" v-model="codigo_deposito" @change="consultarStock(codigo_deposito, codigo_producto)">
@@ -33,7 +32,6 @@
                         <!-- /.col -->
 
                         <div class="col-sm-5 invoice-col">
-                            <label class="control-label">Producto</label>
                             <div class="form-group">
                                 <div class="input-group input-group-sm">
                                     <select class="form-control" v-model="codigo_producto" @change="consultarStock(codigo_deposito, codigo_producto)">
@@ -46,7 +44,6 @@
                         <!-- /.col -->
 
                         <div class="col-sm-2 invoice-col">
-                            <label class="control-label"></label>
                             <div class="form-group">
                                 <button type="button" class="btn btn-warning float-right" @click="consultarStock(codigo_deposito, codigo_producto)">
                                     <i class="fa fa-save fa-fw"></i> Actualizar

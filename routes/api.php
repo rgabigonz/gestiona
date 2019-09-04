@@ -205,5 +205,13 @@ Route::middleware('auth:api')->group( function () {
     Route::get('/ctactecliente/devuelveCtaCte/','Api\CtaCteController@devuelveCtaCte');
 
     //Rutas Stock
-    Route::get('/stockproducto/devuelveStock/','Api\StockProductoController@devuelveStock');    
+    Route::get('/stockproducto/devuelveStock/','Api\StockProductoController@devuelveStock'); 
+    
+    Route::get('/movimientostock/devuelveMovimientoStock/{movimientostock}', 'Api\MovimientoStockController@devuelveMovimientoStock');
+    Route::put('/movimientostock/anulaMovimientoStock/{movimientostock}', 'Api\MovimientoStockController@anulaMovimientoStock');
+    Route::put('/movimientostock/confirmaMovimientoStock/{movimientostock}', 'Api\MovimientoStockController@confirmaMovimientoStock');
+
+    Route::apiResources([
+        'movimientostock' => 'Api\MovimientoStockController'
+    ]);    
 });
