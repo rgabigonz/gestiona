@@ -73,6 +73,7 @@ class ReciboController extends Controller
         $recibo->cliente_id = $request->codigo_cliente;
         $recibo->user_id = $user->id;
         $recibo->total = $request->total_recibo;
+        $recibo->total_dolares = $request->total_dolares;
         $recibo->numero_recibo = $numero_recibo;
         $recibo->obs = $request->obs;
         $recibo->referencia_talonario = $request->referencia_talonario;
@@ -110,6 +111,7 @@ class ReciboController extends Controller
     {
         $Recibo = Recibo::findOrFail($id);
         $Recibo->total = $request->total_recibo;
+        $Recibo->total_dolares = $request->total_dolares;
         $Recibo->obs = $request->obs;
         $Recibo->referencia_talonario = $request->referencia_talonario;
         $Recibo->precio_dolar_manual = $request->precio_dolar_manual;

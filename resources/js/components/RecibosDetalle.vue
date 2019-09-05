@@ -190,9 +190,9 @@
                                 <tr>
                                     <td></td>
                                     <td></td>
-                                    <td></td>
                                     <td>Total:</td>
                                     <td>${{ total | currency }}</td>
+                                    <td>U$S{{ total_dolares | currency }}</td>
                                     <td></td>
                                 </tr>
                             </tbody>
@@ -442,6 +442,7 @@
                         codigo_cliente: this.codigo_cliente, 
                         fecha_recibo: this.fecha_recibo,
                         total_recibo: this.total,
+                        total_dolares: this.total_dolares,
                         obs: this.observacion,
                         referencia_talonario: this.referencia_talonario,
                         precio_dolar_manual: this.precio_dolar_manual,
@@ -474,6 +475,7 @@
                 if (this.validaRecibo()) {
                     axios.put('api/recibo/'+this.recibo_id_edicion, {
                             total_recibo: this.total,
+                            total_dolares: this.total_dolares,
                             obs: this.observacion,
                             referencia_talonario: this.referencia_talonario,
                             precio_dolar_manual: this.precio_dolar_manual,
@@ -543,11 +545,31 @@
         },
         computed: {
             total() {
-                return this.items.reduce(
+                var lTotal = 0;
+
+                for (var i = 0; i < this.items.length; i++) {
+                    if (this.items[i].tipo_pago != 'ED') {
+                        lTotal += (parseFloat(this.items[i].importe));
+                    }
+                }  
+                
+                return parseFloat(lTotal);
+                /*return this.items.reduce(
                     (acc, item) => acc + (parseFloat(item.importe)),
                     0
-                );
-            }            
+                );*/
+            },
+            total_dolares() {
+                var lTotalDolares = 0;
+
+                for (var i = 0; i < this.items.length; i++) {
+                    if (this.items[i].tipo_pago == 'ED') {
+                        lTotalDolares += (parseFloat(this.items[i].importe));
+                    }
+                }  
+                
+                return parseFloat(lTotalDolares);
+            }
         },
         created() {
             this.recibo_id_edicion = this.$route.params.reciboId;

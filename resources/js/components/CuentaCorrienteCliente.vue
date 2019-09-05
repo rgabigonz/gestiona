@@ -146,9 +146,10 @@
                                     <tr>
                                         <th style="width:20%">Recibos Cliente</th>
                                         <th style="width:20%">Fecha</th>
-                                        <th style="width:20%">Importe($)</th>
-                                        <th style="width:20%">Dolar</th>
-                                        <th style="width:20%">Importe(U$S)</th>
+                                        <th style="width:15%">Importe($)</th>
+                                        <th style="width:15%">Importe(U$S)</th>
+                                        <th style="width:10%">Dolar</th>
+                                        <th style="width:20%">Total(U$S)</th>
                                     </tr>
                                 </thead>
                                 <tbody style="font-size: 12px">
@@ -156,16 +157,19 @@
                                         <td>{{ cta_cte_recibo.punto_venta }} - {{ cta_cte_recibo.numero_recibo }}</td>
                                         <td>{{ cta_cte_recibo.fecha | formatDate }}</td>
                                         <td>${{ cta_cte_recibo.total }}</td>
+                                        <td>${{ cta_cte_recibo.total_dolares }}</td>
                                         <td>${{ cta_cte_recibo.precio_dolar_manual }}</td>
-                                        <td v-if="cta_cte_recibo.precio_dolar_manual && cta_cte_recibo.precio_dolar_manual > 0" >${{ (cta_cte_recibo.total / cta_cte_recibo.precio_dolar_manual) | currency }}</td>
+                                        <td v-if="cta_cte_recibo.precio_dolar_manual && cta_cte_recibo.precio_dolar_manual > 0" >${{ (cta_cte_recibo.total / cta_cte_recibo.precio_dolar_manual) + cta_cte_recibo.total_dolares | currency }}</td>
+                                        <td v-else-if="cta_cte_recibo.total_dolares && cta_cte_recibo.total_dolares > 0" >${{ cta_cte_recibo.total_dolares | currency }}</td>                                        
                                         <td v-else>$0</td>
                                     </tr>
                                     <tr>
                                         <td></td>
+                                        <td><b>Total($):</b></td>                                        
+                                        <td><b>${{ total_recibos(cta_cte_cliente.id) | currency }}</b></td>
                                         <td></td>
-                                        <td><b>Total: ${{ total_recibos(cta_cte_cliente.id) | currency }}</b></td>
-                                        <td></td>
-                                        <td><b>Total: ${{ total_recibosDolares(cta_cte_cliente.id) | currency }}</b></td>
+                                        <td><b>Total(U$S):</b></td>
+                                        <td><b>${{ total_recibosDolares(cta_cte_cliente.id) | currency }}</b></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -300,6 +304,7 @@
                         if (this.cta_cte_recibos[i].precio_dolar_manual && this.cta_cte_recibos[i].precio_dolar_manual > 0) {
                             lTotalDolares += parseFloat(this.cta_cte_recibos[i].total) / parseFloat(this.cta_cte_recibos[i].precio_dolar_manual);
                         }
+                        lTotalDolares += parseFloat(this.cta_cte_recibos[i].total_dolares);
                     }
                 }  
                 
@@ -329,6 +334,7 @@
                             lTotalRecibo += parseFloat(this.cta_cte_recibos[i].total) / parseFloat(this.cta_cte_recibos[i].precio_dolar_manual);
                         }
                     }
+                    lTotalRecibo += parseFloat(this.cta_cte_recibos[i].total_dolares);
                 }
 
                 if (!lTotalRecibo)
