@@ -333,8 +333,8 @@
                         if (this.cta_cte_recibos[i].precio_dolar_manual && this.cta_cte_recibos[i].precio_dolar_manual > 0) {
                             lTotalRecibo += parseFloat(this.cta_cte_recibos[i].total) / parseFloat(this.cta_cte_recibos[i].precio_dolar_manual);
                         }
+                        lTotalRecibo += parseFloat(this.cta_cte_recibos[i].total_dolares);
                     }
-                    lTotalRecibo += parseFloat(this.cta_cte_recibos[i].total_dolares);
                 }
 
                 if (!lTotalRecibo)
