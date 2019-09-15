@@ -75,6 +75,7 @@ class NotaDebitoController extends Controller
         $nota_debito->user_id = $user->id;
         $nota_debito->total = $request->total_nota_debito;
         $nota_debito->obs = $request->obs;
+        $nota_debito->precio_dolar_manual = $request->precio_dolar_manual;
 
         $nota_debito->fecha = $fecha_nota_debito->format('Y-m-d');
 
@@ -100,6 +101,7 @@ class NotaDebitoController extends Controller
 
         $NotaDebito->total = $request->total_nota_debito;
         $NotaDebito->obs = $request->obs;
+        $NotaDebito->precio_dolar_manual = $request->precio_dolar_manual;
 
         $NotaDebito->update();
         

@@ -125,7 +125,9 @@
                                     <tr v-for="cta_cte_nota_debito in filtroND(cta_cte_cliente.id)" :key="cta_cte_nota_debito.id">
                                         <td>{{ cta_cte_nota_debito.punto_venta }} - {{ cta_cte_nota_debito.numero_nota_debito }}</td>
                                         <td>{{ cta_cte_nota_debito.fecha | formatDate }}</td>
-                                        <td>${{ cta_cte_nota_debito.total }}</td>
+                                        <td v-if="cta_cte_nota_debito.precio_dolar_manual && cta_cte_nota_debito.precio_dolar_manual > 0" >${{ (cta_cte_nota_debito.total / cta_cte_nota_debito.precio_dolar_manual) | currency }}</td>
+                                        <td v-else>$0</td>                                        
+                                        <!-- <td>${{ cta_cte_nota_debito.total }}</td> -->
                                     </tr>
                                     <tr>
                                         <td></td>
@@ -325,7 +327,10 @@
 
                 for (var i = 0; i < this.cta_cte_notas_debito.length; i++) {
                     if(this.cta_cte_notas_debito[i].cliente_id == cCliente) 
-                        lTotalNV += parseFloat(this.cta_cte_notas_debito[i].total);
+                        if (this.cta_cte_notas_debito[i].precio_dolar_manual && this.cta_cte_notas_debito[i].precio_dolar_manual > 0) {
+                            lTotalNV += parseFloat(this.cta_cte_notas_debito[i].total) / parseFloat(this.cta_cte_notas_debito[i].precio_dolar_manual);
+                        }                    
+                        //lTotalNV += parseFloat(this.cta_cte_notas_debito[i].total);
                 }  
 
                 for (var i = 0; i < this.cta_cte_recibos.length; i++) {
@@ -357,10 +362,15 @@
 
                 for (var i = 0; i < this.cta_cte_notas_debito.length; i++) {
                     if(this.cta_cte_notas_debito[i].cliente_id == cCliente) 
-                        lTotal += parseFloat(this.cta_cte_notas_debito[i].total);
+                        if (this.cta_cte_notas_debito[i].precio_dolar_manual && this.cta_cte_notas_debito[i].precio_dolar_manual > 0) {
+                            lTotal += parseFloat(this.cta_cte_notas_debito[i].total) / parseFloat(this.cta_cte_notas_debito[i].precio_dolar_manual);
+                        }
                 }  
-                
-                return parseFloat(lTotal);
+              
+                if (lTotal)
+                    return parseFloat(lTotal);
+                else    
+                    return 0;
             }
         },
         created() {
