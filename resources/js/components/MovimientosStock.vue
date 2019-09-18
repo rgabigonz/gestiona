@@ -45,22 +45,25 @@
                             <td>{{ movimiento.descripcion_deposito }}</td>
                             <td>{{ movimiento.fecha }}</td>
                             <td>
-                                <div v-if="movimiento.estado == 'A'">
-                                    <span class="badge badge-success">Activo</span>
+                                <div v-if="movimiento.estado == 'PE'">
+                                    <span class="badge badge-info">Pendiente</span>
+                                </div>
+                                <div v-else-if="movimiento.estado == 'CO'">
+                                    <span class="badge badge-success">Confirmado</span>
                                 </div>
                                 <div v-else>
-                                    <span class="badge badge-danger">No Activo</span>
-                                </div>
+                                    <span class="badge badge-danger">Anulado</span>
+                                </div>                                
                             </td>                            
                             <td>
                                 <a href="#" @click="editarModal(movimiento)">
                                     <i class="fa fa-edit blue"></i>
                                 </a>
-                                <a href="#" v-if="movimiento.estado == 'A'" @click="desactivaMovimiento(movimiento.id)">
-                                    <i class="fa fa-trash-alt red"></i>
-                                </a>
-                                <a href="#" v-else @click="activaMovimiento(movimiento.id)">
+                                <a href="#" v-if="movimiento.estado == 'PE'" @click="confirmaMovimiento(movimiento.id)">
                                     <i class="fa fa-check green"></i>
+                                </a>
+                                <a href="#" v-if="movimiento.estado == 'PE'" @click="anulaMovimiento(movimiento.id)">
+                                    <i class="fa fa-trash-alt yellow"></i>
                                 </a>
                             </td>
                         </tr>
@@ -84,67 +87,63 @@
               <!-- /.card-footer -->           
             </div>
             <!-- /.card -->
-          </div>
+          </div>    
         </div>
 
         <!-- Modal -->
         <div class="modal fade" id="ventanaModal" tabindex="-1" role="dialog" aria-labelledby="ventanaModalLabel" aria-hidden="true">
-            <div style="min-width: 35%" class="modal-dialog modal-dialog-centered" role="document">
+            <div style="min-width: 45%" class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 v-show="!modoEdicion" class="modal-title" id="ventanaModalLabel">Agregar Producto</h5>
-                        <h5 v-show="modoEdicion" class="modal-title" id="ventanaModalLabel">Editar Producto</h5>
+                        <h5 v-show="!modoEdicion" class="modal-title" id="ventanaModalLabel">Hacer Movimiento</h5>
+                        <h5 v-show="modoEdicion" class="modal-title" id="ventanaModalLabel">Editar Movimiento</h5>
                         <button type="button" class="close"  @click="cerrarModal()" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form @submit.prevent="modoEdicion ? actualizaProducto() : creaProducto()">
+                    <form @submit.prevent="modoEdicion ? actualizaMovimiento() : creaMovimiento()">
                         <div class="modal-body">
                             <div class="form-group">
-                                <label class="control-label" for="nombre"><i class="fa fa-bell-o"></i>Nombre</label>
-                                <input v-model="form.nombre" type="text" name="nombre" placeholder="Ingrese un nombre"
-                                    class="form-control" :class="{ 'is-invalid': form.errors.has('nombre') }">
-                                <has-error :form="form" field="nombre"></has-error>
+                                <label class="control-label" for="deposito_id"><i class="fa fa-bell-o"></i>Deposito</label>
+                                <select v-model="form.deposito_id" name="deposito_id" class="form-control" :class="{ 'is-invalid': form.errors.has('deposito_id') }">
+                                    <option value=0>Seleccionar...</option>
+                                    <option v-for="ldeposito in oDepositos" :key="ldeposito.id" :value="ldeposito.id">{{ ldeposito.descripcion }}</option>
+                                </select>
+                                <has-error :form="form" field="deposito_id"></has-error>
                             </div>
                             <div class="form-group">
-                                <label class="control-label" for="tipo_producto"><i class="fa fa-bell-o"></i>Tipo de Producto</label>
-                                <select v-model="form.tipo_producto" name="tipo_producto" class="form-control" :class="{ 'is-invalid': form.errors.has('tipo_producto') }">
-                                    <option v-for="ltipo_producto in oTipos_Producto" :key="ltipo_producto.id" :value="ltipo_producto.id">{{ ltipo_producto.descripcion }}</option>
+                                <label class="control-label" for="producto_id"><i class="fa fa-bell-o"></i>Producto</label>
+                                <select v-model="form.producto_id" name="producto_id" class="form-control" :class="{ 'is-invalid': form.errors.has('producto_id') }">
+                                    <option value=0>Seleccionar...</option>
+                                    <option v-for="lproducto in oProductos" :key="lproducto.id" :value="lproducto.id">{{ lproducto.nombre }}</option>
                                 </select>
-                                <has-error :form="form" field="tipo_producto"></has-error>
-                            </div>   
-
+                                <has-error :form="form" field="producto_id"></has-error>
+                            </div>
+                            <div class="row">
+                                <div class="col col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label" for="cantidad"><i class="fa fa-bell-o"></i>Cantidad</label>
+                                        <input v-model="form.cantidad" type="number" name="cantidad" min="0" value="0" step=".01"
+                                            class="form-control" :class="{ 'is-invalid': form.errors.has('cantidad') }">
+                                        <has-error :form="form" field="cantidad"></has-error>
+                                    </div>
+                                </div>
+                                <div class="col col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label" for="tipo"><i class="fa fa-bell-o"></i>Tipo de Movimiento</label>
+                                        <select v-model="form.tipo" name="tipo" class="form-control" :class="{ 'is-invalid': form.errors.has('tipo') }">
+                                            <option v-for="ltipo_movimiento in ltipos_movimientos" :key="ltipo_movimiento.id" :value="ltipo_movimiento.id">{{ ltipo_movimiento.nombre }}</option>
+                                        </select>
+                                        <has-error :form="form" field="tipo"></has-error>
+                                    </div>   
+                                </div>
+                            </div>
                             <div class="form-group">
                                 <label class="control-label" for="descripcion"><i class="fa fa-bell-o"></i>Descripcion</label>
                                 <textarea v-model="form.descripcion" type="text" name="descripcion" placeholder="Ingrese una descripcion"
                                       class="form-control" :class="{ 'is-invalid': form.errors.has('descripcion') }"></textarea>
                                 <has-error :form="form" field="descripcion"></has-error>
                             </div> 
-
-                            <div class="row">
-                                <div class="col col-md-4">
-                                  <div class="form-group">
-                                      <label class="control-label" for="stk_min"><i class="fa fa-bell-o"></i>Stock Minimo</label>
-                                      <input v-model="form.stk_min" type="number" name="stk_min" min="0" value="0" step=".01"
-                                          class="form-control" :class="{ 'is-invalid': form.errors.has('stk_min') }">
-                                      <has-error :form="form" field="stk_min"></has-error>
-                                  </div>
-                                </div>
-                                <div class="col col-md-4">
-                                  <div class="form-group">
-                                    <label class="control-label" for="stk_max"><i class="fa fa-bell-o"></i>Stock maximo</label>
-                                      <input v-model="form.stk_max" type="number" name="stk_max"  min="0" value="0" step=".01"
-                                          class="form-control" :class="{ 'is-invalid': form.errors.has('stk_max') }">
-                                      <has-error :form="form" field="stk_max"></has-error>
-                                  </div>
-                                </div>
-                                <div class="col col-md-4">
-                                  <div class="form-group">
-                                    <label class="control-label" for="stk_actual"><i class="fa fa-bell-o"></i>Stock actual</label>
-                                      <input v-model="form.stk_actual" type="number" name="stk_actual" disabled class="form-control">
-                                  </div>
-                                </div>
-                            </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger" @click="cerrarModal()">Cerrar</button> <!--data-dismiss="modal" -->
@@ -162,6 +161,10 @@
     export default {
         data() {
             return {
+                ltipos_movimientos: [
+                    {id: 'I', nombre: 'INGRESO'},
+                    {id: 'E', nombre: 'EGRESO'}
+                ],                
                 modoEdicion: false,
                 movimientos: {},
                 oProductos: {},
@@ -172,7 +175,9 @@
                     deposito_id: 0,
                     cantidad: 0,
                     descripcion: '',
-                    tipo: 1,
+                    tipo: 'I',
+                    tipo_documento: 'MI',
+                    documento_id: 0
                 }),
                 pagination: {
                     'total': 0,
@@ -221,17 +226,21 @@
                 this.cargarMovimientos(page, buscar, criterio);
             },
             nuevoModal() {
-                this.fCargar_TP();
+                this.cargaDepositos();
+                this.cargaProductos();
+
                 this.modoEdicion = false;
                 this.form.reset();
                 $('#ventanaModal').modal('show');
             },
-            editarModal(producto) {
-                this.fCargar_TP();
+            editarModal(movimiento) {
+                this.cargaDepositos();
+                this.cargaProductos();
+
                 this.modoEdicion = true;
                 this.form.reset();
                 $('#ventanaModal').modal('show');
-                this.form.fill(producto);
+                this.form.fill(movimiento);
             },
             cerrarModal() {
                 this.form.errors.clear();
@@ -252,19 +261,31 @@
                     }
                 });
             },
-            fCargar_TP() {
-                let lMe = this;                
-                var lUrl = 'api/tipoproducto/cargaTP';
-                axios.get(lUrl).then(data => {
-                    var lResponse = data.data;
-                    lMe.oTipos_Producto = lResponse.tiposProducto;
+            cargaDepositos() {
+                let me = this;                
+                var url = 'api/deposito/cargaDepositos';
+                axios.get(url).then(data => {
+                    var response = data.data;
+                    me.oDepositos = response.ldepositos;
                 }).catch((error) => {
-                    if (error.lResponse.status == 401) {
+                    if (error.response.status == 401) {
                         swal('Error!', 'La sesion ha caducado.', 'warning');
                     }
                 });
             },
-            actualizaProducto() {
+            cargaProductos() {
+                let me = this;                
+                var url = 'api/producto/cargaProductos';
+                axios.get(url).then(data => {
+                    var response = data.data;
+                    me.oProductos = response.productos;
+                }).catch((error) => {
+                    if (error.response.status == 401) {
+                        swal('Error!', 'La sesion ha caducado.', 'warning');
+                    }
+                });
+            },            
+            actualizaMovimiento() {
                 this.$Progress.start();
                 
                 this.form.put('api/producto/'+this.form.id)
@@ -281,16 +302,16 @@
                     this.$Progress.fail();
                 });
             },
-            creaProducto() {
+            creaMovimiento() {
                 this.$Progress.start();
                 
-                this.form.post('api/producto')
+                this.form.post('api/movimientostock')
                 .then(() => {
                     Fire.$emit('AfterAction');
                     this.cerrarModal();
                     toast({
                         type: 'success',
-                        title: 'Se creo el producto correctamente!'
+                        title: 'Se creo el movimiento correctamente!'
                     });
 
                 })
@@ -300,26 +321,27 @@
 
                 this.$Progress.finish();
             },
-            activaProducto(id) {
+            anulaMovimiento(id) {
                 swal({
                     title: 'Esta seguro?',
-                    //text: "Activar Producto!",
+                    //text: "Desactivar Cliente!",
                     type: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: 'Si, ACTIVAR',
+                    confirmButtonText: 'Si, ANULAR',
                     cancelButtonText: 'Cancelar'
                 }).then((result) => {
                     if (result.value) {
-                        this.form.put('api/producto/activar/'+id)
+                        axios.put('api/recibo/anulaRecibo/'+id)
                         .then(() => {
                             swal(
-                                'ACTIVADO!',
-                                'El registro a sido Activado.',
+                                'ANULADO!',
+                                'El RECIBO a sido ANULADO.',
                                 'success'
                             );
-                            Fire.$emit('AfterAction');
+                            //Fire.$emit('AfterAction');
+                            this.cargarRecibos(1, this.sBuscar, this.sCriterio);
                         })
                     }
                 })
@@ -327,26 +349,26 @@
                     swal('Fallo!', 'Hubo un error al procesar la transaccion.', 'warning');                    
                 });
             },
-            desactivaProducto(id) {
+            confirmaMovimiento(id) {
                 swal({
                     title: 'Esta seguro?',
-                    //text: "Desactivar Producto!",
+                    //text: "Desactivar Cliente!",
                     type: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: 'Si, DESACTIVAR',
+                    confirmButtonText: 'Si, CONFIRMAR',
                     cancelButtonText: 'Cancelar'
                 }).then((result) => {
                     if (result.value) {
-                        this.form.put('api/producto/desactivar/'+id)
+                        axios.put('api/movimientostock/confirmaMovimientoStock/'+id)
                         .then(() => {
                             swal(
-                                'DESACTIVADO!',
-                                'El registro a sido Desactivado.',
+                                'CONFIRMADO!',
+                                'El MOVIMIENTO DE STOCK a sido CONFIRMADO.',
                                 'success'
                             );
-                            Fire.$emit('AfterAction');
+                            this.cargarMovimientos(1, this.sBuscar, this.sCriterio);
                         })
                     }
                 })
