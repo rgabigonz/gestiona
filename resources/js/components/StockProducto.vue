@@ -64,7 +64,7 @@
                 <div class="card-body">
 
                     <!-- Productos row -->
-                    <div class="card" v-if="codigo_deposito > 0">
+                    <!-- <div class="card" v-if="codigo_deposito > 0"> -->
                         <div class="card-header border-light bg-danger">Stock - Productos</div>
                         <div class="card-body">
                             <table class="table table-striped table-sm">
@@ -82,7 +82,7 @@
                                 </tbody>
                             </table>
                         </div>
-                    </div>
+                    <!-- </div> -->
 
                     <table class="table table-sm">
                         <tbody>
