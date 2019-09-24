@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\OrdenCompra;
 use App\OrdenCompraDetalle;
+use App\MovimientoStock;
+use App\StockProducto;
+use App\Configuracion;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
@@ -147,10 +150,12 @@ class OrdenCompraController extends Controller
         $OrdenCompra->lugar_entrega = $request->lugar_entrega;
         $OrdenCompra->obs = $request->obs;
 
-        if (!empty($request->codigo_deposito))
-            $OrdenCompra->deposito_id = $request->codigo_deposito;
-        else
-            $OrdenCompra->deposito_id = null;
+        if (!empty($OrdenCompra->estado != 'CO')) {
+            if (!empty($request->codigo_deposito))
+                $OrdenCompra->deposito_id = $request->codigo_deposito;
+            else
+                $OrdenCompra->deposito_id = null;
+        }
 
         if (!empty($request->codigo_forma_pago))            
             $OrdenCompra->formapago_id = $request->codigo_forma_pago;
@@ -231,9 +236,54 @@ class OrdenCompraController extends Controller
 
     public function confirmaOrdenCompra(Request $request, $id)
     {
+        $user = auth('api')->user();
+
         $OrdenCompra = OrdenCompra::findOrFail($id);
         $OrdenCompra->estado = 'CO';
         $OrdenCompra->update();
+
+        // Si actualizo
+        if ($OrdenCompra->id > 0) {
+
+            $datoOCDet = OrdenCompraDetalle::select('ordenes_compras_detalle.*')
+                         ->where('ordenes_compras_detalle.orden_compra_id', '=', $id)
+                         ->get();
+            
+            $Configuracion = Configuracion::get();
+
+            if (!empty($OrdenCompra->deposito_id)) {
+                $deposito_producto = $OrdenCompra->deposito_id;
+            } else {
+                $deposito_producto = $Configuracion[0]->deposito_id;
+            }
+
+            $fecha_movimiento = \Carbon\Carbon::parse($OrdenCompra->fecha);
+            $fecha_movimiento = $fecha_movimiento->format('Y-m-d');
+
+            $cantidad_items = count($datoOCDet);
+
+            // Si encontro el detalle de la OC
+            if ($cantidad_items > 0) {
+
+                for($i = 0; $i < $cantidad_items; $i++)
+                {                
+                    $MovimientoStock = MovimientoStock::create([
+                        'producto_id' => $datoOCDet[$i]->producto_id,
+                        'deposito_id' => $deposito_producto,
+                        'user_id' => $user->id,
+                        //'estado' => 'CO',
+                        'fecha' => $fecha_movimiento,
+                        'cantidad' => $datoOCDet[$i]->cantidad,
+                        'descripcion' => 'Movimiento automatico NP Proveedor',
+                        'tipo' => 'I',
+                        'tipo_documento' => 'OC',
+                        'documento_id' => $OrdenCompra->id
+                    ]);
+                }
+            }
+
+            return $cantidad_items;
+        }
     }    
 
     public function anulaOrdenCompra(Request $request, $id)

@@ -9,6 +9,6 @@ class Configuracion extends Model
     protected $table = 'configuracion';
 
     protected $fillable = [
-        'vendedor_gestion_id', 'sucursal_id'
+        'vendedor_gestion_id', 'sucursal_id', 'deposito_id'
     ];
 }

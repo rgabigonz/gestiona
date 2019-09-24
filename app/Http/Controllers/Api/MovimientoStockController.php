@@ -87,35 +87,6 @@ class MovimientoStockController extends Controller
             'tipo_documento' => $request['tipo_documento'],
             'documento_id' => $request['documento_id']
         ]);
-
-/*        if ($movimiento->id > 0)
-        {
-
-        }
-
-        return $movimiento;*/
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\MovimientoStock  $movimientoStock
-     * @return \Illuminate\Http\Response
-     */
-    public function show(MovimientoStock $movimientoStock)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\MovimientoStock  $movimientoStock
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(MovimientoStock $movimientoStock)
-    {
-        //
     }
 
     /**
@@ -126,17 +97,6 @@ class MovimientoStockController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, MovimientoStock $movimientoStock)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\MovimientoStock  $movimientoStock
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(MovimientoStock $movimientoStock)
     {
         //
     }
