@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\OrdenCompra;
 use App\OrdenCompraDetalle;
 use App\MovimientoStock;
-use App\StockProducto;
 use App\Configuracion;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -24,14 +23,26 @@ class OrdenCompraController extends Controller
         $sCriterio = $request->criterio;
 
         if(empty($sBuscar)) {
-            $ordenes_compras = OrdenCompra::join('proveedores', 'ordenes_compras.proveedor_id', '=', 'proveedores.id')
-            ->leftjoin('clientes', 'ordenes_compras.cliente_id', '=', 'clientes.id')
-            ->leftjoin('vendedores', 'ordenes_compras.vendedor_venta_id', '=', 'vendedores.id')
-            ->select('ordenes_compras.*', 'proveedores.nombre as nombre_proveedor', 
-                     'clientes.nombre as nombre_cliente',
-                     'vendedores.nombre as nombre_vendedor')
-            ->orderBy('created_at', 'desc')
-            ->paginate(15);//where('state', '=', 'A')
+            if($sCriterio == 'AP') {
+                $ordenes_compras = OrdenCompra::join('proveedores', 'ordenes_compras.proveedor_id', '=', 'proveedores.id')
+                ->leftjoin('clientes', 'ordenes_compras.cliente_id', '=', 'clientes.id')
+                ->leftjoin('vendedores', 'ordenes_compras.vendedor_venta_id', '=', 'vendedores.id')
+                ->select('ordenes_compras.*', 'proveedores.nombre as nombre_proveedor', 
+                        'clientes.nombre as nombre_cliente',
+                        'vendedores.nombre as nombre_vendedor')
+                ->where('ordenes_compras.tipo', '<>', 'CL')
+                ->orderBy('created_at', 'desc')
+                ->paginate(15);
+            } else {
+                $ordenes_compras = OrdenCompra::join('proveedores', 'ordenes_compras.proveedor_id', '=', 'proveedores.id')
+                ->leftjoin('clientes', 'ordenes_compras.cliente_id', '=', 'clientes.id')
+                ->leftjoin('vendedores', 'ordenes_compras.vendedor_venta_id', '=', 'vendedores.id')
+                ->select('ordenes_compras.*', 'proveedores.nombre as nombre_proveedor', 
+                        'clientes.nombre as nombre_cliente',
+                        'vendedores.nombre as nombre_vendedor')
+                ->orderBy('created_at', 'desc')
+                ->paginate(15);
+            }
         } 
         else {
             $ordenes_compras = OrdenCompra::join('proveedores', 'ordenes_compras.proveedor_id', '=', 'proveedores.id')
@@ -42,7 +53,7 @@ class OrdenCompraController extends Controller
                      'vendedores.nombre as nombre_vendedor')
             ->where($sCriterio, 'like', '%' . $sBuscar . '%')
             ->orderBy('created_at', 'desc')
-            ->paginate(15);//where('state', '=', 'A')
+            ->paginate(15);
         }
 
         return [

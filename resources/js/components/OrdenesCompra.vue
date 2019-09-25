@@ -16,6 +16,7 @@
                                 <option value="proveedores.nombre">Proveedor</option>
                                 <option value="clientes.nombre">Cliente</option>
                                 <option value="vendedores.nombre">Distribuidor</option>
+                                <option value="AP">AGRO PROYECCIONES S.R.L.</option>
                             </select>
                         </div>
                         <div class="col col-md-8">

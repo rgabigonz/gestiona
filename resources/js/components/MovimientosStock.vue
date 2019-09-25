@@ -147,7 +147,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger" @click="cerrarModal()">Cerrar</button> <!--data-dismiss="modal" -->
-                            <button v-show="modoEdicion" type="submit" class="btn btn-success">Actualizar</button>
+                            <button v-show="modoEdicion && puedeEditar" type="submit" class="btn btn-success">Actualizar</button>
                             <button v-show="!modoEdicion" type="submit" class="btn btn-primary">Crear</button>
                         </div>
                     </form>
@@ -166,6 +166,7 @@
                     {id: 'E', nombre: 'EGRESO'}
                 ],                
                 modoEdicion: false,
+                puedeEditar: true,
                 movimientos: {},
                 oProductos: {},
                 oDepositos: {},
@@ -238,6 +239,12 @@
                 this.cargaProductos();
 
                 this.modoEdicion = true;
+
+                if(movimiento.estado == 'PE')
+                    this.puedeEditar = true;
+                else 
+                    this.puedeEditar = false;
+
                 this.form.reset();
                 $('#ventanaModal').modal('show');
                 this.form.fill(movimiento);
@@ -288,7 +295,7 @@
             actualizaMovimiento() {
                 this.$Progress.start();
                 
-                this.form.put('api/producto/'+this.form.id)
+                this.form.put('api/movimientostock/'+this.form.id)
                 .then(() => {
                     Fire.$emit('AfterAction');
                     this.cerrarModal();
@@ -333,15 +340,15 @@
                     cancelButtonText: 'Cancelar'
                 }).then((result) => {
                     if (result.value) {
-                        axios.put('api/recibo/anulaRecibo/'+id)
+                        axios.put('api/movimientostock/anulaMovimientoStock/'+id)
                         .then(() => {
                             swal(
                                 'ANULADO!',
-                                'El RECIBO a sido ANULADO.',
+                                'El MOVIMIENTO DE STOCK a sido ANULADO.',
                                 'success'
                             );
                             //Fire.$emit('AfterAction');
-                            this.cargarRecibos(1, this.sBuscar, this.sCriterio);
+                            this.cargarMovimientos(1, this.sBuscar, this.sCriterio);
                         })
                     }
                 })

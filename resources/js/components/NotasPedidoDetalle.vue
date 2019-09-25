@@ -31,7 +31,7 @@
                 <div class="card-header border-light bg-secondary">Datos Nota de Venta</div>
                 <div class="card-body">
                     <div class="row invoice-info">
-                        <div class="col-sm-4 invoice-col">
+                        <div class="col-sm-3 invoice-col">
                             <div class="form-group">
                                 <div class="input-group input-group-sm">
                                     <datepicker :bootstrap-styling="true" v-model="fecha_nota_pedido" name="fecha_nota_pedido" :language="es" 
@@ -43,7 +43,7 @@
                         </div>
                         <!-- /.col -->
 
-                        <div class="col-sm-4 invoice-col">
+                        <div class="col-sm-3 invoice-col">
                             <div class="form-group">
                                 <div class="input-group input-group-sm">
                                     <input v-model="numero_factura" type="text" name="numero_factura" placeholder="Numero Factura"
@@ -53,11 +53,23 @@
                         </div>
                         <!-- /.col -->
 
-                        <div class="col-sm-4 invoice-col">
+                        <div class="col-sm-3 invoice-col">
                             <div class="form-group">
                                 <div class="input-group input-group-sm">
                                     <input v-model="lugar_entrega" type="text" name="lugar_entrega" placeholder="Lugar Entrega"
                                         class="form-control form-control-sm">
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.col -->
+
+                        <div class="col-sm-3 invoice-col">
+                            <div class="form-group">
+                                <div class="input-group input-group-sm">
+                                    <select class="form-control" v-model="codigo_deposito">
+                                        <option value="">Deposito...</option>
+                                        <option v-for="ldeposito in ldepositos" :key="ldeposito.id" :value="ldeposito.id">{{ ldeposito.descripcion }}</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -338,6 +350,7 @@
                 lclientes: {},
                 lproductos: {},
                 lvendedores_venta: {},
+                ldepositos: {},
                 pagination: {
                     'total': 0,
                     'current_page': 0,
@@ -363,6 +376,7 @@
                 cliente: {},
                 codigo_cliente: 0,
                 codigo_vendedor_venta: 0,
+                codigo_deposito: '',
                 anio_id: 0,
                 anio_actual: 0,
                 items: [],
@@ -411,6 +425,18 @@
             },
 
             // Cargo combos de seleccion
+            cargaDepositos() {
+                let me = this;                
+                var url = 'api/deposito/cargaDepositos';
+                axios.get(url).then(data => {
+                    var response = data.data;
+                    me.ldepositos = response.ldepositos;
+                }).catch((error) => {
+                    if (error.response.status == 401) {
+                        swal('Error!', 'La sesion ha caducado.', 'warning');
+                    }
+                });
+            },            
             cargaClientes() {
                 let me = this;                
                 var url = 'api/cliente/cargaClientes';
@@ -569,6 +595,7 @@
                         total_pedido_siniva: this.total_sinIVA,
                         total_pedido_21: this.total_iva_21,
                         total_pedido_105: this.total_iva_105,
+                        codigo_deposito: this.codigo_deposito,
                         items: this.items})
                     .then(() => {
                         Fire.$emit('AfterAction');
@@ -606,6 +633,7 @@
                     total_pedido_siniva: this.total_sinIVA,
                     total_pedido_21: this.total_iva_21,
                     total_pedido_105: this.total_iva_105,
+                    codigo_deposito: this.codigo_deposito, 
                     items: this.items})
                 .then(() => {
                     Fire.$emit('AfterAction');
@@ -650,6 +678,11 @@
                     me.anio_actual = this.nota_pedido.anio_actual;
 
                     me.cargarCliente(me.codigo_cliente);
+
+                    if (!me.nota_pedido.deposito_id) 
+                        me.codigo_deposito = '';
+                    else
+                        me.codigo_deposito = me.nota_pedido.deposito_id;
 
                     for (var i = 0; i < me.nota_pedido_detalle.length; i++) {
                         me.items.push({ cod: me.nota_pedido_detalle[i].producto_id, 
@@ -754,6 +787,7 @@
             this.cargaClientes();
             this.cargaProductos();
             this.cargaVendedores();
+            this.cargaDepositos();
 
             if(this.notas_pedido_id_edicion > 0) {
                 this.modoEdicion = true;

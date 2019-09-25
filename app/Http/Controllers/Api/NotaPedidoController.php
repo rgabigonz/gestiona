@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\NotaPedido;
 use App\NotaPedidoDetalle;
+use App\MovimientoStock;
+use App\Configuracion;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
@@ -94,6 +96,8 @@ class NotaPedidoController extends Controller
 
         $nota_pedido->total = $request->total_pedido;
 
+        $nota_pedido->deposito_id = $request->codigo_deposito;
+
         $nota_pedido->save();
 
         for($i = 0; $i < $cantidad_items; $i++)
@@ -135,6 +139,13 @@ class NotaPedidoController extends Controller
 
         $NotaPedido->total = $request->total_pedido;
 
+        if (!empty($NotaPedido->estado != 'CO')) {
+            if (!empty($request->codigo_deposito))
+                $NotaPedido->deposito_id = $request->codigo_deposito;
+            else
+                $NotaPedido->deposito_id = null;
+        }
+
         $NotaPedido->update();
 
         $NotaPedidoDetalle = NotaPedidoDetalle::where('nota_pedido_id', $id)->delete();
@@ -174,9 +185,54 @@ class NotaPedidoController extends Controller
 
     public function confirmaNotaPedido(Request $request, $id)
     {
+        $user = auth('api')->user();
+
         $NotaPedido = NotaPedido::findOrFail($id);
         $NotaPedido->estado = 'CO';
         $NotaPedido->update();
+
+        // Si actualizo
+        if ($NotaPedido->id > 0) {
+
+            $datoNPDet = NotaPedidoDetalle::select('notas_pedidos_detalle.*')
+                         ->where('notas_pedidos_detalle.nota_pedido_id', '=', $id)
+                         ->get();
+            
+            $Configuracion = Configuracion::get();
+
+            if (!empty($NotaPedido->deposito_id)) {
+                $deposito_producto = $NotaPedido->deposito_id;
+            } else {
+                $deposito_producto = $Configuracion[0]->deposito_id;
+            }
+
+            $fecha_movimiento = \Carbon\Carbon::parse($NotaPedido->fecha);
+            $fecha_movimiento = $fecha_movimiento->format('Y-m-d');
+
+            $cantidad_items = count($datoNPDet);
+
+            // Si encontro el detalle de la NP
+            if ($cantidad_items > 0) {
+
+                for($i = 0; $i < $cantidad_items; $i++)
+                {                
+                    $MovimientoStock = MovimientoStock::create([
+                        'producto_id' => $datoNPDet[$i]->producto_id,
+                        'deposito_id' => $deposito_producto,
+                        'user_id' => $user->id,
+                        //'estado' => 'CO',
+                        'fecha' => $fecha_movimiento,
+                        'cantidad' => $datoNPDet[$i]->cantidad,
+                        'descripcion' => 'Movimiento automatico NV Cliente',
+                        'tipo' => 'E',
+                        'tipo_documento' => 'NV',
+                        'documento_id' => $NotaPedido->id
+                    ]);
+                }
+            }
+
+            return $cantidad_items;
+        }        
     }    
 
     public function anulaNotaPedido(Request $request, $id)

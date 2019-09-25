@@ -96,9 +96,24 @@ class MovimientoStockController extends Controller
      * @param  \App\MovimientoStock  $movimientoStock
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, MovimientoStock $movimientoStock)
+    public function update(Request $request, $id)
     {
-        //
+        $movimiento_stock = MovimientoStock::findOrFail($id);
+
+        $this->validate($request, [
+            'producto_id' => 'required|numeric|not_in:0',
+            'deposito_id' => 'required|numeric|not_in:0',
+            'cantidad' => 'required|numeric|min:0|not_in:0',
+            'descripcion' => 'required|string'
+        ], [
+            'producto_id.not_in' => 'El producto es requerido',
+            'deposito_id.not_in' => 'El deposito es requerido',
+            'cantidad.required' => 'La cantidad es requerida',
+            'cantidad.not_in' => 'La cantidad debe ser mayor a 0',
+            'descripcion.required' => 'La descripcion es requerida'
+        ]);
+
+        $movimiento_stock->update($request->all());
     }
 
     public function confirmaMovimientoStock(Request $request, $id)
