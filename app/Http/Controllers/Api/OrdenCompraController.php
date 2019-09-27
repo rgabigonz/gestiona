@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\OrdenCompra;
 use App\OrdenCompraDetalle;
 use App\MovimientoStock;
-use App\Configuracion;
+//use App\Configuracion;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
@@ -254,19 +254,19 @@ class OrdenCompraController extends Controller
         $OrdenCompra->update();
 
         // Si actualizo
-        if ($OrdenCompra->id > 0) {
+        if ($OrdenCompra->id > 0 && !empty($OrdenCompra->deposito_id)) {
 
             $datoOCDet = OrdenCompraDetalle::select('ordenes_compras_detalle.*')
                          ->where('ordenes_compras_detalle.orden_compra_id', '=', $id)
                          ->get();
             
-            $Configuracion = Configuracion::get();
+            /*$Configuracion = Configuracion::get();
 
             if (!empty($OrdenCompra->deposito_id)) {
                 $deposito_producto = $OrdenCompra->deposito_id;
             } else {
                 $deposito_producto = $Configuracion[0]->deposito_id;
-            }
+            }*/
 
             $fecha_movimiento = \Carbon\Carbon::parse($OrdenCompra->fecha);
             $fecha_movimiento = $fecha_movimiento->format('Y-m-d');
@@ -280,7 +280,7 @@ class OrdenCompraController extends Controller
                 {                
                     $MovimientoStock = MovimientoStock::create([
                         'producto_id' => $datoOCDet[$i]->producto_id,
-                        'deposito_id' => $deposito_producto,
+                        'deposito_id' => $OrdenCompra->deposito_id,//$deposito_producto,
                         'user_id' => $user->id,
                         //'estado' => 'CO',
                         'fecha' => $fecha_movimiento,

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\NotaPedido;
 use App\NotaPedidoDetalle;
 use App\MovimientoStock;
-use App\Configuracion;
+//use App\Configuracion;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
@@ -192,19 +192,19 @@ class NotaPedidoController extends Controller
         $NotaPedido->update();
 
         // Si actualizo
-        if ($NotaPedido->id > 0) {
+        if ($NotaPedido->id > 0 && !empty($NotaPedido->deposito_id)) {
 
             $datoNPDet = NotaPedidoDetalle::select('notas_pedidos_detalle.*')
                          ->where('notas_pedidos_detalle.nota_pedido_id', '=', $id)
                          ->get();
             
-            $Configuracion = Configuracion::get();
+            //$Configuracion = Configuracion::get();
 
-            if (!empty($NotaPedido->deposito_id)) {
+            /*if (!empty($NotaPedido->deposito_id)) {
                 $deposito_producto = $NotaPedido->deposito_id;
             } else {
                 $deposito_producto = $Configuracion[0]->deposito_id;
-            }
+            }*/
 
             $fecha_movimiento = \Carbon\Carbon::parse($NotaPedido->fecha);
             $fecha_movimiento = $fecha_movimiento->format('Y-m-d');
@@ -218,7 +218,7 @@ class NotaPedidoController extends Controller
                 {                
                     $MovimientoStock = MovimientoStock::create([
                         'producto_id' => $datoNPDet[$i]->producto_id,
-                        'deposito_id' => $deposito_producto,
+                        'deposito_id' => $NotaPedido->deposito_id,//$deposito_producto,
                         'user_id' => $user->id,
                         //'estado' => 'CO',
                         'fecha' => $fecha_movimiento,
