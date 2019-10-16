@@ -24,14 +24,24 @@ class MovimientoStockController extends Controller
         if(empty($sBuscar)) {
             $movimientosstock = MovimientoStock::join('depositos', 'movimientos_stock.deposito_id', '=', 'depositos.id')
             ->join('productos', 'movimientos_stock.producto_id', '=', 'productos.id')
-            ->select('movimientos_stock.*', 'depositos.descripcion as descripcion_deposito', 'productos.nombre as producto_nombre')
+            ->leftjoin('notas_pedidos', 'movimientos_stock.documento_id', '=', 'notas_pedidos.id')
+            ->leftjoin('clientes', 'notas_pedidos.cliente_id', '=', 'clientes.id')
+            ->select('movimientos_stock.*', 'depositos.descripcion as descripcion_deposito', 
+                     'productos.nombre as producto_nombre', 'productos.descripcion as producto_descripcion',
+                     'clientes.nombre as nombre_cliente', 'notas_pedidos.anio_id as nota_ventaAID', 
+                     'notas_pedidos.anio_actual as nota_ventaAA')
             ->orderBy('created_at', 'desc')
             ->paginate(15);
         } 
         else {
             $movimientosstock = MovimientoStock::join('depositos', 'movimientos_stock.deposito_id', '=', 'depositos.id')
             ->join('productos', 'movimientos_stock.producto_id', '=', 'productos.id')
-            ->select('movimientos_stock.*', 'depositos.descripcion as descripcion_deposito', 'productos.nombre as producto_nombre')
+            ->leftjoin('notas_pedidos', 'movimientos_stock.documento_id', '=', 'notas_pedidos.id')
+            ->leftjoin('clientes', 'notas_pedidos.cliente_id', '=', 'clientes.id')
+            ->select('movimientos_stock.*', 'depositos.descripcion as descripcion_deposito', 
+                     'productos.nombre as producto_nombre', 'productos.descripcion as producto_descripcion',
+                     'clientes.nombre as nombre_cliente', 'notas_pedidos.anio_id as nota_ventaAID', 
+                     'notas_pedidos.anio_actual as nota_ventaAA')
             ->where($sCriterio, 'like', '%' . $sBuscar . '%')
             ->orderBy('created_at', 'desc')
             ->paginate(15);

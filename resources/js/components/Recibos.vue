@@ -13,6 +13,7 @@
                         <div class="col col-md-4">
                             <select class="form-control" v-model="sCriterio">
                                 <option value="recibos.id">Numero Recibo</option>
+                                <option value="clientes.nombre">Cliente</option>
                             </select>
                         </div>
                         <div class="col col-md-8">

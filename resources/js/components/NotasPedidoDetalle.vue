@@ -323,13 +323,15 @@
                 <button v-if="!modoEdicion" type="button" class="btn btn-success float-right" @click="creaNotaPedido()">
                     <i class="fa fa-save fa-fw"></i> Guardar
                 </button>
-                <!-- <button v-if="modoEdicion && estado == 'PE'" type="button" class="btn btn-success float-right" @click="actualizaNotaPedido()"> -->
                 <button v-if="modoEdicion" type="button" class="btn btn-success float-right" @click="actualizaNotaPedido()">
                     <i class="fa fa-save fa-fw"></i> Modificar
                 </button>
-                <router-link to="/notaspedido" class="btn btn-primary float-right" style="margin-right: 5px;">
+                <router-link v-if="sBuscarNPD" :to="{ name: 'notaspedido', params: { sBuscar: sBuscarNPD, sCriterio: sCriterioNPD }}" class="btn btn-primary float-right" style="margin-right: 5px;">
                     <i class="fa fa-hand-point-left fa-fw"></i>Volver
-                </router-link>                
+                </router-link>
+                <router-link v-else to="/notaspedido" class="btn btn-primary float-right" style="margin-right: 5px;">
+                    <i class="fa fa-hand-point-left fa-fw"></i>Volver
+                </router-link>
             </div>
         </div>
 
@@ -359,9 +361,8 @@
                     'from': 0,
                     'to': 0
                 },
-                offset: 3,
-                sCriterio: 'nombre',
-                sBuscar: '',
+                sCriterioNPD: '',
+                sBuscarNPD: '',
                 //Lista de Seleccion clientes y productos   
 
                 // Errores
@@ -603,7 +604,11 @@
                             type: 'success',
                             title: 'Se genero el pedido correctamente!'
                         });
-                        this.$router.push('/notaspedido');
+
+                        if(this.sBuscarNPD)
+                            this.$router.push('/notaspedido/'+this.sBuscarNPD+'/'+this.sCriterioNPD);
+                        else
+                            this.$router.push('/notaspedido');
                     })
                     .catch(() => {
                         this.$Progress.fail();
@@ -641,7 +646,11 @@
                         type: 'success',
                         title: 'Se actualizo el pedido correctamente!'
                     });
-                    this.$router.push('/notaspedido');
+
+                    if(this.sBuscarNPD)
+                        this.$router.push('/notaspedido/'+this.sBuscarNPD+'/'+this.sCriterioNPD);
+                    else
+                        this.$router.push('/notaspedido');
                 })
                 .catch(() => {
                     this.$Progress.fail();
@@ -784,6 +793,12 @@
         },
         created() {
             this.notas_pedido_id_edicion = this.$route.params.notaspedidoId;
+
+            if (this.$route.params.sBuscarNPD) {
+                this.sBuscarNPD = this.$route.params.sBuscarNPD
+                this.sCriterioNPD = this.$route.params.sCriterioNPD
+            }
+
             this.cargaClientes();
             this.cargaProductos();
             this.cargaVendedores();

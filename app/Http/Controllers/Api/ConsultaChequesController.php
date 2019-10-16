@@ -22,7 +22,8 @@ class ConsultaChequesController extends Controller
                      'recibos.referencia_talonario as referencia_talonario', DB::raw('COALESCE(cotizaciones.precio_dolar, 0) as precio_dolar'))
             ->where('recibos.estado', '=', 'CO')
             ->where('recibos_detalles.tipo_pago', '=', 'CH')
-            ->orderBy('fecha_cobro_cheque', 'asc', 'lol')->paginate(15);
+            //->orderBy('referencia_talonario', 'desc')->paginate(15);
+            ->orderBy(DB::raw('CONVERT(referencia_talonario, SIGNED)'), 'desc')->paginate(15);
         } 
         else {
             $cheques = ReciboDetalle::join('recibos', 'recibos_detalles.recibo_id', '=', 'recibos.id')
@@ -33,7 +34,7 @@ class ConsultaChequesController extends Controller
             ->where('recibos.estado', '=', 'CO')
             ->where('recibos_detalles.tipo_pago', '=', 'CH')
             ->where($sCriterio, 'like', '%' . $sBuscar . '%')
-            ->orderBy('fecha_cobro_cheque', 'asc')->paginate(15);
+            ->orderBy(DB::raw('CONVERT(referencia_talonario, SIGNED)'), 'desc')->paginate(15);
         }
 
         return [

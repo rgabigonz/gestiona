@@ -34,14 +34,14 @@
                 <table class="table table-hover">
                     <tbody>
                         <tr>
-                            <th style="width: 35%">Producto</th>
-                            <th style="width: 35%">Deposito</th>
+                            <th style="width: 50%">Producto</th>
+                            <th style="width: 20%">Deposito</th>
                             <th style="width: 13%">Fecha</th>                            
                             <th style="width: 8%">Estado</th>
                             <th style="width: 9%"></th>
                         </tr>
                         <tr v-for="movimiento in movimientos" :key="movimiento.id">
-                            <td>{{ movimiento.producto_nombre }}</td>
+                            <td><b>{{ movimiento.producto_nombre }}</b> / {{ movimiento.producto_descripcion }}</td>
                             <td>{{ movimiento.descripcion_deposito }}</td>
                             <td>{{ movimiento.fecha }}</td>
                             <td>
@@ -103,6 +103,18 @@
                     </div>
                     <form @submit.prevent="modoEdicion ? actualizaMovimiento() : creaMovimiento()">
                         <div class="modal-body">
+                            <div v-show="modoEdicion && form.tipo == 'E'" class="row">
+                                <div class="col col-md-8">
+                                    <div class="form-group">
+                                        <h4>{{ form.nombre_cliente }}</h4>
+                                    </div>
+                                </div>
+                                <div class="col col-md-4">
+                                    <div class="form-group">
+                                        <h4>NV N°: {{ form.nota_ventaAID }} - {{ form.nota_ventaAA }}</h4>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="form-group">
                                 <label class="control-label" for="deposito_id"><i class="fa fa-bell-o"></i>Deposito</label>
                                 <select v-model="form.deposito_id" name="deposito_id" class="form-control" :class="{ 'is-invalid': form.errors.has('deposito_id') }">
@@ -178,7 +190,10 @@
                     descripcion: '',
                     tipo: 'I',
                     tipo_documento: 'MI',
-                    documento_id: 0
+                    documento_id: 0,
+                    nombre_cliente: '',
+                    nota_ventaAID: '',
+                    nota_ventaAA: ''
                 }),
                 pagination: {
                     'total': 0,

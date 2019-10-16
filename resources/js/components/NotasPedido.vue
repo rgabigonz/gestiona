@@ -67,9 +67,12 @@
                                 <a href="#" v-if="nota_pedido.estado == 'PE'" @click="anulaPresupuesto(nota_pedido.id)">
                                     <i class="fa fa-trash-alt yellow"></i>
                                 </a>
-                                <router-link :to="{ name: 'notaspedidodetalle', params: { notaspedidoId: nota_pedido.id } }">
+                                <router-link v-if="sBuscar" :to="{ name: 'notaspedidodetalle', params: { notaspedidoId: nota_pedido.id, sBuscarNPD: sBuscar, sCriterioNPD: sCriterio } }">
                                     <i class="fa fa-table indigo"></i>
                                 </router-link>
+                                <router-link v-else :to="{ name: 'notaspedidodetalle', params: { notaspedidoId: nota_pedido.id } }">
+                                    <i class="fa fa-table indigo"></i>
+                                </router-link>                                
                                 <a href="#" @click="generaNotaPedidoPDF(nota_pedido.id, nota_pedido.anio_id, nota_pedido.anio_actual)">
                                     <i class="fa fa-file-pdf red"></i>
                                 </a>                                
@@ -234,6 +237,11 @@
             }
         },
         created() {
+            if (this.$route.params.sBuscar) {
+                this.sBuscar = this.$route.params.sBuscar;
+                this.sCriterio = this.$route.params.sCriterio;
+            }
+
             this.cargarNotasPedido(1, this.sBuscar, this.sCriterio);
         }
     }

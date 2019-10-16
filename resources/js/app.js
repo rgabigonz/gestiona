@@ -48,8 +48,10 @@ let routes = [
     { path: '/proveedores', name: 'proveedores', component: require('./components/Proveedores.vue') },    
     { path: '/proveedoressimple', name: 'proveedoressimple', component: require('./components/ProveedoresSimple.vue') },    
     { path: '/dashboard', name: 'dashboard', component: require('./components/Dashboard.vue') },
-    { path: '/notaspedido', name: 'notaspedido', component: require('./components/NotasPedido.vue') },
-    { path: '/notaspedidodetalle/:notaspedidoId', name: 'notaspedidodetalle', component: require('./components/NotasPedidoDetalle.vue') },
+
+    { path: '/notaspedido/:sBuscar?/:sCriterio?', name: 'notaspedido', component: require('./components/NotasPedido.vue') },
+    { path: '/notaspedidodetalle/:notaspedidoId/:sBuscarNPD?/:sCriterioNPD?', name: 'notaspedidodetalle', component: require('./components/NotasPedidoDetalle.vue') },
+
     { path: '/ordenescompra', name: 'ordenescompra', component: require('./components/OrdenesCompra.vue') },
     { path: '/ordenescompradetalle/:ordenescompraId', name: 'ordenescompradetalle', component: require('./components/OrdenesCompraDetalle.vue') },
     { path: '/recibos', name: 'recibos', component: require('./components/Recibos.vue') },
