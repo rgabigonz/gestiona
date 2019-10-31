@@ -146,6 +146,30 @@
                             <table class="table table-striped table-sm">
                                 <thead>
                                     <tr>
+                                        <th style="width:60%">Nota de Credito Cliente</th>                                
+                                        <th style="width:20%">Fecha</th>
+                                        <th style="width:20%">Importe</th>
+                                    </tr>
+                                </thead>
+                                <tbody style="font-size: 12px">
+                                    <tr v-for="cta_cte_nota_credito in filtroNC(cta_cte_cliente.id)" :key="cta_cte_nota_credito.id">
+                                        <td>{{ cta_cte_nota_credito.punto_venta }} - {{ cta_cte_nota_credito.numero_nota_credito }}</td>
+                                        <td>{{ cta_cte_nota_credito.fecha | formatDate }}</td>
+                                        <td v-if="cta_cte_nota_credito.precio_dolar_manual && cta_cte_nota_credito.precio_dolar_manual > 0" >${{ (cta_cte_nota_credito.total / cta_cte_nota_credito.precio_dolar_manual) | currency }}</td>
+                                        <td v-else>$0</td>                                        
+                                        <!-- <td>${{ cta_cte_nota_credito.total }}</td> -->
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td><b>Total: ${{ total_nc(cta_cte_cliente.id) | currency }}</b></td>
+                                    </tr>                            
+                                </tbody>
+                            </table>                               
+
+                            <table class="table table-striped table-sm">
+                                <thead>
+                                    <tr>
                                         <th style="width:20%">Recibos Cliente</th>
                                         <th style="width:20%">Fecha</th>
                                         <th style="width:15%">Importe($)</th>
@@ -228,7 +252,8 @@
                 codigo_cliente: 0,
                 cliente: {},
                 cta_cte_notas_venta: {},
-                cta_cte_notas_debito: {},                
+                cta_cte_notas_debito: {},     
+                cta_cte_notas_credito: {},           
                 cta_cte_recibos: {},
                 cta_cte_clientes: {}
             }
@@ -247,6 +272,11 @@
             filtroRec(cCliente) {
                 return this.cta_cte_recibos.filter(function(rec) {
                     return rec.cliente_id === cCliente;
+                })
+            },
+            filtroNC(cCliente) {
+                return this.cta_cte_notas_credito.filter(function(nc) {
+                    return nc.cliente_id == cCliente;
                 })
             },            
             consultarCtaCte() {
@@ -268,6 +298,7 @@
                     me.cta_cte_recibos = response.ctacte_recibos;
                     me.cta_cte_notas_venta = response.ctacte_notas_venta;
                     me.cta_cte_notas_debito = response.ctacte_notas_debito;
+                    me.cta_cte_notas_credito = response.ctacte_notas_credito;
                     me.cta_cte_clientes = response.ctacte_clientes;
                 }).catch((error) => {
                     if (error.response.status == 401) {
@@ -318,6 +349,7 @@
             saldo_ctacte(cCliente) {
                 var lTotalNV = 0;
                 var lTotalND = 0;
+                var lTotalNC = 0;
                 var lTotalRecibo = 0;
 
                 for (var i = 0; i < this.cta_cte_notas_venta.length; i++) {
@@ -328,9 +360,8 @@
                 for (var i = 0; i < this.cta_cte_notas_debito.length; i++) {
                     if(this.cta_cte_notas_debito[i].cliente_id == cCliente) 
                         if (this.cta_cte_notas_debito[i].precio_dolar_manual && this.cta_cte_notas_debito[i].precio_dolar_manual > 0) {
-                            lTotalNV += parseFloat(this.cta_cte_notas_debito[i].total) / parseFloat(this.cta_cte_notas_debito[i].precio_dolar_manual);
+                            lTotalND += parseFloat(this.cta_cte_notas_debito[i].total) / parseFloat(this.cta_cte_notas_debito[i].precio_dolar_manual);
                         }                    
-                        //lTotalNV += parseFloat(this.cta_cte_notas_debito[i].total);
                 }  
 
                 for (var i = 0; i < this.cta_cte_recibos.length; i++) {
@@ -342,10 +373,17 @@
                     }
                 }
 
+                for (var i = 0; i < this.cta_cte_notas_credito.length; i++) {
+                    if(this.cta_cte_notas_credito[i].cliente_id == cCliente) 
+                        if (this.cta_cte_notas_credito[i].precio_dolar_manual && this.cta_cte_notas_credito[i].precio_dolar_manual > 0) {
+                            lTotalNC += parseFloat(this.cta_cte_notas_credito[i].total) / parseFloat(this.cta_cte_notas_credito[i].precio_dolar_manual);
+                        }                    
+                } 
+
                 if (!lTotalRecibo)
                     lTotalRecibo = 0;
 
-                return parseFloat((lTotalNV + lTotalND) - lTotalRecibo);
+                return parseFloat((lTotalNV + lTotalND) - (lTotalRecibo + lTotalNC));
             },
             total_nv(cCliente) {
                 var lTotal = 0;
@@ -364,6 +402,21 @@
                     if(this.cta_cte_notas_debito[i].cliente_id == cCliente) 
                         if (this.cta_cte_notas_debito[i].precio_dolar_manual && this.cta_cte_notas_debito[i].precio_dolar_manual > 0) {
                             lTotal += parseFloat(this.cta_cte_notas_debito[i].total) / parseFloat(this.cta_cte_notas_debito[i].precio_dolar_manual);
+                        }
+                }  
+              
+                if (lTotal)
+                    return parseFloat(lTotal);
+                else    
+                    return 0;
+            },
+            total_nc(cCliente) {
+                var lTotal = 0;
+
+                for (var i = 0; i < this.cta_cte_notas_credito.length; i++) {
+                    if(this.cta_cte_notas_credito[i].cliente_id == cCliente) 
+                        if (this.cta_cte_notas_credito[i].precio_dolar_manual && this.cta_cte_notas_credito[i].precio_dolar_manual > 0) {
+                            lTotal += parseFloat(this.cta_cte_notas_credito[i].total) / parseFloat(this.cta_cte_notas_credito[i].precio_dolar_manual);
                         }
                 }  
               

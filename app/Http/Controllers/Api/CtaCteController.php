@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Recibo;
 use App\NotaPedido;
 use App\NotaDebito;
+use App\NotaCredito;
 use App\Cliente;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -41,6 +42,13 @@ class CtaCteController extends Controller
                 ->where('notas_debitos.estado', '=', 'CO')
                 ->orderBy('created_at', 'asc')->get();                
 
+                $ctacte_notas_credito = NotaCredito::join('clientes', 'notas_creditos.cliente_id', '=', 'clientes.id')
+                ->join('sucursales', 'notas_creditos.sucursal_id', '=', 'sucursales.id')
+                ->select('notas_creditos.*', 'clientes.nombre as nombre_cliente', 'sucursales.punto_venta as punto_venta')
+                ->where('notas_creditos.cliente_id', '=', $sCliente)
+                ->where('notas_creditos.estado', '=', 'CO')
+                ->orderBy('created_at', 'asc')->get();                
+
                 $ctacte_clientes_NP = Cliente::join('notas_pedidos', 'clientes.id', '=', 'notas_pedidos.cliente_id')
                 ->select('clientes.id', 'clientes.nombre')
                 ->where('clientes.id', '=', $sCliente)
@@ -51,12 +59,18 @@ class CtaCteController extends Controller
                 ->where('clientes.id', '=', $sCliente)
                 ->where('notas_debitos.estado', '=', 'CO');
 
+                $ctacte_clientes_NC = Cliente::join('notas_creditos', 'clientes.id', '=', 'notas_creditos.cliente_id')
+                ->select('clientes.id', 'clientes.nombre')
+                ->where('clientes.id', '=', $sCliente)
+                ->where('notas_creditos.estado', '=', 'CO');
+
                 $ctacte_clientes = Cliente::join('recibos', 'clientes.id', '=', 'recibos.cliente_id')
                 ->select('clientes.id', 'clientes.nombre')
                 ->where('clientes.id', '=', $sCliente)
                 ->where('recibos.estado', '=', 'CO')
                 ->union($ctacte_clientes_NP)
-                ->union($ctacte_clientes_ND)->distinct()->get();
+                ->union($ctacte_clientes_ND)
+                ->union($ctacte_clientes_NC)->distinct()->get();
 
             } else {
                 $ctacte_recibos = Recibo::join('clientes', 'recibos.cliente_id', '=', 'clientes.id')
@@ -85,6 +99,15 @@ class CtaCteController extends Controller
                 ->whereDate('fecha', '<=', $sFechaH)
                 ->orderBy('created_at', 'asc')->get();                
 
+                $ctacte_notas_credito = NotaCredito::join('clientes', 'notas_creditos.cliente_id', '=', 'clientes.id')
+                ->join('sucursales', 'notas_creditos.sucursal_id', '=', 'sucursales.id')
+                ->select('notas_creditos.*', 'clientes.nombre as nombre_cliente', 'sucursales.punto_venta as punto_venta')
+                ->where('notas_creditos.cliente_id', '=', $sCliente)
+                ->where('notas_creditos.estado', '=', 'CO')
+                ->whereDate('fecha', '>=', $sFechaD)
+                ->whereDate('fecha', '<=', $sFechaH)
+                ->orderBy('created_at', 'asc')->get(); 
+
                 $ctacte_clientes_NP = Cliente::join('notas_pedidos', 'clientes.id', '=', 'notas_pedidos.cliente_id')
                 ->select('clientes.id', 'clientes.nombre')
                 ->where('clientes.id', '=', $sCliente)
@@ -99,6 +122,13 @@ class CtaCteController extends Controller
                 ->whereDate('notas_debitos.fecha', '>=', $sFechaD)
                 ->whereDate('notas_debitos.fecha', '<=', $sFechaH);
 
+                $ctacte_clientes_NC = Cliente::join('notas_creditos', 'clientes.id', '=', 'notas_creditos.cliente_id')
+                ->select('clientes.id', 'clientes.nombre')
+                ->where('clientes.id', '=', $sCliente)
+                ->where('notas_creditos.estado', '=', 'CO')
+                ->whereDate('notas_creditos.fecha', '>=', $sFechaD)
+                ->whereDate('notas_creditos.fecha', '<=', $sFechaH);
+
                 $ctacte_clientes = Cliente::join('recibos', 'clientes.id', '=', 'recibos.cliente_id')
                 ->select('clientes.id', 'clientes.nombre')
                 ->where('recibos.cliente_id', '=', $sCliente)
@@ -106,7 +136,8 @@ class CtaCteController extends Controller
                 ->whereDate('recibos.fecha', '>=', $sFechaD)
                 ->whereDate('recibos.fecha', '<=', $sFechaH)
                 ->union($ctacte_clientes_NP)
-                ->union($ctacte_clientes_ND)->distinct()->get();
+                ->union($ctacte_clientes_ND)
+                ->union($ctacte_clientes_NC)->distinct()->get();
             }
         } else {
             if ($sUsaFecha == 0) {
@@ -127,6 +158,12 @@ class CtaCteController extends Controller
                 ->where('notas_debitos.estado', '=', 'CO')
                 ->orderBy('created_at', 'asc')->get();
 
+                $ctacte_notas_credito = NotaCredito::join('clientes', 'notas_creditos.cliente_id', '=', 'clientes.id')
+                ->join('sucursales', 'notas_creditos.sucursal_id', '=', 'sucursales.id')
+                ->select('notas_creditos.*', 'clientes.nombre as nombre_cliente', 'sucursales.punto_venta as punto_venta')
+                ->where('notas_creditos.estado', '=', 'CO')
+                ->orderBy('created_at', 'asc')->get();
+
                 $ctacte_clientes_NP = Cliente::join('notas_pedidos', 'clientes.id', '=', 'notas_pedidos.cliente_id')
                 ->select('clientes.id', 'clientes.nombre')
                 ->where('notas_pedidos.estado', '=', 'CO');
@@ -135,11 +172,16 @@ class CtaCteController extends Controller
                 ->select('clientes.id', 'clientes.nombre')
                 ->where('notas_debitos.estado', '=', 'CO');
 
+                $ctacte_clientes_NC = Cliente::join('notas_creditos', 'clientes.id', '=', 'notas_creditos.cliente_id')
+                ->select('clientes.id', 'clientes.nombre')
+                ->where('notas_creditos.estado', '=', 'CO');
+
                 $ctacte_clientes = Cliente::join('recibos', 'clientes.id', '=', 'recibos.cliente_id')
                 ->select('clientes.id', 'clientes.nombre')
                 ->where('recibos.estado', '=', 'CO')
-                ->unionall($ctacte_clientes_NP)
-                ->union($ctacte_clientes_ND)->distinct()->get();
+                ->union($ctacte_clientes_NP)
+                ->union($ctacte_clientes_ND)
+                ->union($ctacte_clientes_NC)->distinct()->get();
             } else {
                 $ctacte_recibos = Recibo::join('clientes', 'recibos.cliente_id', '=', 'clientes.id')
                 ->join('sucursales', 'recibos.sucursal_id', '=', 'sucursales.id')
@@ -164,6 +206,14 @@ class CtaCteController extends Controller
                 ->whereDate('fecha', '<=', $sFechaH)
                 ->orderBy('created_at', 'asc')->get();
 
+                $ctacte_notas_credito = NotaCredito::join('clientes', 'notas_creditos.cliente_id', '=', 'clientes.id')
+                ->join('sucursales', 'notas_creditos.sucursal_id', '=', 'sucursales.id')
+                ->select('notas_creditos.*', 'clientes.nombre as nombre_cliente', 'sucursales.punto_venta as punto_venta')
+                ->where('notas_creditos.estado', '=', 'CO')
+                ->whereDate('fecha', '>=', $sFechaD)
+                ->whereDate('fecha', '<=', $sFechaH)
+                ->orderBy('created_at', 'asc')->get();
+
                 $ctacte_clientes_NP = Cliente::join('notas_pedidos', 'clientes.id', '=', 'notas_pedidos.cliente_id')
                 ->select('clientes.id', 'clientes.nombre')
                 ->where('notas_pedidos.estado', '=', 'CO')
@@ -176,13 +226,20 @@ class CtaCteController extends Controller
                 ->whereDate('notas_debitos.fecha', '>=', $sFechaD)
                 ->whereDate('notas_debitos.fecha', '<=', $sFechaH);
 
+                $ctacte_clientes_NC = Cliente::join('notas_creditos', 'clientes.id', '=', 'notas_creditos.cliente_id')
+                ->select('clientes.id', 'clientes.nombre')
+                ->where('notas_creditos.estado', '=', 'CO')
+                ->whereDate('notas_creditos.fecha', '>=', $sFechaD)
+                ->whereDate('notas_creditos.fecha', '<=', $sFechaH);
+
                 $ctacte_clientes = Cliente::join('recibos', 'clientes.id', '=', 'recibos.cliente_id')
                 ->select('clientes.id', 'clientes.nombre')
                 ->where('recibos.estado', '=', 'CO')
                 ->whereDate('recibos.fecha', '>=', $sFechaD)
                 ->whereDate('recibos.fecha', '<=', $sFechaH)
-                ->unionall($ctacte_clientes_NP)
-                ->union($ctacte_clientes_ND)->distinct()->get();
+                ->union($ctacte_clientes_NP)
+                ->union($ctacte_clientes_ND)
+                ->union($ctacte_clientes_NC)->distinct()->get();
             }
         }
 
@@ -190,6 +247,7 @@ class CtaCteController extends Controller
             'ctacte_recibos' => $ctacte_recibos,
             'ctacte_notas_venta' => $ctacte_notas_venta,
             'ctacte_notas_debito' => $ctacte_notas_debito,
+            'ctacte_notas_credito' => $ctacte_notas_credito,
             'ctacte_clientes' => $ctacte_clientes
         ];                    
     } 

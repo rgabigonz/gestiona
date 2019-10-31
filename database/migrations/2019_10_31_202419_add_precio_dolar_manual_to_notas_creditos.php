@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddPrecioDolarManualToNotasDebitos extends Migration
+class AddPrecioDolarManualToNotasCreditos extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class AddPrecioDolarManualToNotasDebitos extends Migration
      */
     public function up()
     {
-        Schema::table('notas_debitos', function (Blueprint $table) {
+        Schema::table('notas_creditos', function (Blueprint $table) {
             $table->decimal('precio_dolar_manual', 8, 2)->default(0);
         });
     }
@@ -25,7 +25,7 @@ class AddPrecioDolarManualToNotasDebitos extends Migration
      */
     public function down()
     {
-        Schema::table('notas_debitos', function (Blueprint $table) {
+        Schema::table('notas_creditos', function (Blueprint $table) {
             $table->dropColumn('precio_dolar_manual');
         });
     }

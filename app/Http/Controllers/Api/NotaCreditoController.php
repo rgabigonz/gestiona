@@ -75,6 +75,7 @@ class NotaCreditoController extends Controller
         $nota_credito->user_id = $user->id;
         $nota_credito->total = $request->total_nota_credito;
         $nota_credito->obs = $request->obs;
+        $nota_credito->precio_dolar_manual = $request->precio_dolar_manual;
 
         $nota_credito->fecha = $fecha_nota_credito->format('Y-m-d');
 
@@ -100,6 +101,7 @@ class NotaCreditoController extends Controller
 
         $NotaCredito->total = $request->total_nota_credito;
         $NotaCredito->obs = $request->obs;
+        $NotaCredito->precio_dolar_manual = $request->precio_dolar_manual;
 
         $NotaCredito->update();
         

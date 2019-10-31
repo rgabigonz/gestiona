@@ -31,7 +31,7 @@
                 <div class="card-header border-light bg-secondary">Datos Nota de Credito</div>
                 <div class="card-body">
                     <div class="row invoice-info">
-                        <div class="col-sm-12 invoice-col">
+                        <div class="col-sm-6 invoice-col">
                             <div class="form-group">
                                 <div class="input-group input-group-sm">
                                     <datepicker :bootstrap-styling="true" v-model="fecha_nota_credito" name="fecha_nota_credito" :language="es" 
@@ -42,6 +42,16 @@
                             </div>
                         </div>
                         <!-- /.col -->
+
+                        <div class="col-sm-6 invoice-col">
+                            <div class="form-group">
+                                <div class="input-group input-group-sm">
+                                    <input v-model="precio_dolar_manual" type="number" name="precio_dolar_manual" placeholder="Dolar" step=".1"
+                                        class="form-control form-control-sm">
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.col --> 
 
                     </div>
                 </div>
@@ -215,6 +225,7 @@
                 numero_nota_credito: 0,
                 codigo_concepto: 0,
                 importe_item_nota_credito: 0,
+                precio_dolar_manual: 0,
 
                 //Objetos 
                 items: [],                
@@ -347,6 +358,7 @@
                         fecha_nota_credito: this.fecha_nota_credito,
                         total_nota_credito: this.total,
                         obs: this.observacion,
+                        precio_dolar_manual: this.precio_dolar_manual,
                         items: this.items})
                     .then(() => {
                         Fire.$emit('AfterAction');
@@ -377,6 +389,7 @@
                     axios.put('api/notacredito/'+this.nota_credito_id_edicion, {
                             total_nota_credito: this.total,
                             obs: this.observacion,
+                            precio_dolar_manual: this.precio_dolar_manual,
                             items: this.items})
                     .then(() => {
                         Fire.$emit('AfterAction');
@@ -414,6 +427,7 @@
                     me.cargarCliente(me.codigo_cliente);
 
                     me.observacion = me.nota_credito[0].obs;
+                    me.precio_dolar_manual = me.nota_credito[0].precio_dolar_manual;
 
                     for (var i = 0; i < me.nota_credito_detalle.length; i++) {
 
