@@ -54,8 +54,10 @@ let routes = [
 
     { path: '/ordenescompra/:sBuscar?/:sCriterio?', name: 'ordenescompra', component: require('./components/OrdenesCompra.vue') },
     { path: '/ordenescompradetalle/:ordenescompraId/:sBuscarOCD?/:sCriterioOCD?', name: 'ordenescompradetalle', component: require('./components/OrdenesCompraDetalle.vue') },
-    { path: '/recibos', name: 'recibos', component: require('./components/Recibos.vue') },
-    { path: '/recibosdetalle/:reciboId', name: 'recibosdetalle', component: require('./components/RecibosDetalle.vue') },
+
+    { path: '/recibos/:sBuscar?/:sCriterio?', name: 'recibos', component: require('./components/Recibos.vue') },
+    { path: '/recibosdetalle/:reciboId/:sBuscarRED?/:sCriterioRED?', name: 'recibosdetalle', component: require('./components/RecibosDetalle.vue') },
+
     { path: '/notasdebito', name: 'notasdebito', component: require('./components/NotasDebito.vue') },
     { path: '/notasdebitodetalle/:notadebitoId', name: 'notasdebitodetalle', component: require('./components/NotasDebitoDetalle.vue') },
     { path: '/notascredito', name: 'notascredito', component: require('./components/NotasCredito.vue') },

@@ -72,7 +72,7 @@
                     <div class="col-sm-4 invoice-col">
                         <div class="form-group">
                             <div class="input-group input-group-sm">
-                                <select class="form-control" v-model="codigo_deposito">
+                                <select class="form-control" v-model="codigo_deposito" :disabled="modoEdicion && estado != 'PE'">
                                     <option value="">Deposito...</option>
                                     <option v-for="ldeposito in ldepositos" :key="ldeposito.id" :value="ldeposito.id">{{ ldeposito.descripcion }}</option>
                                 </select>
@@ -473,8 +473,8 @@
                     'from': 0,
                     'to': 0
                 },
-                sCriterioNPD: '',
-                sBuscarNPD: '',
+                sCriterioOCD: '',
+                sBuscarOCD: '',
 
                 offset: 3,
                 sCriterio: 'nombre',

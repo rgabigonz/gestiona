@@ -66,7 +66,7 @@
                         <div class="col-sm-3 invoice-col">
                             <div class="form-group">
                                 <div class="input-group input-group-sm">
-                                    <select class="form-control" v-model="codigo_deposito">
+                                    <select class="form-control" v-model="codigo_deposito" :disabled="modoEdicion && estado != 'PE'">
                                         <option value="">Deposito...</option>
                                         <option v-for="ldeposito in ldepositos" :key="ldeposito.id" :value="ldeposito.id">{{ ldeposito.descripcion }}</option>
                                     </select>

@@ -66,9 +66,15 @@
                                 <a href="#" v-if="recibo.estado == 'PE'" @click="anulaRecibo(recibo.id)">
                                     <i class="fa fa-trash-alt yellow"></i>
                                 </a>
-                                <router-link :to="{ name: 'recibosdetalle', params: { reciboId: recibo.id } }">
+                                <router-link v-if="sBuscar" :to="{ name: 'recibosdetalle', params: { reciboId: recibo.id, sBuscarRED: sBuscar, sCriterioRED: sCriterio } }">
                                     <i class="fa fa-table indigo"></i>
                                 </router-link>
+                                <router-link v-else :to="{ name: 'recibosdetalle', params: { reciboId: recibo.id } }">
+                                    <i class="fa fa-table indigo"></i>
+                                </router-link>                                  
+                                <!-- <router-link :to="{ name: 'recibosdetalle', params: { reciboId: recibo.id } }">
+                                    <i class="fa fa-table indigo"></i>
+                                </router-link> -->
                                 <!-- <a href="#" @click="generaReciboPDF(recibo.id, recibo.anio_id, recibo.anio_actual)">
                                     <i class="fa fa-file-pdf red"></i>
                                 </a>                                 -->
@@ -236,6 +242,11 @@
             }
         },
         created() {
+            if (this.$route.params.sBuscar) {
+                this.sBuscar = this.$route.params.sBuscar;
+                this.sCriterio = this.$route.params.sCriterio;
+            }
+                        
             this.cargarRecibos(1, this.sBuscar, this.sCriterio);
         }
     }

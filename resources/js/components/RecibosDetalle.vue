@@ -235,9 +235,12 @@
                 <button v-if="modoEdicion" type="button" class="btn btn-success float-right" @click="actualizaRecibo()">
                     <i class="fa fa-save fa-fw"></i> Modificar
                 </button>
-                <router-link to="/recibos" class="btn btn-primary float-right" style="margin-right: 5px;">
+                <router-link v-if="sBuscarRED" :to="{ name: 'recibos', params: { sBuscar: sBuscarRED, sCriterio: sCriterioRED }}" class="btn btn-primary float-right" style="margin-right: 5px;">
                     <i class="fa fa-hand-point-left fa-fw"></i>Volver
-                </router-link>                
+                </router-link>
+                <router-link v-else to="/recibos" class="btn btn-primary float-right" style="margin-right: 5px;">
+                    <i class="fa fa-hand-point-left fa-fw"></i>Volver
+                </router-link>             
             </div>
         </div>
 
@@ -270,9 +273,9 @@
                     'from': 0,
                     'to': 0
                 },
+                sCriterioRED: '',
+                sBuscarRED: '',
                 offset: 3,
-                sCriterio: 'nombre',
-                sBuscar: '',
                 //Lista de Seleccion clientes y productos   
 
                 // Errores
@@ -453,7 +456,10 @@
                             type: 'success',
                             title: 'Se genero el recibo correctamente!'
                         });
-                        this.$router.push('/recibos');
+                        if(this.sBuscarRED)
+                            this.$router.push('/recibos/'+this.sBuscarRED+'/'+this.sCriterioRED);
+                        else
+                            this.$router.push('/recibos');
                     })
                     .catch(() => {
                         this.$Progress.fail();
@@ -486,7 +492,10 @@
                             type: 'success',
                             title: 'Se actualizo el recibo correctamente!'
                         });
-                        this.$router.push('/recibos');
+                        if(this.sBuscarRED)
+                            this.$router.push('/recibos/'+this.sBuscarRED+'/'+this.sCriterioRED);
+                        else
+                            this.$router.push('/recibos');
                     })
                     .catch(() => {
                         this.$Progress.fail();
@@ -573,6 +582,12 @@
         },
         created() {
             this.recibo_id_edicion = this.$route.params.reciboId;
+
+            if (this.$route.params.sBuscarRED) {
+                this.sBuscarRED = this.$route.params.sBuscarRED
+                this.sCriterioRED = this.$route.params.sCriterioRED
+            }
+
             this.cargaClientes();
             this.cargaBancos();
 

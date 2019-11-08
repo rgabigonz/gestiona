@@ -80,10 +80,10 @@
                                 </a>
                                 <router-link v-if="sBuscar" :to="{ name: 'ordenescompradetalle', params: { ordenescompraId: orden_compra.id, sBuscarOCD: sBuscar, sCriterioOCD: sCriterio } }">
                                     <i class="fa fa-table indigo"></i>
-                                </router-link>      
-                                <router-link v-else :to="{ name: 'ordenescompradetalle', params: { ordenescompraId: orden_compra.id } }">
+                                </router-link>
+                                <router-link v-else :to="{ name: 'ordenescompradetalle', params: { ordenescompraId: orden_compra.id, sBuscarOCD: 'AP', sCriterioOCD: sCriterio } }">
                                     <i class="fa fa-table indigo"></i>
-                                </router-link>                                     
+                                </router-link>                                 
                                 <a href="#" @click="NotaPedidoProveedorPDF(orden_compra.id, orden_compra.anio_id, orden_compra.anio_actual)">
                                     <i class="fa fa-file-pdf red"></i>
                                 </a>  
@@ -248,10 +248,15 @@
             }
         },
         created() {
-            if (this.$route.params.sBuscar) {
-                this.sBuscar = this.$route.params.sBuscar;
+            if (this.$route.params.sCriterio == 'AP') {
                 this.sCriterio = this.$route.params.sCriterio;
-            }            
+            }
+            else {
+                if (this.$route.params.sBuscar) {
+                    this.sBuscar = this.$route.params.sBuscar;
+                    this.sCriterio = this.$route.params.sCriterio;
+                }
+            }
             this.cargarOrdenesCompra(1, this.sBuscar, this.sCriterio);
         }
     }
