@@ -78,12 +78,15 @@
                                 <a href="#" v-if="orden_compra.estado == 'PE'" @click="anulaOrdenCompra(orden_compra.id)">
                                     <i class="fa fa-trash-alt yellow"></i>
                                 </a>
-                                <router-link v-if="sBuscar" :to="{ name: 'ordenescompradetalle', params: { ordenescompraId: orden_compra.id, sBuscarOCD: sBuscar, sCriterioOCD: sCriterio } }">
+                                <router-link v-if="sBuscar && sCriterio != 'AP'" :to="{ name: 'ordenescompradetalle', params: { ordenescompraId: orden_compra.id, sBuscarOCD: sBuscar, sCriterioOCD: sCriterio } }">
                                     <i class="fa fa-table indigo"></i>
                                 </router-link>
-                                <router-link v-else :to="{ name: 'ordenescompradetalle', params: { ordenescompraId: orden_compra.id, sBuscarOCD: 'AP', sCriterioOCD: sCriterio } }">
+                                <router-link v-else-if="sCriterio == 'AP'" :to="{ name: 'ordenescompradetalle', params: { ordenescompraId: orden_compra.id, sBuscarOCD: 'AP', sCriterioOCD: sCriterio } }">
                                     <i class="fa fa-table indigo"></i>
-                                </router-link>                                 
+                                </router-link>    
+                                <router-link v-else :to="{ name: 'ordenescompradetalle', params: { ordenescompraId: orden_compra.id } }">
+                                    <i class="fa fa-table indigo"></i>
+                                </router-link>                                                              
                                 <a href="#" @click="NotaPedidoProveedorPDF(orden_compra.id, orden_compra.anio_id, orden_compra.anio_actual)">
                                     <i class="fa fa-file-pdf red"></i>
                                 </a>  
@@ -250,6 +253,7 @@
         created() {
             if (this.$route.params.sCriterio == 'AP') {
                 this.sCriterio = this.$route.params.sCriterio;
+                //this.sBuscar = '';
             }
             else {
                 if (this.$route.params.sBuscar) {
