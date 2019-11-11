@@ -69,18 +69,112 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <p>
                 Dashboard
               </p>
-            </router-link>
+            </router-link>          
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-money-check-alt red"></i>
+                <p>
+                  Compras
+                  <i class="right fa fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <router-link to="/ordenescompra" class="nav-link">
+                    <i class="fas fa-file-invoice nav-icon"></i>
+                    <p>Notas de Pedido Proveedor</p>
+                  </router-link>
+                </li>
+              </ul>
+            </li> 
+
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-money-check-alt green"></i>
+                <p>
+                  Ventas
+                  <i class="right fa fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <router-link to="/notaspedido" class="nav-link">
+                    <i class="fas fa-file-invoice nav-icon"></i>
+                    <p>Notas de Venta Cliente</p>
+                  </router-link>
+                </li>
+              </ul>
+            </li>
+
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-money-check-alt blue"></i>
+                <p>
+                  Procesos administrativos
+                  <i class="right fa fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <router-link to="/recibos" class="nav-link">
+                    <i class="fas fa-file-invoice-dollar nav-icon"></i>
+                    <p>Recibos</p>
+                  </router-link>
+                </li>
+                <hr>
+                <li class="nav-item">
+                  <router-link to="/notasdebito" class="nav-link">
+                  <i class="fas fa-sticky-note nav-icon"></i>
+                    <p>Notas de Debito</p>
+                  </router-link>
+                </li>
+                <li class="nav-item">
+                  <router-link to="/notascredito" class="nav-link">
+                    <i class="fas fa-sticky-note nav-icon"></i>
+                    <p>Notas de Credito</p>
+                  </router-link>
+                </li>    
+                <hr>
+                <li class="nav-item">
+                  <router-link to="/movimientostock" class="nav-link">
+                    <i class="fas fa-people-carry nav-icon"></i>
+                    <p>Movimientos Stock</p>
+                  </router-link>
+                </li>                                      
+              </ul>
+            </li>   
           </li>
 
-          <!-- <li class="nav-item">
-            <router-link to="/calendario" class="nav-link">
-              <i class="nav-icon fas fa-tachometer-alt blue"></i>
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-info-circle"></i>
               <p>
-                Calendario
+                Consultas
+                <i class="right fa fa-angle-left"></i>
               </p>
-            </router-link>
-          </li> -->
-
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <router-link to="/consultacheques" class="nav-link">
+                  <i class="fas fa-money-check nav-icon"></i>
+                  <p>Cheques</p>
+                </router-link>
+              </li>
+              <li class="nav-item">
+                <router-link to="/ctactecliente" class="nav-link">
+                  <i class="fas fa-hand-holding-usd"></i>
+                  <p>Cta Cte Clientes</p>
+                </router-link>
+              </li>
+              <li class="nav-item">
+                <router-link to="/stockproductos" class="nav-link">
+                  <i class="fas fa-boxes nav-icon"></i>
+                  <p>Stock</p>
+                </router-link>
+              </li>              
+            </ul>
+          </li>
+          
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="nav-icon fa fa-cog yellow"></i>
@@ -161,60 +255,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </li>      
             </ul>
           </li>
-          <li class="nav-item has-treeview">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-money-check-alt red"></i>
-              <p>
-                Compras
-                <i class="right fa fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <router-link to="/ordenescompra" class="nav-link">
-                  <i class="fas fa-file-invoice nav-icon"></i>
-                  <p>Notas de Pedido Proveedor</p>
-                </router-link>
-              </li>
-            </ul>
-          </li>          
-          <li class="nav-item has-treeview">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-money-check-alt green"></i>
-              <p>
-                Ventas
-                <i class="right fa fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <router-link to="/notaspedido" class="nav-link">
-                  <i class="fas fa-file-invoice nav-icon"></i>
-                  <p>Notas de Venta Cliente</p>
-                </router-link>
-              </li>
-              <li class="nav-item">
-                <router-link to="/recibos" class="nav-link">
-                  <i class="fas fa-file-invoice-dollar nav-icon"></i>
-                  <p>Recibos</p>
-                </router-link>
-              </li>
-              <hr>
-              <li class="nav-item">
-                <router-link to="/notasdebito" class="nav-link">
-                <i class="fas fa-sticky-note nav-icon"></i>
-                  <p>Notas de Debito</p>
-                </router-link>
-              </li>
-              <li class="nav-item">
-                <router-link to="/notascredito" class="nav-link">
-                  <i class="fas fa-sticky-note nav-icon"></i>
-                  <p>Notas de Credito</p>
-                </router-link>
-              </li>              
-            </ul>
-          </li>
-          <li class="nav-item has-treeview">
+          <!-- <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-truck-loading pink"></i>
               <p>
@@ -223,43 +264,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </p>
             </a>
             <ul class="nav nav-treeview">
-            <li class="nav-item">
-                <router-link to="/movimientostock" class="nav-link">
-                  <i class="fas fa-people-carry nav-icon"></i>
-                  <p>Movimientos Stock</p>
-                </router-link>
-              </li>            
             </ul>
-          </li>           
-          <li class="nav-item has-treeview">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-info-circle"></i>
-              <p>
-                Consultas
-                <i class="right fa fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <router-link to="/consultacheques" class="nav-link">
-                  <i class="fas fa-money-check nav-icon"></i>
-                  <p>Cheques</p>
-                </router-link>
-              </li>
-              <li class="nav-item">
-                <router-link to="/ctactecliente" class="nav-link">
-                  <i class="fas fa-hand-holding-usd"></i>
-                  <p>Cta Cte Clientes</p>
-                </router-link>
-              </li>
-              <li class="nav-item">
-                <router-link to="/stockproductos" class="nav-link">
-                  <i class="fas fa-boxes nav-icon"></i>
-                  <p>Stock</p>
-                </router-link>
-              </li>              
-            </ul>
-          </li>
+          </li>            -->
           <li class="nav-item">
             <router-link to="/profile" class="nav-link">
               <i class="nav-icon fas fa-user-circle orange"></i>

@@ -66,7 +66,7 @@
                         <div class="col-sm-3 invoice-col">
                             <div class="form-group">
                                 <div class="input-group input-group-sm">
-                                    <select class="form-control" v-model="codigo_deposito" :disabled="modoEdicion && estado != 'PE'">
+                                    <select class="form-control" v-model="codigo_deposito">
                                         <option value="">Deposito...</option>
                                         <option v-for="ldeposito in ldepositos" :key="ldeposito.id" :value="ldeposito.id">{{ ldeposito.descripcion }}</option>
                                     </select>
@@ -323,7 +323,7 @@
                 <button v-if="!modoEdicion" type="button" class="btn btn-success float-right" @click="creaNotaPedido()">
                     <i class="fa fa-save fa-fw"></i> Guardar
                 </button>
-                <button v-if="modoEdicion" type="button" class="btn btn-success float-right" @click="actualizaNotaPedido()">
+                <button v-if="modoEdicion && estado == 'PE'" type="button" class="btn btn-success float-right" @click="actualizaNotaPedido()">
                     <i class="fa fa-save fa-fw"></i> Modificar
                 </button>
                 <router-link v-if="sBuscarNPD" :to="{ name: 'notaspedido', params: { sBuscar: sBuscarNPD, sCriterio: sCriterioNPD }}" class="btn btn-primary float-right" style="margin-right: 5px;">
