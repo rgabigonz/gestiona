@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Recibo;
+use App\ReciboDetalle;
 use App\NotaPedido;
 use App\NotaDebito;
 use App\NotaCredito;
@@ -28,6 +29,10 @@ class CtaCteController extends Controller
                 ->where('recibos.cliente_id', '=', $sCliente)
                 ->where('recibos.estado', '=', 'CO')
                 ->orderBy('created_at', 'asc')->get();
+
+                $ctacte_recibos_detalle = ReciboDetalle::join('recibos', 'recibos_detalles.recibo_id', '=', 'recibos.id')
+                ->where('recibos.cliente_id', '=', $sCliente)
+                ->where('recibos.estado', '=', 'CO')->get();
 
                 $ctacte_notas_venta = NotaPedido::join('clientes', 'notas_pedidos.cliente_id', '=', 'clientes.id')
                 ->select('notas_pedidos.*', 'clientes.nombre as nombre_cliente')
@@ -81,6 +86,12 @@ class CtaCteController extends Controller
                 ->whereDate('fecha', '>=', $sFechaD)
                 ->whereDate('fecha', '<=', $sFechaH)
                 ->orderBy('created_at', 'asc')->get();
+
+                $ctacte_recibos_detalle = ReciboDetalle::join('recibos', 'recibos_detalles.recibo_id', '=', 'recibos.id')
+                ->where('recibos.cliente_id', '=', $sCliente)
+                ->where('recibos.estado', '=', 'CO')
+                ->whereDate('fecha', '>=', $sFechaD)
+                ->whereDate('fecha', '<=', $sFechaH)->get();                
 
                 $ctacte_notas_venta = NotaPedido::join('clientes', 'notas_pedidos.cliente_id', '=', 'clientes.id')
                 ->select('notas_pedidos.*', 'clientes.nombre as nombre_cliente')
@@ -147,6 +158,9 @@ class CtaCteController extends Controller
                 ->where('recibos.estado', '=', 'CO')
                 ->orderBy('created_at', 'asc')->get();
 
+                $ctacte_recibos_detalle = ReciboDetalle::join('recibos', 'recibos_detalles.recibo_id', '=', 'recibos.id')
+                ->where('recibos.estado', '=', 'CO')->get();
+
                 $ctacte_notas_venta = NotaPedido::join('clientes', 'notas_pedidos.cliente_id', '=', 'clientes.id')
                 ->select('notas_pedidos.*', 'clientes.nombre as nombre_cliente')
                 ->where('notas_pedidos.estado', '=', 'CO')
@@ -190,6 +204,11 @@ class CtaCteController extends Controller
                 ->whereDate('fecha', '>=', $sFechaD)
                 ->whereDate('fecha', '<=', $sFechaH)
                 ->orderBy('created_at', 'asc')->get();
+
+                $ctacte_recibos_detalle = ReciboDetalle::join('recibos', 'recibos_detalles.recibo_id', '=', 'recibos.id')
+                ->whereDate('fecha', '>=', $sFechaD)
+                ->whereDate('fecha', '<=', $sFechaH)
+                ->where('recibos.estado', '=', 'CO')->get();
 
                 $ctacte_notas_venta = NotaPedido::join('clientes', 'notas_pedidos.cliente_id', '=', 'clientes.id')
                 ->select('notas_pedidos.*', 'clientes.nombre as nombre_cliente')
@@ -245,6 +264,7 @@ class CtaCteController extends Controller
 
         return [
             'ctacte_recibos' => $ctacte_recibos,
+            'ctacte_recibos_detalle' => $ctacte_recibos_detalle,
             'ctacte_notas_venta' => $ctacte_notas_venta,
             'ctacte_notas_debito' => $ctacte_notas_debito,
             'ctacte_notas_credito' => $ctacte_notas_credito,

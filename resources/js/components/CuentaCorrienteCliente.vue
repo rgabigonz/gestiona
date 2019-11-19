@@ -174,7 +174,7 @@
                                         <th style="width:20%">Fecha</th>
                                         <th style="width:15%">Importe($)</th>
                                         <th style="width:15%">Importe(U$S)</th>
-                                        <th style="width:10%">Dolar</th>
+                                        <th style="width:10%">Dolar(Rec)</th>
                                         <th style="width:20%">Total(U$S)</th>
                                     </tr>
                                 </thead>
@@ -255,6 +255,7 @@
                 cta_cte_notas_debito: {},     
                 cta_cte_notas_credito: {},           
                 cta_cte_recibos: {},
+                cta_cte_recibos_detalle: {},
                 cta_cte_clientes: {}
             }
         },
@@ -296,6 +297,7 @@
                 axios.get(url).then(data => {
                     var response = data.data;
                     me.cta_cte_recibos = response.ctacte_recibos;
+                    me.cta_cte_recibos_detalle = response.ctacte_recibos_detalle;
                     me.cta_cte_notas_venta = response.ctacte_notas_venta;
                     me.cta_cte_notas_debito = response.ctacte_notas_debito;
                     me.cta_cte_notas_credito = response.ctacte_notas_credito;
@@ -331,13 +333,82 @@
             },
             total_recibosDolares(cCliente) {
                 var lTotalDolares = 0;
+                var lTotalDolaresD = 0;
+
+                console.log('Ingreso');
 
                 for (var i = 0; i < this.cta_cte_recibos.length; i++) {
                     if(this.cta_cte_recibos[i].cliente_id == cCliente) {
-                        if (this.cta_cte_recibos[i].precio_dolar_manual && this.cta_cte_recibos[i].precio_dolar_manual > 0) {
+                        /*if (this.cta_cte_recibos[i].precio_dolar_manual && this.cta_cte_recibos[i].precio_dolar_manual > 0) {
                             lTotalDolares += parseFloat(this.cta_cte_recibos[i].total) / parseFloat(this.cta_cte_recibos[i].precio_dolar_manual);
                         }
-                        lTotalDolares += parseFloat(this.cta_cte_recibos[i].total_dolares);
+                        lTotalDolares += parseFloat(this.cta_cte_recibos[i].total_dolares);*/
+
+                        //Nuevo
+                        lTotalDolaresD = 0;
+
+                        for (var j = 0; j < this.cta_cte_recibos_detalle.length; j++) {
+                            if(this.cta_cte_recibos_detalle[j].recibo_id == this.cta_cte_recibos[i].id) {
+                                if (this.cta_cte_recibos_detalle[j].tipo_pago == 'CH') {
+                                    if (this.cta_cte_recibos_detalle[j].precio_dolar_cheque > 0 && this.cta_cte_recibos_detalle[j].precio_dolar_cheque) {
+                                        lTotalDolaresD += parseFloat(this.cta_cte_recibos_detalle[j].importe) / parseFloat(this.cta_cte_recibos_detalle[j].precio_dolar_cheque);
+                                    } else {
+                                        if (this.cta_cte_recibos[i].precio_dolar_manual > 0 && this.cta_cte_recibos[i].precio_dolar_manual) 
+                                            lTotalDolaresD += parseFloat(this.cta_cte_recibos_detalle[j].importe) / parseFloat(this.cta_cte_recibos[i].precio_dolar_manual);
+                                    }
+                                    console.log(this.cta_cte_recibos_detalle[j].precio_dolar_cheque);
+                                } else {
+                                    if (this.cta_cte_recibos[i].precio_dolar_manual > 0 && this.cta_cte_recibos[i].precio_dolar_manual) 
+                                        lTotalDolaresD += parseFloat(this.cta_cte_recibos_detalle[j].importe) / parseFloat(this.cta_cte_recibos[i].precio_dolar_manual);
+                                }
+                            }
+                        }
+
+                        lTotalDolares += lTotalDolaresD;
+                        // Nuevo
+                    }
+                }  
+                
+                if (lTotalDolares)
+                    return parseFloat(lTotalDolares);
+                else    
+                    return 0;
+            },
+            total_recibosDolaresRecibo(cRecibo) {
+                var lTotalDolares = 0;
+                var lTotalDolaresD = 0;
+
+                console.log('Ingreso');
+
+                for (var i = 0; i < this.cta_cte_recibos.length; i++) {
+                    if(this.cta_cte_recibos[i].cliente_id == cCliente) {
+                        /*if (this.cta_cte_recibos[i].precio_dolar_manual && this.cta_cte_recibos[i].precio_dolar_manual > 0) {
+                            lTotalDolares += parseFloat(this.cta_cte_recibos[i].total) / parseFloat(this.cta_cte_recibos[i].precio_dolar_manual);
+                        }
+                        lTotalDolares += parseFloat(this.cta_cte_recibos[i].total_dolares);*/
+
+                        //Nuevo
+                        lTotalDolaresD = 0;
+
+                        for (var j = 0; j < this.cta_cte_recibos_detalle.length; j++) {
+                            if(this.cta_cte_recibos_detalle[j].recibo_id == this.cta_cte_recibos[i].id) {
+                                if (this.cta_cte_recibos_detalle[j].tipo_pago == 'CH') {
+                                    if (this.cta_cte_recibos_detalle[j].precio_dolar_cheque > 0 && this.cta_cte_recibos_detalle[j].precio_dolar_cheque) {
+                                        lTotalDolaresD += parseFloat(this.cta_cte_recibos_detalle[j].importe) / parseFloat(this.cta_cte_recibos_detalle[j].precio_dolar_cheque);
+                                    } else {
+                                        if (this.cta_cte_recibos[i].precio_dolar_manual > 0 && this.cta_cte_recibos[i].precio_dolar_manual) 
+                                            lTotalDolaresD += parseFloat(this.cta_cte_recibos_detalle[j].importe) / parseFloat(this.cta_cte_recibos[i].precio_dolar_manual);
+                                    }
+                                    console.log(this.cta_cte_recibos_detalle[j].precio_dolar_cheque);
+                                } else {
+                                    if (this.cta_cte_recibos[i].precio_dolar_manual > 0 && this.cta_cte_recibos[i].precio_dolar_manual) 
+                                        lTotalDolaresD += parseFloat(this.cta_cte_recibos_detalle[j].importe) / parseFloat(this.cta_cte_recibos[i].precio_dolar_manual);
+                                }
+                            }
+                        }
+
+                        lTotalDolares += lTotalDolaresD;
+                        // Nuevo
                     }
                 }  
                 
