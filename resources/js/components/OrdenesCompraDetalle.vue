@@ -545,7 +545,7 @@
                 let origenKey = event.key || String.fromCharCode(event.keyCode);
 
                 switch(origenInput) {
-                    case 'precio_producto':
+                    case 'flete_producto':
                         switch(origenKey) {
                             case 'Tab':  
                                 if (this.tipo != 'CL')  
