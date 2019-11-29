@@ -70,14 +70,20 @@
                             <table class="table table-striped table-sm">
                                 <thead>
                                     <tr>
-                                        <th style="width:60%">Producto</th>                                
+                                        <th style="width:55%">Producto</th>                                
                                         <th style="width:40%">Cantidad</th>
+                                        <th style="width:5%"></th>
                                     </tr>
                                 </thead>
                                 <tbody style="font-size: 12px">
                                     <tr v-for="stock_producto in filtroProducto(stock_deposito.id)" :key="stock_producto.id">
                                         <td>{{ stock_producto.nombre_producto }}</td>
                                         <td>{{ stock_producto.cantidad }}</td>
+                                        <td>
+                                            <a href="#" @click="mostrarModal(stock_producto.deposito_id, stock_producto.producto_id)">
+                                                <i class="fas fa-people-carry nav-icon"></i>
+                                            </a>
+                                        </td>                                        
                                     </tr>
                                 </tbody>
                             </table>
@@ -104,6 +110,46 @@
 
         </div>
         <!-- /.row -->
+
+        <!-- Modal -->
+        <div class="modal fade" id="ventanaModal" tabindex="-1" role="dialog" aria-labelledby="ventanaModalLabel" aria-hidden="true">
+            <div style="min-width: 55%" class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="ventanaModalLabel">Movimientos del Producto</h5>
+                        <button type="button" class="close" @click="cerrarModal()" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>                        
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-striped table-sm">
+                            <thead>
+                                <tr>
+                                    <th style="width:50%">Producto</th>
+                                    <th style="width:15%">Fecha</th>
+                                    <th style="width:25%">NP/NV/MI</th>
+                                    <th style="width:10%">Cantidad</th>
+                                </tr>
+                            </thead>
+                            <tbody style="font-size: 12px">
+                                <tr v-for="stock_movimiento in stock_movimientos" :key="stock_movimiento.id">
+                                    <td>{{ stock_movimiento.nombre_producto }} / {{ stock_movimiento.descripcion_producto }}</td>
+                                    <td>{{ stock_movimiento.fecha | formatDate }}</td>
+                                    <td v-if="stock_movimiento.tipo_documento == 'NV'" >{{ stock_movimiento.tipo_documento }} / {{ stock_movimiento.nota_ventaAID }} - {{ stock_movimiento.nota_ventaAA }}</td>
+                                    <td v-else-if="stock_movimiento.tipo_documento == 'OC'" >NP / {{ stock_movimiento.orden_compraAID }} - {{ stock_movimiento.orden_compraAA }}</td>
+                                    <td v-else-if="stock_movimiento.tipo_documento == 'MI'" >MI / {{ stock_movimiento.id }} <b>({{ stock_movimiento.tipo }})</b></td>
+                                    <td>{{ stock_movimiento.cantidad }}</td>
+                                </tr>
+                            </tbody>
+                        </table>                        
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" @click="cerrarModal()">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
       </div>
 </template>
 
@@ -119,7 +165,8 @@
                 codigo_producto: 0,
                 deposito: {},
                 stock_depositos: {},
-                stock_producto: {},                
+                stock_producto: {},
+                stock_movimientos: {},                
             }
         },
         methods: {
@@ -137,6 +184,27 @@
                     var response = data.data;
                     me.stock_producto = response.stock_producto;
                     me.stock_depositos = response.stock_depositos;
+                }).catch((error) => {
+                    if (error.response.status == 401) {
+                        swal('Error!', 'La sesion ha caducado.', 'warning');
+                    }
+                });
+            },
+            mostrarModal(cDeposito, cProducto) {
+                this.movimientosStock(cDeposito, cProducto);
+                $('#ventanaModal').modal('show');
+            },
+            cerrarModal() {
+                $('#ventanaModal').modal('hide');
+            },            
+            movimientosStock(cDeposito, cProducto) {
+                let me = this;    
+
+                var url = 'api/movimientostock/devuelveMovimientosStock?deposito=' + cDeposito + '&producto=' + cProducto
+
+                axios.get(url).then(data => {
+                    var response = data.data;
+                    me.stock_movimientos = response.MovimientosStock;
                 }).catch((error) => {
                     if (error.response.status == 401) {
                         swal('Error!', 'La sesion ha caducado.', 'warning');

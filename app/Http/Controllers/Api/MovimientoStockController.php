@@ -164,5 +164,25 @@ class MovimientoStockController extends Controller
         $MovimientoStock = MovimientoStock::findOrFail($id);
         $MovimientoStock->estado = 'AN';
         $MovimientoStock->update();
+    }
+
+    public function devuelveMovimientosStock(Request $request)
+    {
+        $deposito = $request->deposito;
+        $producto = $request->producto;
+        
+        $MovimientosStock = MovimientoStock::join('productos', 'movimientos_stock.producto_id', '=', 'productos.id')
+        ->join('depositos', 'movimientos_stock.deposito_id', '=', 'depositos.id')
+        ->leftjoin('notas_pedidos', 'movimientos_stock.documento_id', '=', 'notas_pedidos.id')
+        ->leftjoin('ordenes_compras', 'movimientos_stock.documento_id', '=', 'ordenes_compras.id')
+        ->select('movimientos_stock.*', 'productos.nombre as nombre_producto', 'productos.descripcion as descripcion_producto', 'depositos.descripcion as nombre_deposito', 
+                 'notas_pedidos.anio_id as nota_ventaAID', 'notas_pedidos.anio_actual as nota_ventaAA',
+                 'ordenes_compras.anio_id as orden_compraAID', 'ordenes_compras.anio_actual as orden_compraAA')
+        ->where('movimientos_stock.deposito_id', '=', $deposito)
+        ->where('movimientos_stock.producto_id', '=', $producto)->get();
+
+        return [
+            'MovimientosStock' => $MovimientosStock
+        ];
     }      
 }
