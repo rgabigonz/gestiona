@@ -84,7 +84,7 @@
                     <div class="col-sm-4 invoice-col">
                         <div class="form-group">
                             <div class="input-group input-group-sm">
-                                <select class="form-control" v-model="codigo_formapago">
+                                <select class="form-control" v-model="codigo_formapago" :disabled="modoEdicion && estado != 'PE'">
                                     <option value="">Forma Pago...</option>
                                     <option v-for="lformaspago in lformaspagos" :key="lformaspago.id" :value="lformaspago.id">{{ lformaspago.descripcion }}</option>
                                 </select>
@@ -96,7 +96,7 @@
                     <div class="col-sm-4 invoice-col">
                         <div class="form-group">
                             <div class="input-group input-group-sm">
-                                <select class="form-control" v-model="codigo_condicionpago">
+                                <select class="form-control" v-model="codigo_condicionpago" :disabled="modoEdicion && estado != 'PE'">
                                     <option value="">Condicion Pago...</option>
                                     <option v-for="lcondicionespago in lcondicionespagos" :key="lcondicionespago.id" :value="lcondicionespago.id">{{ lcondicionespago.descripcion }}</option>
                                 </select>
@@ -111,7 +111,7 @@
                     <div class="col-sm-4 invoice-col">
                         <div class="form-group">
                             <div class="input-group input-group-sm">
-                                <input v-model="lugar_entrega" type="text" name="lugar_entrega" placeholder="Lugar Entrega"
+                                <input v-model="lugar_entrega"  :disabled="modoEdicion && estado != 'PE'" type="text" name="lugar_entrega" placeholder="Lugar Entrega"
                                     class="form-control form-control-sm">
                             </div>
                         </div>
@@ -130,7 +130,8 @@
                         <div class="col-sm-4 invoice-col">
                             <div class="form-group">
                                 <div class="input-group input-group-sm">
-                                    <select class="form-control" v-model="codigo_proveedor" @change="cargarProveedor(codigo_proveedor)">
+                                    <select class="form-control" v-model="codigo_proveedor" @change="cargarProveedor(codigo_proveedor)"
+                                            :disabled="modoEdicion && estado != 'PE'">
                                         <option value=0>Proveedor...</option>
                                         <option v-for="lproveedor in lproveedores" :key="lproveedor.id" :value="lproveedor.id">{{ lproveedor.nombre }}</option>
                                     </select>
@@ -161,7 +162,8 @@
                         <label class="control-label">Cliente</label>
                         <div class="form-group">
                             <div class="input-group input-group-sm">
-                                <select class="form-control" v-model="codigo_cliente" @change="cargarCliente(codigo_cliente)">
+                                <select class="form-control" v-model="codigo_cliente" @change="cargarCliente(codigo_cliente)"
+                                        :disabled="modoEdicion && estado != 'PE'">
                                     <option value=0>Cliente...</option>
                                     <option v-for="lcliente in lclientes" :key="lcliente.id" :value="lcliente.id">{{ lcliente.nombre }}</option>
                                 </select>
@@ -174,7 +176,8 @@
                         <label class="control-label">Comision de venta</label>
                         <div class="form-group">
                             <div class="input-group input-group-sm">
-                                <select class="form-control" v-model="codigo_vendedor_venta" @change="cargarVendedor(codigo_vendedor_venta)">
+                                <select class="form-control" v-model="codigo_vendedor_venta" @change="cargarVendedor(codigo_vendedor_venta)"
+                                        :disabled="modoEdicion && estado != 'PE'">
                                     <option value=0>x Venta...</option>
                                     <option v-for="lvendedor_venta in lvendedores_venta" :key="lvendedor_venta.id" :value="lvendedor_venta.id">{{ lvendedor_venta.nombre }}</option>
                                 </select>
@@ -187,7 +190,7 @@
                         <div class="form-group">
                             <label class="control-label">Comision de gestion</label>
                             <div class="input-group input-group-sm">
-                                <select class="form-control" v-model="codigo_vendedor_gestion">
+                                <select class="form-control" v-model="codigo_vendedor_gestion" :disabled="modoEdicion && estado != 'PE'">
                                     <option value=0>x Gestion...</option>
                                     <option v-for="lvendedor_gestion in lvendedores_gestion" :key="lvendedor_gestion.id" :value="lvendedor_gestion.id">{{ lvendedor_gestion.nombre }}</option>
                                 </select>
@@ -246,7 +249,8 @@
                                     <td class="invoice-col">
                                         <div class="form-group">
                                             <div class="input-group input-group-sm">
-                                                <select class="form-control" v-model="codigo_producto" ref="codigo_producto" @change="cargarProducto(codigo_producto)">
+                                                <select class="form-control" v-model="codigo_producto" ref="codigo_producto" @change="cargarProducto(codigo_producto)"
+                                                        :disabled="modoEdicion && estado != 'PE'">
                                                     <option value=0>Producto...</option>
                                                     <option v-for="lproducto in lproductos" :key="lproducto.id" :value="lproducto.id">{{ lproducto.nombre }}</option>
                                                 </select>                                                    
@@ -775,8 +779,11 @@
             validaNP() {
                 var resultado = false;
 
+                console.log(this.codigo_deposito);
+                console.log('Prueba');
+
                 if (this.tipo != 'CL') {
-                    if (this.codigo_proveedor && this.items.length) {
+                    if (this.codigo_proveedor && this.codigo_deposito && this.items.length) {
                         resultado = true;
                     }
 
@@ -785,12 +792,16 @@
                     if (this.codigo_proveedor == 0) {
                         this.errors.push('Debe ingresar un proveedor');
                     }
+                    if (this.codigo_deposito == 0) {
+                        this.errors.push('Debe ingresar un deposito');
+                    }                                        
                     if (this.items.length == 0) {
                         this.errors.push('Debe ingresar al menos un producto');
                     }
                 } else {
                     if (this.codigo_proveedor && this.codigo_cliente && 
-                        this.codigo_vendedor_gestion && this.items.length) {
+                        this.codigo_deposito && this.codigo_vendedor_gestion && 
+                        this.items.length) {
                         resultado = true;
                     }
 
@@ -808,6 +819,9 @@
                     if (this.codigo_vendedor_gestion == 0) {
                         this.errors.push('Debe ingresar un distribuidor de comision de gestion');
                     }
+                    if (this.codigo_deposito == 0) {
+                        this.errors.push('Debe ingresar un deposito');
+                    }                    
                     if (this.items.length == 0) {
                         this.errors.push('Debe ingresar al menos un producto');
                     }
@@ -854,8 +868,7 @@
                     .catch(() => {
                         this.$Progress.fail();
                     });
-                }
-                else {
+                } else {
                     toast({
                         type: 'error',
                         title: 'Verificar errores'
@@ -867,39 +880,46 @@
             actualizaOrdenCompra() {
                 this.$Progress.start();
                 
-                axios.put('api/ordenCompra/'+this.orenes_compra_id_edicion, {
-                    codigo_proveedor: this.codigo_proveedor, 
-                    codigo_deposito: this.codigo_deposito, 
-                    codigo_forma_pago: this.codigo_formapago, 
-                    codigo_condicion_pago: this.codigo_condicionpago, 
-                    fecha_orden_compra: this.fecha_orden_compra,
-                    tipo: this.tipo,
-                    total_orden: this.total_conIVA,
-                    total_orden_siniva: this.total_sinIVA,
-                    total_orden_21: this.total_iva_21,
-                    total_orden_105: this.total_iva_105,
-                    numero_negocio: this.numero_negocio,
-                    lugar_entrega: this.lugar_entrega,
-                    obs: this.observacion,
-                    codigo_cliente: this.codigo_cliente, 
-                    codigo_vendedor_venta: this.codigo_vendedor_venta, 
-                    codigo_vendedor_gestion: this.codigo_vendedor_gestion, 
-                    items: this.items})
-                .then(() => {
-                    Fire.$emit('AfterAction');
-                    toast({
-                        type: 'success',
-                        title: 'Se actualizo la orden de compra correctamente!'
-                    });
+                if (this.validaNP()) {
+                    axios.put('api/ordenCompra/'+this.orenes_compra_id_edicion, {
+                        codigo_proveedor: this.codigo_proveedor, 
+                        codigo_deposito: this.codigo_deposito, 
+                        codigo_forma_pago: this.codigo_formapago, 
+                        codigo_condicion_pago: this.codigo_condicionpago, 
+                        fecha_orden_compra: this.fecha_orden_compra,
+                        tipo: this.tipo,
+                        total_orden: this.total_conIVA,
+                        total_orden_siniva: this.total_sinIVA,
+                        total_orden_21: this.total_iva_21,
+                        total_orden_105: this.total_iva_105,
+                        numero_negocio: this.numero_negocio,
+                        lugar_entrega: this.lugar_entrega,
+                        obs: this.observacion,
+                        codigo_cliente: this.codigo_cliente, 
+                        codigo_vendedor_venta: this.codigo_vendedor_venta, 
+                        codigo_vendedor_gestion: this.codigo_vendedor_gestion, 
+                        items: this.items})
+                    .then(() => {
+                        Fire.$emit('AfterAction');
+                        toast({
+                            type: 'success',
+                            title: 'Se actualizo la orden de compra correctamente!'
+                        });
 
-                    if(this.sBuscarOCD)
-                        this.$router.push('/ordenescompra/'+this.sBuscarOCD+'/'+this.sCriterioOCD);
-                    else
-                        this.$router.push('/ordenescompra');
-                })
-                .catch(() => {
-                    this.$Progress.fail();
-                });
+                        if(this.sBuscarOCD)
+                            this.$router.push('/ordenescompra/'+this.sBuscarOCD+'/'+this.sCriterioOCD);
+                        else
+                            this.$router.push('/ordenescompra');
+                    })
+                    .catch(() => {
+                        this.$Progress.fail();
+                    });
+                } else {
+                    toast({
+                        type: 'error',
+                        title: 'Verificar errores'
+                    });
+                }
 
                 this.$Progress.finish();
             },

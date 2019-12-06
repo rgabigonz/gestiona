@@ -57,7 +57,7 @@
                             <div class="form-group">
                                 <div class="input-group input-group-sm">
                                     <input v-model="lugar_entrega" type="text" name="lugar_entrega" placeholder="Lugar Entrega"
-                                        class="form-control form-control-sm">
+                                        class="form-control form-control-sm" :disabled="modoEdicion && estado != 'PE'">
                                 </div>
                             </div>
                         </div>
@@ -66,7 +66,7 @@
                         <div class="col-sm-3 invoice-col">
                             <div class="form-group">
                                 <div class="input-group input-group-sm">
-                                    <select class="form-control" v-model="codigo_deposito">
+                                    <select class="form-control" v-model="codigo_deposito" :disabled="modoEdicion && estado != 'PE'">
                                         <option value="">Deposito...</option>
                                         <option v-for="ldeposito in ldepositos" :key="ldeposito.id" :value="ldeposito.id">{{ ldeposito.descripcion }}</option>
                                     </select>
@@ -88,7 +88,7 @@
                             <label class="control-label">Cliente</label>
                             <div class="form-group">
                                 <div class="input-group input-group-sm">
-                                    <select class="form-control" v-model="codigo_cliente" @change="cargarCliente(codigo_cliente)">
+                                    <select class="form-control" v-model="codigo_cliente" @change="cargarCliente(codigo_cliente)" :disabled="modoEdicion && estado != 'PE'">
                                         <option value=0>Cliente...</option>
                                         <option v-for="lcliente in lclientes" :key="lcliente.id" :value="lcliente.id">{{ lcliente.nombre }}</option>
                                     </select>
@@ -111,7 +111,7 @@
                             <label class="control-label">Comision de venta</label>
                             <div class="form-group">
                                 <div class="input-group input-group-sm">
-                                    <select class="form-control" v-model="codigo_vendedor_venta">
+                                    <select class="form-control" v-model="codigo_vendedor_venta" :disabled="modoEdicion && estado != 'PE'">
                                         <option value=0>x Venta...</option>
                                         <option v-for="lvendedor_venta in lvendedores_venta" :key="lvendedor_venta.id" :value="lvendedor_venta.id">{{ lvendedor_venta.nombre }}</option>
                                     </select>
@@ -148,7 +148,8 @@
                                         <td class="invoice-col">
                                             <div class="form-group">
                                                 <div class="input-group input-group-sm">
-                                                    <select class="form-control" v-model="codigo_producto" ref="codigo_producto" @change="cargarProducto(codigo_producto)">
+                                                    <select class="form-control" v-model="codigo_producto" ref="codigo_producto" @change="cargarProducto(codigo_producto)"
+                                                            :disabled="modoEdicion && estado != 'PE'">
                                                         <option value=0>Producto...</option>
                                                         <option v-for="lproducto in lproductos" :key="lproducto.id" :value="lproducto.id">{{ lproducto.nombre }}</option>
                                                     </select>                                                    
@@ -323,7 +324,7 @@
                 <button v-if="!modoEdicion" type="button" class="btn btn-success float-right" @click="creaNotaPedido()">
                     <i class="fa fa-save fa-fw"></i> Guardar
                 </button>
-                <button v-if="modoEdicion && estado == 'PE'" type="button" class="btn btn-success float-right" @click="actualizaNotaPedido()">
+                <button v-if="modoEdicion" type="button" class="btn btn-success float-right" @click="actualizaNotaPedido()">
                     <i class="fa fa-save fa-fw"></i> Modificar
                 </button>
                 <router-link v-if="sBuscarNPD" :to="{ name: 'notaspedido', params: { sBuscar: sBuscarNPD, sCriterio: sCriterioNPD }}" class="btn btn-primary float-right" style="margin-right: 5px;">
@@ -564,7 +565,7 @@
             validaNV() {
                 var resultado = false;
 
-                if (this.codigo_cliente && this.items.length) {
+                if (this.codigo_cliente && this.codigo_deposito && this.items.length) {
                     resultado = true;
                 }
 
@@ -573,6 +574,9 @@
                 if (this.codigo_cliente == 0) {
                     this.errors.push('Debe ingresar un cliente');
                 }
+                if (this.codigo_deposito == 0) {
+                    this.errors.push('Debe ingresar un deposito');
+                }                
                 if (this.items.length == 0) {
                     this.errors.push('Debe ingresar al menos un producto');
                 }
@@ -613,7 +617,6 @@
                     .catch(() => {
                         this.$Progress.fail();
                     });
-
                 } else {
                     toast({
                         type: 'error',
@@ -627,35 +630,42 @@
             actualizaNotaPedido() {
                 this.$Progress.start();
                 
-                axios.put('api/notaPedido/'+this.notas_pedido_id_edicion, {
-                    codigo_cliente: this.codigo_cliente, 
-                    codigo_vendedor_venta: this.codigo_vendedor_venta,
-                    fecha_nota_pedido: this.fecha_nota_pedido,
-                    numero_factura: this.numero_factura,
-                    lugar_entrega: this.lugar_entrega,
-                    obs: this.observacion,
-                    total_pedido: this.total_conIVA,
-                    total_pedido_siniva: this.total_sinIVA,
-                    total_pedido_21: this.total_iva_21,
-                    total_pedido_105: this.total_iva_105,
-                    codigo_deposito: this.codigo_deposito, 
-                    items: this.items})
-                .then(() => {
-                    Fire.$emit('AfterAction');
-                    toast({
-                        type: 'success',
-                        title: 'Se actualizo el pedido correctamente!'
+                if (this.validaNV()) {
+                    axios.put('api/notaPedido/'+this.notas_pedido_id_edicion, {
+                        codigo_cliente: this.codigo_cliente, 
+                        codigo_vendedor_venta: this.codigo_vendedor_venta,
+                        fecha_nota_pedido: this.fecha_nota_pedido,
+                        numero_factura: this.numero_factura,
+                        lugar_entrega: this.lugar_entrega,
+                        obs: this.observacion,
+                        total_pedido: this.total_conIVA,
+                        total_pedido_siniva: this.total_sinIVA,
+                        total_pedido_21: this.total_iva_21,
+                        total_pedido_105: this.total_iva_105,
+                        codigo_deposito: this.codigo_deposito, 
+                        items: this.items})
+                    .then(() => {
+                        Fire.$emit('AfterAction');
+                        toast({
+                            type: 'success',
+                            title: 'Se actualizo el pedido correctamente!'
+                        });
+
+                        if(this.sBuscarNPD)
+                            this.$router.push('/notaspedido/'+this.sBuscarNPD+'/'+this.sCriterioNPD);
+                        else
+                            this.$router.push('/notaspedido');
+                    })
+                    .catch(() => {
+                        this.$Progress.fail();
                     });
-
-                    if(this.sBuscarNPD)
-                        this.$router.push('/notaspedido/'+this.sBuscarNPD+'/'+this.sCriterioNPD);
-                    else
-                        this.$router.push('/notaspedido');
-                })
-                .catch(() => {
-                    this.$Progress.fail();
-                });
-
+                } else {
+                    toast({
+                        type: 'error',
+                        title: 'Verificar errores'
+                    });
+                }
+                
                 this.$Progress.finish();
             },
             cargarNotaPedido(npCod) {
