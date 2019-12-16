@@ -779,9 +779,6 @@
             validaNP() {
                 var resultado = false;
 
-                console.log(this.codigo_deposito);
-                console.log('Prueba');
-
                 if (this.tipo != 'CL') {
                     if (this.codigo_proveedor && this.codigo_deposito && this.items.length) {
                         resultado = true;
@@ -800,8 +797,7 @@
                     }
                 } else {
                     if (this.codigo_proveedor && this.codigo_cliente && 
-                        this.codigo_deposito && this.codigo_vendedor_gestion && 
-                        this.items.length) {
+                        this.codigo_vendedor_gestion && this.items.length) {
                         resultado = true;
                     }
 
@@ -819,9 +815,9 @@
                     if (this.codigo_vendedor_gestion == 0) {
                         this.errors.push('Debe ingresar un distribuidor de comision de gestion');
                     }
-                    if (this.codigo_deposito == 0) {
+                    /*if (this.codigo_deposito == 0) {
                         this.errors.push('Debe ingresar un deposito');
-                    }                    
+                    }*/
                     if (this.items.length == 0) {
                         this.errors.push('Debe ingresar al menos un producto');
                     }
