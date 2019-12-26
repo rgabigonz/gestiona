@@ -23,7 +23,8 @@
                             <label class="control-label">Cliente</label>
                             <div class="form-group">
                                 <div class="input-group input-group-sm">
-                                    <select class="form-control" v-model="codigo_cliente" @change="consultarCtaCte(codigo_cliente)">
+                                    <!-- <select class="form-control" v-model="codigo_cliente"> -->
+                                    <select class="form-control" v-model="codigo_cliente" @change="consultarCtaCte">
                                         <option value=0>Cliente...</option>
                                         <option v-for="lcliente in lclientes" :key="lcliente.id" :value="lcliente.id">{{ lcliente.nombre }}</option>
                                     </select>
@@ -69,7 +70,7 @@
                         <div class="col-sm-2 invoice-col">
                             <label class="control-label"></label>
                             <div class="form-group">
-                                <button type="button" class="btn btn-warning float-right" @click="consultarCtaCte(codigo_cliente)">
+                                <button type="button" class="btn btn-warning float-right" @click="consultarCtaCte">
                                     <i class="fa fa-save fa-fw"></i> Actualizar
                                 </button>                                
                             </div>
@@ -83,8 +84,8 @@
               <!-- /.row -->
 
               <!-- Clientes row -->
-              <div v-for="cta_cte_cliente in cta_cte_clientes" :key="cta_cte_cliente.id" class="card">
-                <div class="card-header border-light bg-primary"><b>{{ cta_cte_cliente.nombre }}</b></div>
+              <div v-for="cta_cte_cliente in cta_cte_clientes_ordenado" :key="cta_cte_cliente.cCliente" class="card">
+                <div class="card-header border-light bg-primary"><b>{{ cta_cte_cliente.nCliente }}</b></div>
                 <div class="card-body">
 
                     <!-- Debitos row -->
@@ -100,7 +101,7 @@
                                     </tr>
                                 </thead>
                                 <tbody style="font-size: 12px">
-                                    <tr v-for="cta_cte_nota_venta in filtroNV(cta_cte_cliente.id)" :key="cta_cte_nota_venta.id">
+                                    <tr v-for="cta_cte_nota_venta in filtroNV(cta_cte_cliente.cCliente)" :key="cta_cte_nota_venta.id">
                                         <td>{{ cta_cte_nota_venta.anio_id }} - {{ cta_cte_nota_venta.anio_actual }}</td>
                                         <td>{{ cta_cte_nota_venta.fecha | formatDate }}</td>
                                         <td>${{ cta_cte_nota_venta.total }}</td>
@@ -108,7 +109,7 @@
                                     <tr>
                                         <td></td>
                                         <td></td>
-                                        <td><b>Total: ${{ total_nv(cta_cte_cliente.id) | currency }}</b></td>
+                                        <td><b>Total: ${{ total_nv(cta_cte_cliente.cCliente) | currency }}</b></td>
                                     </tr>                            
                                 </tbody>
                             </table>
@@ -122,7 +123,7 @@
                                     </tr>
                                 </thead>
                                 <tbody style="font-size: 12px">
-                                    <tr v-for="cta_cte_nota_debito in filtroND(cta_cte_cliente.id)" :key="cta_cte_nota_debito.id">
+                                    <tr v-for="cta_cte_nota_debito in filtroND(cta_cte_cliente.cCliente)" :key="cta_cte_nota_debito.id">
                                         <td>{{ cta_cte_nota_debito.punto_venta }} - {{ cta_cte_nota_debito.numero_nota_debito }}</td>
                                         <td>{{ cta_cte_nota_debito.fecha | formatDate }}</td>
                                         <td v-if="cta_cte_nota_debito.precio_dolar_manual && cta_cte_nota_debito.precio_dolar_manual > 0" >${{ (cta_cte_nota_debito.total / cta_cte_nota_debito.precio_dolar_manual) | currency }}</td>
@@ -132,7 +133,7 @@
                                     <tr>
                                         <td></td>
                                         <td></td>
-                                        <td><b>Total: ${{ total_nd(cta_cte_cliente.id) | currency }}</b></td>
+                                        <td><b>Total: ${{ total_nd(cta_cte_cliente.cCliente) | currency }}</b></td>
                                     </tr>                            
                                 </tbody>
                             </table>                            
@@ -152,7 +153,7 @@
                                     </tr>
                                 </thead>
                                 <tbody style="font-size: 12px">
-                                    <tr v-for="cta_cte_nota_credito in filtroNC(cta_cte_cliente.id)" :key="cta_cte_nota_credito.id">
+                                    <tr v-for="cta_cte_nota_credito in filtroNC(cta_cte_cliente.cCliente)" :key="cta_cte_nota_credito.id">
                                         <td>{{ cta_cte_nota_credito.punto_venta }} - {{ cta_cte_nota_credito.numero_nota_credito }}</td>
                                         <td>{{ cta_cte_nota_credito.fecha | formatDate }}</td>
                                         <td v-if="cta_cte_nota_credito.precio_dolar_manual && cta_cte_nota_credito.precio_dolar_manual > 0" >${{ (cta_cte_nota_credito.total / cta_cte_nota_credito.precio_dolar_manual) | currency }}</td>
@@ -162,7 +163,7 @@
                                     <tr>
                                         <td></td>
                                         <td></td>
-                                        <td><b>Total: ${{ total_nc(cta_cte_cliente.id) | currency }}</b></td>
+                                        <td><b>Total: ${{ total_nc(cta_cte_cliente.cCliente) | currency }}</b></td>
                                     </tr>                            
                                 </tbody>
                             </table>                               
@@ -179,7 +180,7 @@
                                     </tr>
                                 </thead>
                                 <tbody style="font-size: 12px">
-                                    <tr v-for="cta_cte_recibo in filtroRec(cta_cte_cliente.id)" :key="cta_cte_recibo.id">
+                                    <tr v-for="cta_cte_recibo in filtroRec(cta_cte_cliente.cCliente)" :key="cta_cte_recibo.id">
                                         <td>{{ cta_cte_recibo.punto_venta }} - {{ cta_cte_recibo.numero_recibo }}</td>
                                         <td>{{ cta_cte_recibo.fecha | formatDate }}</td>
                                         <td>${{ cta_cte_recibo.total }}</td>
@@ -193,10 +194,10 @@
                                     <tr>
                                         <td></td>
                                         <td><b>Total($):</b></td>                                        
-                                        <td><b>${{ total_recibos(cta_cte_cliente.id) | currency }}</b></td>
+                                        <td><b>${{ total_recibos(cta_cte_cliente.cCliente) | currency }}</b></td>
                                         <td></td>
                                         <td><b>Total(U$S):</b></td>
-                                        <td><b>${{ total_recibosDolares(cta_cte_cliente.id) | currency }}</b></td>
+                                        <td><b>${{ total_recibosDolares(cta_cte_cliente.cCliente) | currency }}</b></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -211,7 +212,7 @@
                             </thead>                             -->
                             <tr>
                                 <td style="width:100%">
-                                    <h4 class="text-right"><b>Saldo(U$S): {{ saldo_ctacte(cta_cte_cliente.id) | currency }}</b></h4>
+                                    <h4 class="text-right"><b>Saldo(U$S): {{ saldo_ctacte(cta_cte_cliente.cCliente) | currency }}</b></h4>
                                 </td>
                             </tr>                            
                         </tbody>
@@ -257,7 +258,8 @@
                 cta_cte_notas_credito: {},           
                 cta_cte_recibos: {},
                 cta_cte_recibos_detalle: {},
-                cta_cte_clientes: {}
+                cta_cte_clientes: {},
+                cta_cte_clientes_ordenado: []
             }
         },
         methods: {
@@ -297,12 +299,67 @@
                                                                       + '&usaFecha=' + lusaFecha
                 axios.get(url).then(data => {
                     var response = data.data;
+
                     me.cta_cte_recibos = response.ctacte_recibos;
                     me.cta_cte_recibos_detalle = response.ctacte_recibos_detalle;
                     me.cta_cte_notas_venta = response.ctacte_notas_venta;
                     me.cta_cte_notas_debito = response.ctacte_notas_debito;
                     me.cta_cte_notas_credito = response.ctacte_notas_credito;
                     me.cta_cte_clientes = response.ctacte_clientes;
+
+                    this.cta_cte_clientes_ordenado = [];
+                    
+                    for (var i_ordenado = 0; i_ordenado < this.cta_cte_clientes.length; i_ordenado++) {
+                        var lTotalNV = 0;
+                        var lTotalND = 0;
+                        var lTotalNC = 0;
+                        var lTotalRecibo = 0;
+                        var lTotalCliente = 0;
+
+                        for (var i = 0; i < this.cta_cte_notas_venta.length; i++) {
+                            if(this.cta_cte_notas_venta[i].cliente_id == this.cta_cte_clientes[i_ordenado].id) 
+                                lTotalNV += parseFloat(this.cta_cte_notas_venta[i].total);
+                        }
+
+                        for (var i = 0; i < this.cta_cte_notas_debito.length; i++) {
+                            if(this.cta_cte_notas_debito[i].cliente_id == this.cta_cte_clientes[i_ordenado].id) 
+                                if (this.cta_cte_notas_debito[i].precio_dolar_manual && this.cta_cte_notas_debito[i].precio_dolar_manual > 0) {
+                                    lTotalND += parseFloat(this.cta_cte_notas_debito[i].total) / parseFloat(this.cta_cte_notas_debito[i].precio_dolar_manual);
+                                }                    
+                        }  
+
+                        // Nuevo
+                        lTotalRecibo = parseFloat(this.total_recibosDolares(this.cta_cte_clientes[i_ordenado].id));
+                        // Nuevo
+
+                        for (var i = 0; i < this.cta_cte_notas_credito.length; i++) {
+                            if(this.cta_cte_notas_credito[i].cliente_id == this.cta_cte_clientes[i_ordenado].id) 
+                                if (this.cta_cte_notas_credito[i].precio_dolar_manual && this.cta_cte_notas_credito[i].precio_dolar_manual > 0) {
+                                    lTotalNC += parseFloat(this.cta_cte_notas_credito[i].total) / parseFloat(this.cta_cte_notas_credito[i].precio_dolar_manual);
+                                }                    
+                        } 
+
+                        if (!lTotalRecibo)
+                            lTotalRecibo = 0;
+
+                        lTotalCliente = parseFloat((lTotalNV + lTotalND) - (lTotalRecibo + lTotalNC));
+
+                        this.cta_cte_clientes_ordenado.push({ cCliente: this.cta_cte_clientes[i_ordenado].id, 
+                                                            nCliente: this.cta_cte_clientes[i_ordenado].nombre, 
+                                                            totCliente: lTotalCliente});
+                    }
+
+                    this.cta_cte_clientes_ordenado.sort(function (a, b) {
+                        if (a.totCliente < b.totCliente) {
+                            return 1;
+                        }
+                        if (a.totCliente > b.totCliente) {
+                            return -1;
+                        }
+                        return 0;
+                    });
+
+
                 }).catch((error) => {
                     if (error.response.status == 401) {
                         swal('Error!', 'La sesion ha caducado.', 'warning');
