@@ -212,7 +212,8 @@
                             </thead>                             -->
                             <tr>
                                 <td style="width:100%">
-                                    <h4 class="text-right"><b>Saldo(U$S): {{ saldo_ctacte(cta_cte_cliente.cCliente) | currency }}</b></h4>
+                                    <!-- <h4 class="text-right"><b>Saldo(U$S): {{ saldo_ctacte(cta_cte_cliente.cCliente) | currency }}</b></h4> -->
+                                    <h4 class="text-right"><b>Saldo(U$S): {{ cta_cte_cliente.totCliente | currency }}</b></h4>
                                 </td>
                             </tr>                            
                         </tbody>
