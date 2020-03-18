@@ -95,9 +95,10 @@
                             <table class="table table-striped table-sm">
                                 <thead>
                                     <tr>
-                                        <th style="width:60%">Nota de Venta Cliente</th>                                
+                                        <th style="width:55%">Nota de Venta Cliente</th>                                
                                         <th style="width:20%">Fecha</th>
                                         <th style="width:20%">Importe</th>
+                                        <th style="width:5%"></th>
                                     </tr>
                                 </thead>
                                 <tbody style="font-size: 12px">
@@ -105,6 +106,11 @@
                                         <td>{{ cta_cte_nota_venta.anio_id }} - {{ cta_cte_nota_venta.anio_actual }}</td>
                                         <td>{{ cta_cte_nota_venta.fecha | formatDate }}</td>
                                         <td>${{ cta_cte_nota_venta.total }}</td>
+                                        <td>
+                                            <a href="#" @click="editarModal(movimiento)">
+                                                <i class="fa fa-eye"></i>
+                                            </a>                                            
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td></td>
@@ -117,9 +123,10 @@
                             <table class="table table-striped table-sm">
                                 <thead>
                                     <tr>
-                                        <th style="width:60%">Nota de Debito Cliente</th>                                
+                                        <th style="width:55%">Nota de Debito Cliente</th>                                
                                         <th style="width:20%">Fecha</th>
                                         <th style="width:20%">Importe</th>
+                                        <th style="width:5%"></th>
                                     </tr>
                                 </thead>
                                 <tbody style="font-size: 12px">
@@ -127,7 +134,12 @@
                                         <td>{{ cta_cte_nota_debito.punto_venta }} - {{ cta_cte_nota_debito.numero_nota_debito }}</td>
                                         <td>{{ cta_cte_nota_debito.fecha | formatDate }}</td>
                                         <td v-if="cta_cte_nota_debito.precio_dolar_manual && cta_cte_nota_debito.precio_dolar_manual > 0" >${{ (cta_cte_nota_debito.total / cta_cte_nota_debito.precio_dolar_manual) | currency }}</td>
-                                        <td v-else>$0</td>                                        
+                                        <td v-else>$0</td>
+                                        <td>
+                                            <a href="#" @click="editarModal(movimiento)">
+                                                <i class="fa fa-eye"></i>
+                                            </a>                                            
+                                        </td>                                        
                                         <!-- <td>${{ cta_cte_nota_debito.total }}</td> -->
                                     </tr>
                                     <tr>
@@ -147,9 +159,10 @@
                             <table class="table table-striped table-sm">
                                 <thead>
                                     <tr>
-                                        <th style="width:60%">Nota de Credito Cliente</th>                                
+                                        <th style="width:55%">Nota de Credito Cliente</th>                                
                                         <th style="width:20%">Fecha</th>
                                         <th style="width:20%">Importe</th>
+                                        <th style="width:5%"></th>
                                     </tr>
                                 </thead>
                                 <tbody style="font-size: 12px">
@@ -159,6 +172,11 @@
                                         <td v-if="cta_cte_nota_credito.precio_dolar_manual && cta_cte_nota_credito.precio_dolar_manual > 0" >${{ (cta_cte_nota_credito.total / cta_cte_nota_credito.precio_dolar_manual) | currency }}</td>
                                         <td v-else>$0</td>                                        
                                         <!-- <td>${{ cta_cte_nota_credito.total }}</td> -->
+                                        <td>
+                                            <a href="#" @click="editarModal(movimiento)">
+                                                <i class="fa fa-eye"></i>
+                                            </a>                                            
+                                        </td>                                        
                                     </tr>
                                     <tr>
                                         <td></td>
@@ -172,11 +190,12 @@
                                 <thead>
                                     <tr>
                                         <th style="width:20%">Recibos Cliente</th>
-                                        <th style="width:20%">Fecha</th>
+                                        <th style="width:15%">Fecha</th>
                                         <th style="width:15%">Importe($)</th>
                                         <th style="width:15%">Importe(U$S)</th>
                                         <th style="width:10%">Dolar(Rec)</th>
                                         <th style="width:20%">Total(U$S)</th>
+                                        <th style="width:5%"></th>
                                     </tr>
                                 </thead>
                                 <tbody style="font-size: 12px">
@@ -190,6 +209,11 @@
                                         <td v-else-if="cta_cte_recibo.total_dolares && cta_cte_recibo.total_dolares > 0" >${{ cta_cte_recibo.total_dolares | currency }}</td>                                        
                                         <td v-else>$0</td> -->
                                         <td>${{ total_recibosDolaresRecibo(cta_cte_recibo.id, cta_cte_recibo.precio_dolar_manual) | currency }}</td>
+                                        <td>
+                                            <a href="#" @click="editarModal(movimiento)">
+                                                <i class="fa fa-eye"></i>
+                                            </a>                                            
+                                        </td>                                        
                                     </tr>
                                     <tr>
                                         <td></td>
@@ -229,6 +253,84 @@
 
         </div>
         <!-- /.row -->
+
+        <!-- Modal -->
+        <div class="modal fade" id="ventanaModal" tabindex="-1" role="dialog" aria-labelledby="ventanaModalLabel" aria-hidden="true">
+            <div style="min-width: 45%" class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 v-show="!modoEdicion" class="modal-title" id="ventanaModalLabel">Hacer Movimiento</h5>
+                        <h5 v-show="modoEdicion" class="modal-title" id="ventanaModalLabel">Editar Movimiento</h5>
+                        <button type="button" class="close"  @click="cerrarModal()" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                        <div class="modal-body">
+                            <div v-show="modoEdicion && form.tipo == 'E'" class="row">
+                                <div class="col col-md-8">
+                                    <div class="form-group">
+                                        <h4>{{ form.nombre_cliente }}</h4>
+                                    </div>
+                                </div>
+                                <div class="col col-md-4">
+                                    <div class="form-group">
+                                        <h4>NV N°: {{ form.nota_ventaAID }} - {{ form.nota_ventaAA }}</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="deposito_id"><i class="fa fa-bell-o"></i>Deposito</label>
+                                <select v-model="form.deposito_id" name="deposito_id" class="form-control" :class="{ 'is-invalid': form.errors.has('deposito_id') }">
+                                    <option value=0>Seleccionar...</option>
+                                    <option v-for="ldeposito in oDepositos" :key="ldeposito.id" :value="ldeposito.id">{{ ldeposito.descripcion }}</option>
+                                </select>
+                                <has-error :form="form" field="deposito_id"></has-error>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="producto_id"><i class="fa fa-bell-o"></i>Producto</label>
+                                <select v-model="form.producto_id" name="producto_id" class="form-control" :class="{ 'is-invalid': form.errors.has('producto_id') }">
+                                    <option value=0>Seleccionar...</option>
+                                    <option v-for="lproducto in oProductos" :key="lproducto.id" :value="lproducto.id">{{ lproducto.nombre }}</option>
+                                </select>
+                                <has-error :form="form" field="producto_id"></has-error>
+                            </div>
+                            <div class="row">
+                                <div class="col col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label" for="cantidad"><i class="fa fa-bell-o"></i>Cantidad</label>
+                                        <input v-model="form.cantidad" type="number" name="cantidad" min="0" value="0" step=".01"
+                                            class="form-control" :class="{ 'is-invalid': form.errors.has('cantidad') }">
+                                        <has-error :form="form" field="cantidad"></has-error>
+                                    </div>
+                                </div>
+                                <div class="col col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label" for="tipo"><i class="fa fa-bell-o"></i>Tipo de Movimiento</label>
+                                        <select v-model="form.tipo" name="tipo" class="form-control" :class="{ 'is-invalid': form.errors.has('tipo') }">
+                                            <option v-for="ltipo_movimiento in ltipos_movimientos" :key="ltipo_movimiento.id" :value="ltipo_movimiento.id">{{ ltipo_movimiento.nombre }}</option>
+                                        </select>
+                                        <has-error :form="form" field="tipo"></has-error>
+                                    </div>   
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="descripcion"><i class="fa fa-bell-o"></i>Descripcion</label>
+                                <textarea v-model="form.descripcion" type="text" name="descripcion" placeholder="Ingrese una descripcion"
+                                      class="form-control" :class="{ 'is-invalid': form.errors.has('descripcion') }"></textarea>
+                                <has-error :form="form" field="descripcion"></has-error>
+                            </div> 
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" @click="cerrarModal()">Cerrar</button> <!--data-dismiss="modal" -->
+                            <button v-show="modoEdicion && puedeEditar" type="submit" class="btn btn-success">Actualizar</button>
+                            <button v-show="!modoEdicion" type="submit" class="btn btn-primary">Crear</button>
+                        </div>
+
+                </div>
+            </div>
+        </div>
+
       </div>
 </template>
 
