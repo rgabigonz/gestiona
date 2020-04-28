@@ -107,7 +107,7 @@
                                         <td>{{ cta_cte_nota_venta.fecha | formatDate }}</td>
                                         <td>${{ cta_cte_nota_venta.total }}</td>
                                         <td>
-                                            <a href="#" @click="editarModal(movimiento)">
+                                            <a href="#" @click="editarModal('NV', cta_cte_nota_venta.id)">
                                                 <i class="fa fa-eye"></i>
                                             </a>                                            
                                         </td>
@@ -136,7 +136,7 @@
                                         <td v-if="cta_cte_nota_debito.precio_dolar_manual && cta_cte_nota_debito.precio_dolar_manual > 0" >${{ (cta_cte_nota_debito.total / cta_cte_nota_debito.precio_dolar_manual) | currency }}</td>
                                         <td v-else>$0</td>
                                         <td>
-                                            <a href="#" @click="editarModal(movimiento)">
+                                            <a href="#" @click="editarModal('ND', cta_cte_nota_debito.id)">
                                                 <i class="fa fa-eye"></i>
                                             </a>                                            
                                         </td>                                        
@@ -173,7 +173,7 @@
                                         <td v-else>$0</td>                                        
                                         <!-- <td>${{ cta_cte_nota_credito.total }}</td> -->
                                         <td>
-                                            <a href="#" @click="editarModal(movimiento)">
+                                            <a href="#" @click="editarModal('NC', cta_cte_nota_credito.id)">
                                                 <i class="fa fa-eye"></i>
                                             </a>                                            
                                         </td>                                        
@@ -210,7 +210,7 @@
                                         <td v-else>$0</td> -->
                                         <td>${{ total_recibosDolaresRecibo(cta_cte_recibo.id, cta_cte_recibo.precio_dolar_manual) | currency }}</td>
                                         <td>
-                                            <a href="#" @click="editarModal(movimiento)">
+                                            <a href="#" @click="editarModal('RC', cta_cte_recibo.id)">
                                                 <i class="fa fa-eye"></i>
                                             </a>                                            
                                         </td>                                        
@@ -259,74 +259,35 @@
             <div style="min-width: 45%" class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 v-show="!modoEdicion" class="modal-title" id="ventanaModalLabel">Hacer Movimiento</h5>
-                        <h5 v-show="modoEdicion" class="modal-title" id="ventanaModalLabel">Editar Movimiento</h5>
+                        <h5 class="modal-title" id="ventanaModalLabel">Detalle Comprobante</h5>
                         <button type="button" class="close"  @click="cerrarModal()" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
 
-                        <div class="modal-body">
-                            <div v-show="modoEdicion && form.tipo == 'E'" class="row">
-                                <div class="col col-md-8">
-                                    <div class="form-group">
-                                        <h4>{{ form.nombre_cliente }}</h4>
-                                    </div>
-                                </div>
-                                <div class="col col-md-4">
-                                    <div class="form-group">
-                                        <h4>NV N°: {{ form.nota_ventaAID }} - {{ form.nota_ventaAA }}</h4>
-                                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label">Tipo Comprobante</label>
+                                    <h4>{{ 'NV' }}</h4>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label class="control-label" for="deposito_id"><i class="fa fa-bell-o"></i>Deposito</label>
-                                <select v-model="form.deposito_id" name="deposito_id" class="form-control" :class="{ 'is-invalid': form.errors.has('deposito_id') }">
-                                    <option value=0>Seleccionar...</option>
-                                    <option v-for="ldeposito in oDepositos" :key="ldeposito.id" :value="ldeposito.id">{{ ldeposito.descripcion }}</option>
-                                </select>
-                                <has-error :form="form" field="deposito_id"></has-error>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label" for="producto_id"><i class="fa fa-bell-o"></i>Producto</label>
-                                <select v-model="form.producto_id" name="producto_id" class="form-control" :class="{ 'is-invalid': form.errors.has('producto_id') }">
-                                    <option value=0>Seleccionar...</option>
-                                    <option v-for="lproducto in oProductos" :key="lproducto.id" :value="lproducto.id">{{ lproducto.nombre }}</option>
-                                </select>
-                                <has-error :form="form" field="producto_id"></has-error>
-                            </div>
-                            <div class="row">
-                                <div class="col col-md-6">
-                                    <div class="form-group">
-                                        <label class="control-label" for="cantidad"><i class="fa fa-bell-o"></i>Cantidad</label>
-                                        <input v-model="form.cantidad" type="number" name="cantidad" min="0" value="0" step=".01"
-                                            class="form-control" :class="{ 'is-invalid': form.errors.has('cantidad') }">
-                                        <has-error :form="form" field="cantidad"></has-error>
-                                    </div>
-                                </div>
-                                <div class="col col-md-6">
-                                    <div class="form-group">
-                                        <label class="control-label" for="tipo"><i class="fa fa-bell-o"></i>Tipo de Movimiento</label>
-                                        <select v-model="form.tipo" name="tipo" class="form-control" :class="{ 'is-invalid': form.errors.has('tipo') }">
-                                            <option v-for="ltipo_movimiento in ltipos_movimientos" :key="ltipo_movimiento.id" :value="ltipo_movimiento.id">{{ ltipo_movimiento.nombre }}</option>
-                                        </select>
-                                        <has-error :form="form" field="tipo"></has-error>
-                                    </div>   
+                            <div class="col col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label">Numero Comprobante</label>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label class="control-label" for="descripcion"><i class="fa fa-bell-o"></i>Descripcion</label>
-                                <textarea v-model="form.descripcion" type="text" name="descripcion" placeholder="Ingrese una descripcion"
-                                      class="form-control" :class="{ 'is-invalid': form.errors.has('descripcion') }"></textarea>
-                                <has-error :form="form" field="descripcion"></has-error>
-                            </div> 
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" @click="cerrarModal()">Cerrar</button> <!--data-dismiss="modal" -->
-                            <button v-show="modoEdicion && puedeEditar" type="submit" class="btn btn-success">Actualizar</button>
-                            <button v-show="!modoEdicion" type="submit" class="btn btn-primary">Crear</button>
-                        </div>
-
+                            <div class="col col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label">Fecha Comprobante</label>
+                                </div>
+                            </div>                            
+                        </div>                        
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" @click="cerrarModal()">Cerrar</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -362,7 +323,9 @@
                 cta_cte_recibos: {},
                 cta_cte_recibos_detalle: {},
                 cta_cte_clientes: {},
-                cta_cte_clientes_ordenado: []
+                cta_cte_clientes_ordenado: [],
+                comprobante: {},
+                comprobante_detalle: {}
             }
         },
         methods: {
@@ -625,6 +588,100 @@
                     return parseFloat(lTotal);
                 else    
                     return 0;
+            },
+            cerrarModal() {
+                $('#ventanaModal').modal('hide');
+            },
+            editarModal(ptipoComprobante, pnumeroComprobante) {
+                this.traeComprobante(ptipoComprobante, pnumeroComprobante);
+
+                $('#ventanaModal').modal('show');
+                console.log(ptipoComprobante);
+                console.log(pnumeroComprobante);
+            },
+            traeComprobante(ptipoComprobante, pnumeroComprobante) {
+                var url = '';
+
+                switch(ptipoComprobante) {
+                    case 'NV':
+                        url = 'api/notaPedido/devuelveNotaPedido/'+pnumeroComprobante; 
+                        break;
+                    case 'ND':
+                        url = 'api/notadebito/devuelveNotaDebito'+pnumeroComprobante;
+                        break;                        
+                    case 'NC':
+                        url = 'api/notacredito/devuelveNotaCredito/'+pnumeroComprobante;
+                        break;                        
+                    case 'RC':
+                        url = 'api/recibo/devuelveRecibo/'+pnumeroComprobante;
+                        break;                        
+                    default:
+                        //code block
+                }    
+                
+                axios.get(url).then(data => {
+                    var response = data.data;
+
+                    switch(ptipoComprobante) {
+                        case 'NV':
+                            this.comprobante = response.datoNotaPedido;
+                            this.comprobante_detalle = response.datoNotaPedidoD;
+                            break;
+                        case 'ND':
+                            this.comprobante = response.datoNotaDebito;
+                            this.comprobante_detalle = response.datoNotaDebitoD;
+                            break;                        
+                        case 'NC':
+                            this.comprobante = response.datoNotaCredito;
+                            this.comprobante_detalle = response.datoNotaCreditoD;
+                            break;                        
+                        case 'RC':
+                            this.comprobante = response.datoRecibo;
+                            this.comprobante_detalle = response.datoReciboD;
+                            break;                        
+                        default:
+                            //code block
+                    }                     
+
+                    //Datos Recibo
+                    /*me.codigo_cliente = me.recibo[0].cliente_id;
+
+                    me.fecha_recibo = new Date(me.recibo[0].fecha);
+                    me.fecha_recibo = me.fecha_recibo.setDate(me.fecha_recibo.getDate() + 1);
+
+                    me.referencia_talonario = me.recibo[0].referencia_talonario;
+                    me.precio_dolar_manual = me.recibo[0].precio_dolar_manual;
+
+                    me.estado = me.recibo[0].estado;
+
+                    me.numero_recibo = me.recibo[0].numero_recibo;
+                    me.punto_venta = me.recibo[0].punto_venta;
+
+                    me.cargarCliente(me.codigo_cliente);
+
+                    for (var i = 0; i < me.recibo_detalle.length; i++) {
+
+                        if (me.recibo_detalle[i].tipo_pago == 'CH' )
+                            me.tipo_pago_descripcion = 'CHEQUE';
+                        if (me.recibo_detalle[i].tipo_pago == 'EF' )
+                            me.tipo_pago_descripcion = 'EFECTIVO';
+                        if (me.recibo_detalle[i].tipo_pago == 'ED' )
+                            me.tipo_pago_descripcion = 'EFECTIVO DOLARES';
+
+                        me.items.push({ tipo_pago: me.recibo_detalle[i].tipo_pago, 
+                                        tipo_pago_descripcion: me.tipo_pago_descripcion,
+                                        banco_id: me.recibo_detalle[i].banco_id, 
+                                        codigo_banco_nombre: me.recibo_detalle[i].nombre_banco,
+                                        fecha_cobro_cheque: me.recibo_detalle[i].fecha_cobro_cheque,
+                                        numero_cheque: me.recibo_detalle[i].numero_cheque,
+                                        importe: me.recibo_detalle[i].importe
+                        });
+                    }*/
+
+                }).catch((error) => {
+                    me.recibo = {};
+                    me.recibo_detalle = {};
+                });                
             }
         },
         created() {
