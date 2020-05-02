@@ -24,24 +24,43 @@ class MovimientoStockController extends Controller
         if(empty($sBuscar)) {
             $movimientosstock = MovimientoStock::join('depositos', 'movimientos_stock.deposito_id', '=', 'depositos.id')
             ->join('productos', 'movimientos_stock.producto_id', '=', 'productos.id')
-            ->leftjoin('notas_pedidos', 'movimientos_stock.documento_id', '=', 'notas_pedidos.id')
+            //->leftjoin('notas_pedidos', 'movimientos_stock.documento_id', '=', 'notas_pedidos.id')
+            //->leftjoin('ordenes_compras', 'movimientos_stock.documento_id', '=', 'ordenes_compras.id')
+            ->leftjoin('notas_pedidos', function ($join) {
+                $join->on('movimientos_stock.documento_id', '=', 'notas_pedidos.id')
+                     ->where('movimientos_stock.tipo_documento', '=', 'NV');
+            })
+            ->leftjoin('ordenes_compras', function ($join) {
+                $join->on('movimientos_stock.documento_id', '=', 'ordenes_compras.id')
+                     ->where('movimientos_stock.tipo_documento', '=', 'OC');
+            })            
             ->leftjoin('clientes', 'notas_pedidos.cliente_id', '=', 'clientes.id')
             ->select('movimientos_stock.*', 'depositos.descripcion as descripcion_deposito', 
                      'productos.nombre as producto_nombre', 'productos.descripcion as producto_descripcion',
                      'clientes.nombre as nombre_cliente', 'notas_pedidos.anio_id as nota_ventaAID', 
-                     'notas_pedidos.anio_actual as nota_ventaAA')
+                     'notas_pedidos.anio_actual as nota_ventaAA', 'ordenes_compras.anio_id as nota_pedidoAID', 
+                     'ordenes_compras.anio_actual as nota_pedidoAA')
             ->orderBy('created_at', 'desc')
             ->paginate(15);
         } 
         else {
             $movimientosstock = MovimientoStock::join('depositos', 'movimientos_stock.deposito_id', '=', 'depositos.id')
             ->join('productos', 'movimientos_stock.producto_id', '=', 'productos.id')
-            ->leftjoin('notas_pedidos', 'movimientos_stock.documento_id', '=', 'notas_pedidos.id')
+            //->leftjoin('notas_pedidos', 'movimientos_stock.documento_id', '=', 'notas_pedidos.id')
+            ->leftjoin('notas_pedidos', function ($join) {
+                $join->on('movimientos_stock.documento_id', '=', 'notas_pedidos.id')
+                     ->where('movimientos_stock.tipo_documento', '=', 'NV');
+            })
+            ->leftjoin('ordenes_compras', function ($join) {
+                $join->on('movimientos_stock.documento_id', '=', 'ordenes_compras.id')
+                     ->where('movimientos_stock.tipo_documento', '=', 'OC');
+            })             
             ->leftjoin('clientes', 'notas_pedidos.cliente_id', '=', 'clientes.id')
             ->select('movimientos_stock.*', 'depositos.descripcion as descripcion_deposito', 
                      'productos.nombre as producto_nombre', 'productos.descripcion as producto_descripcion',
                      'clientes.nombre as nombre_cliente', 'notas_pedidos.anio_id as nota_ventaAID', 
-                     'notas_pedidos.anio_actual as nota_ventaAA')
+                     'notas_pedidos.anio_actual as nota_ventaAA', 'ordenes_compras.anio_id as nota_pedidoAID', 
+                     'ordenes_compras.anio_actual as nota_pedidoAA')
             ->where($sCriterio, 'like', '%' . $sBuscar . '%')
             ->orderBy('created_at', 'desc')
             ->paginate(15);

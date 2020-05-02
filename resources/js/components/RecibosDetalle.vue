@@ -260,7 +260,10 @@
                 ltipos_pagos: [
                     {id: 'CH', nombre: 'CHEQUE'},
                     {id: 'EF', nombre: 'EFECTIVO'},
-                    {id: 'ED', nombre: 'EFECTIVO DOLARES'}
+                    {id: 'ED', nombre: 'EFECTIVO DOLARES'},
+                    {id: 'RE', nombre: 'RETENCIONES'},
+                    {id: 'TT', nombre: 'TRANSFERENCIA CTA TERCERO'},
+                    {id: 'TP', nombre: 'TRANSFERENCIA CTA PROPIA'}
                 ],                
                 //Lista de Seleccion clientes y productos
                 lclientes: {},
@@ -535,6 +538,13 @@
                             me.tipo_pago_descripcion = 'EFECTIVO';
                         if (me.recibo_detalle[i].tipo_pago == 'ED' )
                             me.tipo_pago_descripcion = 'EFECTIVO DOLARES';
+                        if (me.recibo_detalle[i].tipo_pago == 'RE' )
+                            me.tipo_pago_descripcion = 'RETENCIONES';
+                        if (me.recibo_detalle[i].tipo_pago == 'TT' )
+                            me.tipo_pago_descripcion = 'TRANSFERENCIA CTA TERCERO';
+                        if (me.recibo_detalle[i].tipo_pago == 'TP' )
+                            me.tipo_pago_descripcion = 'TRANSFERENCIA CTA PROPIA';
+
 
                         me.items.push({ tipo_pago: me.recibo_detalle[i].tipo_pago, 
                                         tipo_pago_descripcion: me.tipo_pago_descripcion,

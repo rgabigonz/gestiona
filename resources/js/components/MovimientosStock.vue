@@ -41,7 +41,7 @@
                             <th style="width: 9%"></th>
                         </tr>
                         <tr v-for="movimiento in movimientos" :key="movimiento.id">
-                            <td><b>{{ movimiento.producto_nombre }}</b> / {{ movimiento.producto_descripcion }}</td>
+                            <td><b>{{ movimiento.producto_nombre }}</b> / {{ movimiento.producto_descripcion }} ({{ movimiento.tipo }})</td>
                             <td>{{ movimiento.descripcion_deposito }}</td>
                             <td>{{ movimiento.fecha }}</td>
                             <td>
@@ -103,15 +103,18 @@
                     </div>
                     <form @submit.prevent="modoEdicion ? actualizaMovimiento() : creaMovimiento()">
                         <div class="modal-body">
-                            <div v-show="modoEdicion && form.tipo == 'E'" class="row">
+                            <div v-show="modoEdicion" class="row">
                                 <div class="col col-md-8">
                                     <div class="form-group">
                                         <h4>{{ form.nombre_cliente }}</h4>
                                     </div>
                                 </div>
                                 <div class="col col-md-4">
-                                    <div class="form-group">
+                                    <div v-if="form.tipo == 'E'" class="form-group">
                                         <h4>NV N°: {{ form.nota_ventaAID }} - {{ form.nota_ventaAA }}</h4>
+                                    </div>
+                                    <div v-else class="form-group">
+                                        <h4>NP N°: {{ form.nota_pedidoAID }} - {{ form.nota_pedidoAA }}</h4>
                                     </div>
                                 </div>
                             </div>
@@ -193,7 +196,9 @@
                     documento_id: 0,
                     nombre_cliente: '',
                     nota_ventaAID: '',
-                    nota_ventaAA: ''
+                    nota_ventaAA: '',
+                    nota_pedidoAID: '',
+                    nota_pedidoAA: ''                    
                 }),
                 pagination: {
                     'total': 0,
