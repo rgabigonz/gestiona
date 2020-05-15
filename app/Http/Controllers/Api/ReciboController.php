@@ -145,7 +145,7 @@ class ReciboController extends Controller
             $recibo_item->save();
         }
         
-        return $request->items;
+        return $Recibo;
     }    
 
     public function devuelveRecibo(Request $request, $id)

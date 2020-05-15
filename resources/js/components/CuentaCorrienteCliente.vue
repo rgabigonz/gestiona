@@ -276,14 +276,38 @@
                             <div class="col col-md-4">
                                 <div class="form-group">
                                     <label class="control-label">Numero Comprobante</label>
+                                    <div>{{ anio_id_comprobante }} - {{ anio_actual_comprobante }}</div>
                                 </div>
                             </div>
                             <div class="col col-md-4">
                                 <div class="form-group">
                                     <label class="control-label">Fecha Comprobante</label>
+                                    <div class="input-group input-group-sm">
+                                        <datepicker :bootstrap-styling="true" v-model="fecha_comprobante" name="fecha_comprobante" :language="es" 
+                                            :format="formato_fecha_comprobante" inputClass="form-control form-control-sm" placeholder="Fecha">
+                                        </datepicker>
+                                    </div>                                    
                                 </div>
                             </div>                            
-                        </div>                        
+                        </div>
+                        <div class="row">
+                            <table class="table table-striped table-sm table-responsive">
+                                <thead>
+                                    <tr>
+                                        <th style="width:40%">Producto</th>
+                                        <th style="width:10%">Cantidad</th>
+                                        <th style="width:10%">Precio</th>
+                                    </tr>
+                                </thead>
+                                <tbody style="font-size: 12px;">
+                                    <tr class="item" v-for="(item) in items_comprobante" :key="item.cod">
+                                        <td><b>{{ item.descripcion }}</b> / {{ item.descripcion_larga}}</td>
+                                        <td>{{ item.cantidad }}</td>
+                                        <td>${{ item.precio }}</td>
+                                    </tr>
+                                </tbody>                                
+                            </table>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" @click="cerrarModal()">Cerrar</button>
@@ -325,7 +349,13 @@
                 cta_cte_clientes: {},
                 cta_cte_clientes_ordenado: [],
                 comprobante: {},
-                comprobante_detalle: {}
+                comprobante_detalle: {},
+                items_comprobante: [],
+                fecha_comprobante: new Date(),
+                formato_fecha_comprobante: "dd-MM-yyyy",
+                anio_id_comprobante: 0,
+                anio_actual_comprobante: 0,
+
             }
         },
         methods: {
@@ -596,15 +626,41 @@
                 this.traeComprobante(ptipoComprobante, pnumeroComprobante);
 
                 $('#ventanaModal').modal('show');
-                console.log(ptipoComprobante);
-                console.log(pnumeroComprobante);
             },
             traeComprobante(ptipoComprobante, pnumeroComprobante) {
                 var url = '';
+                let me = this;
 
                 switch(ptipoComprobante) {
                     case 'NV':
                         url = 'api/notaPedido/devuelveNotaPedido/'+pnumeroComprobante; 
+                        me.items_comprobante = [];
+
+                        axios.get(url).then(data => {
+                            var response = data.data;
+                            me.comprobante = response.datoNotaPedido;
+                            me.comprobante_detalle = response.datoNotaPedidoD;
+
+                            me.fecha_comprobante = new Date(me.comprobante.fecha);
+                            me.fecha_comprobante = me.fecha_comprobante.setDate(me.fecha_comprobante.getDate() + 1);
+                            me.anio_id_comprobante = this.comprobante.anio_id;
+                            me.anio_actual_comprobante = this.comprobante.anio_actual;
+
+                            for (var i = 0; i < me.comprobante_detalle.length; i++) {
+                                me.items_comprobante.push({ cod: me.comprobante_detalle[i].producto_id, 
+                                                            descripcion: me.comprobante_detalle[i].nombre_producto, 
+                                                            descripcion_larga: me.comprobante_detalle[i].descripcion_producto, 
+                                                            cantidad: me.comprobante_detalle[i].cantidad, 
+                                                            precio: me.comprobante_detalle[i].precio,
+                                });
+                            }
+
+                        }).catch((error) => {
+                            me.comprobante = {};
+                            me.comprobante_detalle = {};
+                            me.items_comprobante = [];
+                        });
+
                         break;
                     case 'ND':
                         url = 'api/notadebito/devuelveNotaDebito'+pnumeroComprobante;

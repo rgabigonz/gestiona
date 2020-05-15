@@ -527,6 +527,8 @@
 
                     me.numero_recibo = me.recibo[0].numero_recibo;
                     me.punto_venta = me.recibo[0].punto_venta;
+                    
+                    me.observacion = me.recibo[0].obs;
 
                     me.cargarCliente(me.codigo_cliente);
 
