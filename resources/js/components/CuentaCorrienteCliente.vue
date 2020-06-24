@@ -23,7 +23,6 @@
                             <label class="control-label">Cliente</label>
                             <div class="form-group">
                                 <div class="input-group input-group-sm">
-                                    <!-- <select class="form-control" v-model="codigo_cliente"> -->
                                     <select class="form-control" v-model="codigo_cliente" @change="consultarCtaCte">
                                         <option value=0>Cliente...</option>
                                         <option v-for="lcliente in lclientes" :key="lcliente.id" :value="lcliente.id">{{ lcliente.nombre }}</option>
@@ -140,7 +139,6 @@
                                                 <i class="fa fa-eye"></i>
                                             </a>                                            
                                         </td>                                        
-                                        <!-- <td>${{ cta_cte_nota_debito.total }}</td> -->
                                     </tr>
                                     <tr>
                                         <td></td>
@@ -171,7 +169,6 @@
                                         <td>{{ cta_cte_nota_credito.fecha | formatDate }}</td>
                                         <td v-if="cta_cte_nota_credito.precio_dolar_manual && cta_cte_nota_credito.precio_dolar_manual > 0" >${{ (cta_cte_nota_credito.total / cta_cte_nota_credito.precio_dolar_manual) | currency }}</td>
                                         <td v-else>$0</td>                                        
-                                        <!-- <td>${{ cta_cte_nota_credito.total }}</td> -->
                                         <td>
                                             <a href="#" @click="editarModal('NC', cta_cte_nota_credito.id)">
                                                 <i class="fa fa-eye"></i>
@@ -205,9 +202,6 @@
                                         <td>${{ cta_cte_recibo.total }}</td>
                                         <td>${{ cta_cte_recibo.total_dolares }}</td>
                                         <td>${{ cta_cte_recibo.precio_dolar_manual }}</td>
-                                        <!-- <td v-if="cta_cte_recibo.precio_dolar_manual && cta_cte_recibo.precio_dolar_manual > 0" >${{ (cta_cte_recibo.total / cta_cte_recibo.precio_dolar_manual) + cta_cte_recibo.total_dolares | currency }}</td>
-                                        <td v-else-if="cta_cte_recibo.total_dolares && cta_cte_recibo.total_dolares > 0" >${{ cta_cte_recibo.total_dolares | currency }}</td>                                        
-                                        <td v-else>$0</td> -->
                                         <td>${{ total_recibosDolaresRecibo(cta_cte_recibo.id, cta_cte_recibo.precio_dolar_manual) | currency }}</td>
                                         <td>
                                             <a href="#" @click="editarModal('RC', cta_cte_recibo.id)">
@@ -229,14 +223,8 @@
                     </div>  
                     <table class="table table-sm">
                         <tbody>
-                            <!-- <thead>
-                                <tr>
-                                    <th style="width:100%">Saldo(U$S)</th>
-                                </tr>
-                            </thead>                             -->
                             <tr>
                                 <td style="width:100%">
-                                    <!-- <h4 class="text-right"><b>Saldo(U$S): {{ saldo_ctacte(cta_cte_cliente.cCliente) | currency }}</b></h4> -->
                                     <h4 class="text-right"><b>Saldo(U$S): {{ cta_cte_cliente.totCliente | currency }}</b></h4>
                                 </td>
                             </tr>                            
@@ -270,7 +258,7 @@
                             <div class="col col-md-4">
                                 <div class="form-group">
                                     <label class="control-label">Tipo Comprobante</label>
-                                    <h4>{{ 'NV' }}</h4>
+                                    <h4>{{ tipo_comprobante }}</h4>
                                 </div>
                             </div>
                             <div class="col col-md-4">
@@ -294,9 +282,9 @@
                             <table class="table table-striped table-sm table-responsive">
                                 <thead>
                                     <tr>
-                                        <th style="width:40%">Producto</th>
+                                        <th style="width:40%">Detalle</th>
                                         <th style="width:10%">Cantidad</th>
-                                        <th style="width:10%">Precio</th>
+                                        <th style="width:10%">Importe</th>
                                     </tr>
                                 </thead>
                                 <tbody style="font-size: 12px;">
@@ -355,6 +343,7 @@
                 formato_fecha_comprobante: "dd-MM-yyyy",
                 anio_id_comprobante: 0,
                 anio_actual_comprobante: 0,
+                tipo_comprobante: ''
 
             }
         },
@@ -634,6 +623,8 @@
                 switch(ptipoComprobante) {
                     case 'NV':
                         url = 'api/notaPedido/devuelveNotaPedido/'+pnumeroComprobante; 
+                        me.comprobante = {};
+                        me.comprobante_detalle = {};
                         me.items_comprobante = [];
 
                         axios.get(url).then(data => {
@@ -643,8 +634,9 @@
 
                             me.fecha_comprobante = new Date(me.comprobante.fecha);
                             me.fecha_comprobante = me.fecha_comprobante.setDate(me.fecha_comprobante.getDate() + 1);
-                            me.anio_id_comprobante = this.comprobante.anio_id;
-                            me.anio_actual_comprobante = this.comprobante.anio_actual;
+                            me.anio_id_comprobante = me.comprobante.anio_id;
+                            me.anio_actual_comprobante = me.comprobante.anio_actual;
+                            me.tipo_comprobante = 'NV';
 
                             for (var i = 0; i < me.comprobante_detalle.length; i++) {
                                 me.items_comprobante.push({ cod: me.comprobante_detalle[i].producto_id, 
@@ -663,13 +655,144 @@
 
                         break;
                     case 'ND':
-                        url = 'api/notadebito/devuelveNotaDebito'+pnumeroComprobante;
+                        url = 'api/notadebito/devuelveNotaDebito/'+pnumeroComprobante;
+                        me.comprobante = {};
+                        me.comprobante_detalle = {};
+                        me.items_comprobante = [];
+
+                        axios.get(url).then(data => {
+                            var response = data.data;
+                            var precio_dolar = 1;
+
+                            me.comprobante = response.datoNotaDebito;
+                            me.comprobante_detalle = response.datoNotaDebitoD;
+
+                            me.fecha_comprobante = new Date(me.comprobante[0].fecha);
+                            me.fecha_comprobante = me.fecha_comprobante.setDate(me.fecha_comprobante.getDate() + 1);
+                            me.anio_id_comprobante = me.comprobante[0].punto_venta;
+                            me.anio_actual_comprobante = me.comprobante[0].numero_nota_debito;
+                            me.tipo_comprobante = 'ND';
+
+                            if (me.comprobante[0].precio_dolar_manual && me.comprobante[0].precio_dolar_manual > 0) {
+                                precio_dolar = me.comprobante[0].precio_dolar_manual;
+                            }
+
+                            for (var i = 0; i < me.comprobante_detalle.length; i++) {
+                                me.items_comprobante.push({ cod: me.comprobante_detalle[i].concepto_id, 
+                                                            descripcion: me.comprobante_detalle[i].descripcion_concepto, 
+                                                            descripcion_larga: '',
+                                                            cantidad: 1, 
+                                                            precio: (parseFloat(me.comprobante_detalle[i].importe) / parseFloat(precio_dolar)),
+                                });
+                            }
+
+                        }).catch((error) => {
+                            me.comprobante = {};
+                            me.comprobante_detalle = {};
+                            me.items_comprobante = [];
+                        });
+
                         break;                        
                     case 'NC':
                         url = 'api/notacredito/devuelveNotaCredito/'+pnumeroComprobante;
+                        me.comprobante = {};
+                        me.comprobante_detalle = {};
+                        me.items_comprobante = [];
+
+                        axios.get(url).then(data => {
+                            var response = data.data;
+                            var precio_dolar = 1;
+
+                            me.comprobante = response.datoNotaCredito;
+                            me.comprobante_detalle = response.datoNotaCreditoD;
+
+                            me.fecha_comprobante = new Date(me.comprobante[0].fecha);
+                            me.fecha_comprobante = me.fecha_comprobante.setDate(me.fecha_comprobante.getDate() + 1);
+                            me.anio_id_comprobante = me.comprobante[0].punto_venta;
+                            me.anio_actual_comprobante = me.comprobante[0].numero_nota_credito;
+                            me.tipo_comprobante = 'NC';
+
+                            if (me.comprobante[0].precio_dolar_manual && me.comprobante[0].precio_dolar_manual > 0) {
+                                precio_dolar = me.comprobante[0].precio_dolar_manual;
+                            }
+
+                            for (var i = 0; i < me.comprobante_detalle.length; i++) {
+                                me.items_comprobante.push({ cod: me.comprobante_detalle[i].concepto_id, 
+                                                            descripcion: me.comprobante_detalle[i].descripcion_concepto, 
+                                                            descripcion_larga: '',
+                                                            cantidad: 1, 
+                                                            precio: (parseFloat(me.comprobante_detalle[i].importe) / parseFloat(precio_dolar)),
+                                });
+                            }
+
+                        }).catch((error) => {
+                            me.comprobante = {};
+                            me.comprobante_detalle = {};
+                            me.items_comprobante = [];
+                        });
+
                         break;                        
                     case 'RC':
                         url = 'api/recibo/devuelveRecibo/'+pnumeroComprobante;
+                        me.comprobante = {};
+                        me.comprobante_detalle = {};
+                        me.items_comprobante = [];
+
+                        axios.get(url).then(data => {
+                            var response = data.data;
+                            var precio_dolar = 1;
+                            var tipo_pago = '';
+
+                            me.comprobante = response.datoRecibo;
+                            me.comprobante_detalle = response.datoReciboD;
+
+                            me.fecha_comprobante = new Date(me.comprobante[0].fecha);
+                            me.fecha_comprobante = me.fecha_comprobante.setDate(me.fecha_comprobante.getDate() + 1);
+                            me.anio_id_comprobante = me.comprobante[0].punto_venta;
+                            me.anio_actual_comprobante = me.comprobante[0].numero_recibo;
+                            me.tipo_comprobante = 'REC';
+
+                            if (me.comprobante[0].precio_dolar_manual && me.comprobante[0].precio_dolar_manual > 0) {
+                                precio_dolar = me.comprobante[0].precio_dolar_manual;
+                            }
+
+                            for (var i = 0; i < me.comprobante_detalle.length; i++) {
+                                switch(me.comprobante_detalle[i].tipo_pago) {
+                                    case 'EF':                                
+                                        tipo_pago = 'EFECTIVO';
+                                    break;
+                                    case 'ED':                                
+                                        tipo_pago = 'EFECTIVO DOLARES';
+                                    break;  
+                                    case 'CH':                                
+                                        tipo_pago = 'CHEQUE';
+                                    break;  
+                                    case 'RE':                                
+                                        tipo_pago = 'RETENCIONES';
+                                    break;    
+                                    case 'TT':                                
+                                        tipo_pago = 'TRANSFERENCIA CTA TERCERO';
+                                    break;  
+                                    case 'TP':                                
+                                        tipo_pago = 'TRANSFERENCIA CTA PROPIA';
+                                    break;                                                                                                                                                                               
+                                    default:
+                                }
+                                
+                                me.items_comprobante.push({ cod: me.comprobante_detalle[i].concepto_id, 
+                                                            descripcion: tipo_pago, 
+                                                            descripcion_larga: '',
+                                                            cantidad: 1, 
+                                                            precio: (parseFloat(me.comprobante_detalle[i].importe) / parseFloat(precio_dolar)),
+                                });
+                            }
+
+                        }).catch((error) => {
+                            me.comprobante = {};
+                            me.comprobante_detalle = {};
+                            me.items_comprobante = [];
+                        });
+
                         break;                        
                     default:
                         //code block
