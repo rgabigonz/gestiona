@@ -43,7 +43,7 @@
                         </tr>
                         <tr v-for="cheque in cheques" :key="cheque.id">
                             <td>{{ cheque.nombre_cliente }}</td>
-                            <td>{{ cheque.referencia_talonario }}</td>
+                            <td>{{ cheque.referencia_talonario }} - ({{ cheque.punto_venta }} - {{ cheque.numero_recibo }})</td>
                             <td>{{ cheque.numero_cheque }}</td>
                             <td>${{ cheque.importe }}</td>
                             <td>{{ cheque.fecha_cobro_cheque | formatDate}}</td>

@@ -17,24 +17,29 @@ class ConsultaChequesController extends Controller
         if(empty($sBuscar)) {
             $cheques = ReciboDetalle::join('recibos', 'recibos_detalles.recibo_id', '=', 'recibos.id')
             ->join('clientes', 'recibos.cliente_id', '=', 'clientes.id')
+            ->join('sucursales', 'recibos.sucursal_id', '=', 'sucursales.id')
             ->leftJoin('cotizaciones', 'recibos_detalles.fecha_cobro_cheque', '=', 'cotizaciones.fecha')
-            ->select('recibos_detalles.*', 'recibos_detalles.importe as importe_cheque', 'clientes.nombre as nombre_cliente', 
-                     'recibos.referencia_talonario as referencia_talonario', DB::raw('COALESCE(cotizaciones.precio_dolar, 0) as precio_dolar'))
+            ->select('recibos_detalles.*', 'recibos_detalles.importe as importe_cheque', 'clientes.nombre as nombre_cliente', 'sucursales.punto_venta as punto_venta',
+                     'recibos.referencia_talonario as referencia_talonario', 'recibos.numero_recibo as numero_recibo', 
+                     DB::raw('COALESCE(cotizaciones.precio_dolar, 0) as precio_dolar'))
             ->where('recibos.estado', '=', 'CO')
             ->where('recibos_detalles.tipo_pago', '=', 'CH')
-            //->orderBy('referencia_talonario', 'desc')->paginate(15);
-            ->orderBy(DB::raw('CONVERT(referencia_talonario, SIGNED)'), 'desc')->paginate(15);
+            ->orderBy('recibos.created_at', 'desc')->paginate(15);
+            //->orderBy(DB::raw('CONVERT(referencia_talonario, SIGNED)'), 'desc')->paginate(15);
         } 
         else {
             $cheques = ReciboDetalle::join('recibos', 'recibos_detalles.recibo_id', '=', 'recibos.id')
             ->join('clientes', 'recibos.cliente_id', '=', 'clientes.id')
+            ->join('sucursales', 'recibos.sucursal_id', '=', 'sucursales.id')
             ->leftJoin('cotizaciones', 'recibos_detalles.fecha_cobro_cheque', '=', 'cotizaciones.fecha')
-            ->select('recibos_detalles.*', 'recibos_detalles.importe as importe_cheque', 'clientes.nombre as nombre_cliente', 
-                     'recibos.referencia_talonario as referencia_talonario', DB::raw('COALESCE(cotizaciones.precio_dolar, 0) as precio_dolar'))
+            ->select('recibos_detalles.*', 'recibos_detalles.importe as importe_cheque', 'clientes.nombre as nombre_cliente', 'sucursales.punto_venta as punto_venta',
+                     'recibos.referencia_talonario as referencia_talonario', 'recibos.numero_recibo as numero_recibo', 
+                     DB::raw('COALESCE(cotizaciones.precio_dolar, 0) as precio_dolar'))
             ->where('recibos.estado', '=', 'CO')
             ->where('recibos_detalles.tipo_pago', '=', 'CH')
             ->where($sCriterio, 'like', '%' . $sBuscar . '%')
-            ->orderBy(DB::raw('CONVERT(referencia_talonario, SIGNED)'), 'desc')->paginate(15);
+            ->orderBy('recibos.created_at', 'desc')->paginate(15);
+            //->orderBy(DB::raw('CONVERT(referencia_talonario, SIGNED)'), 'desc')->paginate(15);
         }
 
         return [
