@@ -145,6 +145,7 @@
                     <thead>                        
                         <tr>
                             <th id="nv">Proveedor</th>
+                            <th id="nv">Lugar de Entrega</th>							
                         </tr>
                     </thead>
                     <tbody>
@@ -156,6 +157,10 @@
                             					Email: {{ $datoOrdenCompra[0]['email_proveedor'] }} -->
 								</p>
 							</th>
+							<th>
+								<p id="cliente">{{ $datoOrdenCompra[0]['lugar_entrega'] }}
+								</p>
+							</th>							
                         </tr>
                     </tbody>
                 </table>

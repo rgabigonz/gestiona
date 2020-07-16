@@ -83,8 +83,27 @@
               <!-- /.row -->
 
               <!-- Clientes row -->
+              <div id="impresion">
               <div v-for="cta_cte_cliente in cta_cte_clientes_ordenado" :key="cta_cte_cliente.cCliente" class="card">
-                <div class="card-header border-light bg-primary"><b>{{ cta_cte_cliente.nCliente }}</b></div>
+                <div class="card-header border-light bg-primary">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <b>{{ cta_cte_cliente.nCliente }}</b>
+                        </div>
+                        <div class="col-md-6 text-right">
+                            <!--<a href="#" @click="CtaCteClientePDF(cta_cte_cliente.cCliente, cta_cte_cliente.nCliente)">-->
+                            <a href="#" @click="CtaCteClientePDF('impresion')" v-if="codigo_cliente > 0">
+                                <i class="fa fa-file-pdf red"></i>
+                            </a>
+                            <!--<a href="#" onclick="window.print()" v-if="codigo_cliente > 0">
+                                <i class="fa fa-file-pdf red"></i>
+                            </a>     -->
+
+                                
+                        </div>
+                    </div>                                      
+                </div>
+              
                 <div class="card-body">
 
                     <!-- Debitos row -->
@@ -231,6 +250,7 @@
                         </tbody>
                     </table>
                 </div>
+              </div>
               </div>
 
             </div>
@@ -861,6 +881,25 @@
                     me.recibo = {};
                     me.recibo_detalle = {};
                 });                
+            },
+            CtaCteClientePDF(impresion) {
+                /*var urlBE = 'api/ctactecliente/CtaCteClientePDF/'+id;
+                axios.get(urlBE, {
+                    responseType: 'blob'}).then((response) => {
+                    const url = window.URL.createObjectURL(new Blob([response.data]));
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.setAttribute('download', 'CTACTE' + Cliente + '.pdf');
+                    document.body.appendChild(link);
+                    link.click();
+                });*/
+
+                var printContents = document.getElementById(impresion).innerHTML;
+                var originalContents = document.body.innerHTML;
+
+                document.body.innerHTML = printContents;
+                window.print();
+                document.body.innerHTML = originalContents;
             }
         },
         created() {

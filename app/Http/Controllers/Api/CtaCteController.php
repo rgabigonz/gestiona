@@ -271,4 +271,95 @@ class CtaCteController extends Controller
             'ctacte_clientes' => $ctacte_clientes
         ];                    
     } 
+
+    public function CtaCteClientePDF(Request $request, $id)
+    {
+        $ctacte_recibos = Recibo::join('clientes', 'recibos.cliente_id', '=', 'clientes.id')
+        ->join('sucursales', 'recibos.sucursal_id', '=', 'sucursales.id')
+        ->select('recibos.*', 'clientes.nombre as nombre_cliente', 'sucursales.punto_venta as punto_venta')
+        ->where('recibos.cliente_id', '=', $id)
+        ->where('recibos.estado', '=', 'CO')
+        //->whereDate('fecha', '>=', $sFechaD)
+        //->whereDate('fecha', '<=', $sFechaH)
+        ->orderBy('created_at', 'asc')->get();
+
+        $ctacte_recibos_detalle = ReciboDetalle::join('recibos', 'recibos_detalles.recibo_id', '=', 'recibos.id')
+        ->where('recibos.cliente_id', '=', $id)
+        ->where('recibos.estado', '=', 'CO')->get();
+        //->whereDate('fecha', '>=', $sFechaD)
+        //->whereDate('fecha', '<=', $sFechaH)->get();
+
+        $ctacte_notas_venta = NotaPedido::join('clientes', 'notas_pedidos.cliente_id', '=', 'clientes.id')
+        ->select('notas_pedidos.*', 'clientes.nombre as nombre_cliente')
+        ->where('notas_pedidos.cliente_id', '=', $id)
+        ->where('notas_pedidos.estado', '=', 'CO')
+        //->whereDate('fecha', '>=', $sFechaD)
+        //->whereDate('fecha', '<=', $sFechaH)
+        ->orderBy('created_at', 'asc')->get();
+
+        $ctacte_notas_debito = NotaDebito::join('clientes', 'notas_debitos.cliente_id', '=', 'clientes.id')
+        ->join('sucursales', 'notas_debitos.sucursal_id', '=', 'sucursales.id')
+        ->select('notas_debitos.*', 'clientes.nombre as nombre_cliente', 'sucursales.punto_venta as punto_venta')
+        ->where('notas_debitos.cliente_id', '=', $id)
+        ->where('notas_debitos.estado', '=', 'CO')
+        //->whereDate('fecha', '>=', $sFechaD)
+        //->whereDate('fecha', '<=', $sFechaH)
+        ->orderBy('created_at', 'asc')->get();                
+
+        $ctacte_notas_credito = NotaCredito::join('clientes', 'notas_creditos.cliente_id', '=', 'clientes.id')
+        ->join('sucursales', 'notas_creditos.sucursal_id', '=', 'sucursales.id')
+        ->select('notas_creditos.*', 'clientes.nombre as nombre_cliente', 'sucursales.punto_venta as punto_venta')
+        ->where('notas_creditos.cliente_id', '=', $id)
+        ->where('notas_creditos.estado', '=', 'CO')
+        //->whereDate('fecha', '>=', $sFechaD)
+        //->whereDate('fecha', '<=', $sFechaH)
+        ->orderBy('created_at', 'asc')->get(); 
+
+        $ctacte_clientes_NP = Cliente::join('notas_pedidos', 'clientes.id', '=', 'notas_pedidos.cliente_id')
+        ->select('clientes.id', 'clientes.nombre')
+        ->where('clientes.id', '=', $id)
+        ->where('notas_pedidos.estado', '=', 'CO');
+        //->whereDate('notas_pedidos.fecha', '>=', $sFechaD)
+        //->whereDate('notas_pedidos.fecha', '<=', $sFechaH);
+
+        $ctacte_clientes_ND = Cliente::join('notas_debitos', 'clientes.id', '=', 'notas_debitos.cliente_id')
+        ->select('clientes.id', 'clientes.nombre')
+        ->where('clientes.id', '=', $id)
+        ->where('notas_debitos.estado', '=', 'CO');
+        //->whereDate('notas_debitos.fecha', '>=', $sFechaD)
+        //->whereDate('notas_debitos.fecha', '<=', $sFechaH);
+
+        $ctacte_clientes_NC = Cliente::join('notas_creditos', 'clientes.id', '=', 'notas_creditos.cliente_id')
+        ->select('clientes.id', 'clientes.nombre')
+        ->where('clientes.id', '=', $id)
+        ->where('notas_creditos.estado', '=', 'CO');
+        //->whereDate('notas_creditos.fecha', '>=', $sFechaD)
+        //->whereDate('notas_creditos.fecha', '<=', $sFechaH);
+
+        $ctacte_clientes = Cliente::join('recibos', 'clientes.id', '=', 'recibos.cliente_id')
+        ->select('clientes.id', 'clientes.nombre as nombre_cliente')
+        ->where('recibos.cliente_id', '=', $id)
+        ->where('recibos.estado', '=', 'CO')
+        //->whereDate('recibos.fecha', '>=', $sFechaD)
+        //->whereDate('recibos.fecha', '<=', $sFechaH)
+        ->union($ctacte_clientes_NP)
+        ->union($ctacte_clientes_ND)
+        ->union($ctacte_clientes_NC)->distinct()->get();
+        
+        $pdf = \PDF::loadView('reportesPDF.ctactecliente', ['ctacte_recibos' => $ctacte_recibos,
+                                                            'ctacte_recibos_detalle' => $ctacte_recibos_detalle,
+                                                            'ctacte_notas_venta' => $ctacte_notas_venta,
+                                                            'ctacte_notas_debito' => $ctacte_notas_debito,
+                                                            'ctacte_notas_credito' => $ctacte_notas_credito,
+                                                            'ctacte_clientes' => $ctacte_clientes]);
+
+        return $pdf->download('ctactecliente.pdf');
+
+        /*return ['ctacte_recibos' => $ctacte_recibos,
+        'ctacte_recibos_detalle' => $ctacte_recibos_detalle,
+        'ctacte_notas_venta' => $ctacte_notas_venta,
+        'ctacte_notas_debito' => $ctacte_notas_debito,
+        'ctacte_notas_credito' => $ctacte_notas_credito,
+        'ctacte_clientes' => $ctacte_clientes];        */
+    }       
 }
