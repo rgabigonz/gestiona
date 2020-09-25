@@ -17,6 +17,7 @@
                                 <option value="clientes.nombre">Cliente</option>
                                 <option value="vendedores.nombre">Distribuidor</option>
                                 <option value="AP">AGRO PROYECCIONES S.R.L.</option>
+                                <option value="ordenes_compras.numero_negocio">Numero de Negocio</option>
                             </select>
                         </div>
                         <div class="col col-md-8">

@@ -120,6 +120,8 @@ class NotaPedidoController extends Controller
         $user = auth('api')->user();
         
         $NotaPedido = NotaPedido::findOrFail($id);
+
+        $NotaPedido->cliente_id = $request->codigo_cliente;
         $NotaPedido->numero_factura = $request->numero_factura;
         $NotaPedido->lugar_entrega = $request->lugar_entrega;
         $NotaPedido->obs = $request->obs;
