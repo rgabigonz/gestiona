@@ -447,7 +447,7 @@
                 <button v-if="modoEdicion" type="button" class="btn btn-success float-right" @click="actualizaOrdenCompra()">
                     <i class="fa fa-save fa-fw"></i> Modificar
                 </button>
-                <router-link v-if="sBuscarOCD" :to="{ name: 'ordenescompra', params: { sBuscar: sBuscarOCD, sCriterio: sCriterioOCD }}" class="btn btn-primary float-right" style="margin-right: 5px;">
+                <router-link v-if="sBuscarOCD" :to="{ name: 'ordenescompra', params: { sBuscar: sBuscarOCD, sCriterio: sCriterioOCD, sProducto: sProductoOCD }}" class="btn btn-primary float-right" style="margin-right: 5px;">
                     <i class="fa fa-hand-point-left fa-fw"></i>Volver
                 </router-link>                  
                 <router-link v-else to="/ordenescompra" class="btn btn-primary float-right" style="margin-right: 5px;">
@@ -479,6 +479,7 @@
                 },
                 sCriterioOCD: '',
                 sBuscarOCD: '',
+                sProductoOCD: 0,
 
                 offset: 3,
                 sCriterio: 'nombre',
@@ -855,7 +856,7 @@
                         });
 
                         if(this.sBuscarOCD)
-                            this.$router.push('/ordenescompra/'+this.sBuscarOCD+'/'+this.sCriterioOCD);
+                            this.$router.push('/ordenescompra/'+this.sBuscarOCD+'/'+this.sCriterioOCD+'/'+this.sProductoOCD);
                         else
                             this.$router.push('/ordenescompra');
 
@@ -903,7 +904,7 @@
                         });
 
                         if(this.sBuscarOCD)
-                            this.$router.push('/ordenescompra/'+this.sBuscarOCD+'/'+this.sCriterioOCD);
+                            this.$router.push('/ordenescompra/'+this.sBuscarOCD+'/'+this.sCriterioOCD+'/'+this.sProductoOCD);
                         else
                             this.$router.push('/ordenescompra');
                     })
@@ -1084,9 +1085,10 @@
         created() {
             this.orenes_compra_id_edicion = this.$route.params.ordenescompraId;
 
-            if (this.$route.params.sBuscarOCD) {
+            if (this.$route.params.sBuscarOCD || this.$route.params.sProductoOCD) {
                 this.sBuscarOCD = this.$route.params.sBuscarOCD
                 this.sCriterioOCD = this.$route.params.sCriterioOCD
+                this.sProductoOCD = this.$route.params.sProductoOCD
             }
 
             this.cargaDepositos();

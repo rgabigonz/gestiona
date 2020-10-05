@@ -262,11 +262,7 @@
             if (this.$route.params.sBuscar || this.$route.params.sProducto) {
                 this.sBuscar = this.$route.params.sBuscar;
                 this.sCriterio = this.$route.params.sCriterio;
-
-                //if (this.$route.params.sProducto)
-                    this.sProducto = this.$route.params.sProducto;
-                //else
-                    //this.sProducto = 0;
+                this.sProducto = this.$route.params.sProducto;
             }
 
             this.cargarNotasPedido(1, this.sBuscar, this.sCriterio, this.sProducto);

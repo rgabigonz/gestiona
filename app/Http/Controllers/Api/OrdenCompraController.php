@@ -21,39 +21,81 @@ class OrdenCompraController extends Controller
     {
         $sBuscar = $request->buscar;
         $sCriterio = $request->criterio;
+        $sProducto = $request->producto;
 
         if(empty($sBuscar)) {
             if($sCriterio == 'AP') {
+                if(empty($sProducto)) {
+                    $ordenes_compras = OrdenCompra::join('proveedores', 'ordenes_compras.proveedor_id', '=', 'proveedores.id')
+                    ->leftjoin('clientes', 'ordenes_compras.cliente_id', '=', 'clientes.id')
+                    ->leftjoin('vendedores', 'ordenes_compras.vendedor_venta_id', '=', 'vendedores.id')
+                    ->select('ordenes_compras.*', 'proveedores.nombre as nombre_proveedor', 
+                            'clientes.nombre as nombre_cliente',
+                            'vendedores.nombre as nombre_vendedor')
+                    ->where('ordenes_compras.tipo', '<>', 'CL')
+                    ->orderBy('created_at', 'desc')
+                    ->paginate(15);
+                } else {
+                    $ordenes_compras = OrdenCompra::join('proveedores', 'ordenes_compras.proveedor_id', '=', 'proveedores.id')
+                    ->join('ordenes_compras_detalle', 'ordenes_compras_detalle.orden_compra_id', '=', 'ordenes_compras.id')
+                    ->leftjoin('clientes', 'ordenes_compras.cliente_id', '=', 'clientes.id')
+                    ->leftjoin('vendedores', 'ordenes_compras.vendedor_venta_id', '=', 'vendedores.id')
+                    ->select('ordenes_compras.*', 'proveedores.nombre as nombre_proveedor', 
+                            'clientes.nombre as nombre_cliente',
+                            'vendedores.nombre as nombre_vendedor')
+                    ->where('ordenes_compras.tipo', '<>', 'CL')
+                    ->where('ordenes_compras_detalle.producto_id', '=', $sProducto)
+                    ->orderBy('created_at', 'desc')
+                    ->paginate(15);                    
+                }
+            } else {
+                if(empty($sProducto)) {
+                    $ordenes_compras = OrdenCompra::join('proveedores', 'ordenes_compras.proveedor_id', '=', 'proveedores.id')
+                    ->leftjoin('clientes', 'ordenes_compras.cliente_id', '=', 'clientes.id')
+                    ->leftjoin('vendedores', 'ordenes_compras.vendedor_venta_id', '=', 'vendedores.id')
+                    ->select('ordenes_compras.*', 'proveedores.nombre as nombre_proveedor', 
+                            'clientes.nombre as nombre_cliente',
+                            'vendedores.nombre as nombre_vendedor')
+                    ->orderBy('created_at', 'desc')
+                    ->paginate(15);
+                } else {
+                    $ordenes_compras = OrdenCompra::join('proveedores', 'ordenes_compras.proveedor_id', '=', 'proveedores.id')
+                    ->join('ordenes_compras_detalle', 'ordenes_compras_detalle.orden_compra_id', '=', 'ordenes_compras.id')
+                    ->leftjoin('clientes', 'ordenes_compras.cliente_id', '=', 'clientes.id')
+                    ->leftjoin('vendedores', 'ordenes_compras.vendedor_venta_id', '=', 'vendedores.id')
+                    ->select('ordenes_compras.*', 'proveedores.nombre as nombre_proveedor', 
+                            'clientes.nombre as nombre_cliente',
+                            'vendedores.nombre as nombre_vendedor')
+                    ->where('ordenes_compras_detalle.producto_id', '=', $sProducto)
+                    ->orderBy('created_at', 'desc')
+                    ->paginate(15);
+                }                    
+            }
+        } 
+        else {
+            if(empty($sProducto)) {
                 $ordenes_compras = OrdenCompra::join('proveedores', 'ordenes_compras.proveedor_id', '=', 'proveedores.id')
                 ->leftjoin('clientes', 'ordenes_compras.cliente_id', '=', 'clientes.id')
                 ->leftjoin('vendedores', 'ordenes_compras.vendedor_venta_id', '=', 'vendedores.id')
                 ->select('ordenes_compras.*', 'proveedores.nombre as nombre_proveedor', 
                         'clientes.nombre as nombre_cliente',
                         'vendedores.nombre as nombre_vendedor')
-                ->where('ordenes_compras.tipo', '<>', 'CL')
+                ->where($sCriterio, 'like', '%' . $sBuscar . '%')
                 ->orderBy('created_at', 'desc')
                 ->paginate(15);
             } else {
                 $ordenes_compras = OrdenCompra::join('proveedores', 'ordenes_compras.proveedor_id', '=', 'proveedores.id')
+                ->join('ordenes_compras_detalle', 'ordenes_compras_detalle.orden_compra_id', '=', 'ordenes_compras.id')
                 ->leftjoin('clientes', 'ordenes_compras.cliente_id', '=', 'clientes.id')
                 ->leftjoin('vendedores', 'ordenes_compras.vendedor_venta_id', '=', 'vendedores.id')
                 ->select('ordenes_compras.*', 'proveedores.nombre as nombre_proveedor', 
                         'clientes.nombre as nombre_cliente',
                         'vendedores.nombre as nombre_vendedor')
+                ->where($sCriterio, 'like', '%' . $sBuscar . '%')
+                ->where('ordenes_compras_detalle.producto_id', '=', $sProducto)
                 ->orderBy('created_at', 'desc')
                 ->paginate(15);
             }
-        } 
-        else {
-            $ordenes_compras = OrdenCompra::join('proveedores', 'ordenes_compras.proveedor_id', '=', 'proveedores.id')
-            ->leftjoin('clientes', 'ordenes_compras.cliente_id', '=', 'clientes.id')
-            ->leftjoin('vendedores', 'ordenes_compras.vendedor_venta_id', '=', 'vendedores.id')
-            ->select('ordenes_compras.*', 'proveedores.nombre as nombre_proveedor', 
-                     'clientes.nombre as nombre_cliente',
-                     'vendedores.nombre as nombre_vendedor')
-            ->where($sCriterio, 'like', '%' . $sBuscar . '%')
-            ->orderBy('created_at', 'desc')
-            ->paginate(15);
         }
 
         return [

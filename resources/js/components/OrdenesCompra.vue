@@ -87,10 +87,10 @@
                                 <a href="#" v-if="orden_compra.estado == 'PE'" @click="anulaOrdenCompra(orden_compra.id)">
                                     <i class="fa fa-trash-alt yellow"></i>
                                 </a>
-                                <router-link v-if="sBuscar && sCriterio != 'AP'" :to="{ name: 'ordenescompradetalle', params: { ordenescompraId: orden_compra.id, sBuscarOCD: sBuscar, sCriterioOCD: sCriterio } }">
+                                <router-link v-if="sBuscar && sCriterio != 'AP'" :to="{ name: 'ordenescompradetalle', params: { ordenescompraId: orden_compra.id, sBuscarOCD: sBuscar, sCriterioOCD: sCriterio, sProductoOCD: sProducto } }">
                                     <i class="fa fa-table indigo"></i>
                                 </router-link>
-                                <router-link v-else-if="sCriterio == 'AP'" :to="{ name: 'ordenescompradetalle', params: { ordenescompraId: orden_compra.id, sBuscarOCD: 'AP', sCriterioOCD: sCriterio } }">
+                                <router-link v-else-if="sCriterio == 'AP'" :to="{ name: 'ordenescompradetalle', params: { ordenescompraId: orden_compra.id, sBuscarOCD: 'AP', sCriterioOCD: sCriterio, sProductoOCD: sProducto } }">
                                     <i class="fa fa-table indigo"></i>
                                 </router-link>    
                                 <router-link v-else :to="{ name: 'ordenescompradetalle', params: { ordenescompraId: orden_compra.id } }">
@@ -276,10 +276,11 @@
         created() {
             if (this.$route.params.sCriterio == 'AP') {
                 this.sCriterio = this.$route.params.sCriterio;
+                this.sProducto = this.$route.params.sProducto;
                 //this.sBuscar = '';
             }
             else {
-                if (this.$route.params.sBuscar) {
+                if (this.$route.params.sBuscar || this.$route.params.sProducto) {
                     this.sBuscar = this.$route.params.sBuscar;
                     this.sCriterio = this.$route.params.sCriterio;
                     this.sProducto = this.$route.params.sProducto;
