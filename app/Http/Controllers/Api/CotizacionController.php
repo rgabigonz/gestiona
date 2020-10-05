@@ -15,7 +15,7 @@ class CotizacionController extends Controller
     {
         $client = new Client();
 
-        $token = 'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODc2NDI4NTQsInR5cGUiOiJleHRlcm5hbCIsInVzZXIiOiJhZHMuZ2dvbnphbGV6QGdtYWlsLmNvbSJ9.BtoG0dCyhFrCPlG0Q4SNBkW9oE_B-l0HzA1Uahk-sSXAaW9RRO8RmEH2sVvJsiCqeX1cuR1wcC8nt-5brqL_Bw';
+        $token = 'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MzMxNzkzNTQsInR5cGUiOiJleHRlcm5hbCIsInVzZXIiOiJhZHMuZ2dvbnphbGV6QGdtYWlsLmNvbSJ9.__y5iYLgDQC2-_AeEe507U6Nmy9xF4UcSPKkhJvFogX8Mae1RmWaDWTpu9LeR9w144rsT1HSNs16nSisbXdk9g';
 
         $headers = [
             'Authorization' => 'BEARER ' . $token,

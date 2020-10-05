@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use PDF;
+use Illuminate\Support\Facades\DB;
 
 class NotaPedidoController extends Controller
 {
@@ -22,21 +23,43 @@ class NotaPedidoController extends Controller
     {
         $sBuscar = $request->buscar;
         $sCriterio = $request->criterio;
+        $sProducto = $request->producto;
 
         if(empty($sBuscar)) {
-            $notas_pedidos = NotaPedido::join('clientes', 'notas_pedidos.cliente_id', '=', 'clientes.id')
-            ->leftjoin('vendedores', 'notas_pedidos.vendedor_venta_id', '=', 'vendedores.id')
-            ->select('notas_pedidos.*', 'clientes.nombre as nombre_cliente', 'vendedores.nombre as nombre_vendedor')
-            ->orderBy('created_at', 'desc')
-            ->paginate(15);//where('state', '=', 'A')
+            if(empty($sProducto)) {
+                $notas_pedidos = NotaPedido::join('clientes', 'notas_pedidos.cliente_id', '=', 'clientes.id')
+                ->leftjoin('vendedores', 'notas_pedidos.vendedor_venta_id', '=', 'vendedores.id')
+                ->select('notas_pedidos.*', 'clientes.nombre as nombre_cliente', 'vendedores.nombre as nombre_vendedor')
+                ->orderBy('created_at', 'desc')
+                ->paginate(15);
+            } else {
+                $notas_pedidos = NotaPedido::join('clientes', 'notas_pedidos.cliente_id', '=', 'clientes.id')
+                ->join('notas_pedidos_detalle', 'notas_pedidos_detalle.nota_pedido_id', '=', 'notas_pedidos.id')
+                ->leftjoin('vendedores', 'notas_pedidos.vendedor_venta_id', '=', 'vendedores.id')
+                ->select('notas_pedidos.*', 'clientes.nombre as nombre_cliente', 'vendedores.nombre as nombre_vendedor')
+                ->where('notas_pedidos_detalle.producto_id', '=', $sProducto)
+                ->orderBy('created_at', 'desc')
+                ->paginate(15);
+            }
         } 
         else {
-            $notas_pedidos = NotaPedido::join('clientes', 'notas_pedidos.cliente_id', '=', 'clientes.id')
-            ->leftjoin('vendedores', 'notas_pedidos.vendedor_venta_id', '=', 'vendedores.id')
-            ->select('notas_pedidos.*', 'clientes.nombre as nombre_cliente','vendedores.nombre as nombre_vendedor')
-            ->where($sCriterio, 'like', '%' . $sBuscar . '%')//where('state', '=', 'A')
-            ->orderBy('created_at', 'desc')
-            ->paginate(15);
+            if(empty($sProducto)) {
+                $notas_pedidos = NotaPedido::join('clientes', 'notas_pedidos.cliente_id', '=', 'clientes.id')
+                ->leftjoin('vendedores', 'notas_pedidos.vendedor_venta_id', '=', 'vendedores.id')
+                ->select('notas_pedidos.*', 'clientes.nombre as nombre_cliente','vendedores.nombre as nombre_vendedor')
+                ->where($sCriterio, 'like', '%' . $sBuscar . '%')
+                ->orderBy('created_at', 'desc')
+                ->paginate(15);
+            } else {   
+                $notas_pedidos = NotaPedido::join('clientes', 'notas_pedidos.cliente_id', '=', 'clientes.id')
+                ->join('notas_pedidos_detalle', 'notas_pedidos_detalle.nota_pedido_id', '=', 'notas_pedidos.id')
+                ->leftjoin('vendedores', 'notas_pedidos.vendedor_venta_id', '=', 'vendedores.id')
+                ->select('notas_pedidos.*', 'clientes.nombre as nombre_cliente','vendedores.nombre as nombre_vendedor')
+                ->where($sCriterio, 'like', '%' . $sBuscar . '%')
+                ->where('notas_pedidos_detalle.producto_id', '=', $sProducto)
+                ->orderBy('created_at', 'desc')
+                ->paginate(15);
+            }             
         }
 
         return [

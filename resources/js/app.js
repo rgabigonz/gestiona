@@ -36,36 +36,36 @@ import VueRouter from 'vue-router';
 Vue.use(VueRouter)
 
 let routes = [
-    { path: '/productos', name: 'productos', component: require('./components/Productos.vue') },
-    { path: '/conceptos', name: 'conceptos', component: require('./components/Conceptos.vue') },
-    { path: '/depositos', name: 'depositos', component: require('./components/Depositos.vue') },
-    { path: '/bancos', name: 'bancos', component: require('./components/Bancos.vue') },
-    { path: '/formasventa', name: 'formasventa', component: require('./components/FormasVenta.vue') },
-    { path: '/formaspago', name: 'formaspago', component: require('./components/FormasPago.vue') },
-    { path: '/condicionespago', name: 'condicionespago', component: require('./components/CondicionesPago.vue') },
-    { path: '/clientes', name: 'clientes', component: require('./components/Clientes.vue') },
-    { path: '/vendedores', name: 'vendedores', component: require('./components/Vendedores.vue') },
-    { path: '/proveedores', name: 'proveedores', component: require('./components/Proveedores.vue') },    
-    { path: '/proveedoressimple', name: 'proveedoressimple', component: require('./components/ProveedoresSimple.vue') },    
-    { path: '/dashboard', name: 'dashboard', component: require('./components/Dashboard.vue') },
+    { path: '/productos', name: 'productos', component: require('./components/Productos.vue').default },
+    { path: '/conceptos', name: 'conceptos', component: require('./components/Conceptos.vue').default },
+    { path: '/depositos', name: 'depositos', component: require('./components/Depositos.vue').default },
+    { path: '/bancos', name: 'bancos', component: require('./components/Bancos.vue').default },
+    { path: '/formasventa', name: 'formasventa', component: require('./components/FormasVenta.vue').default },
+    { path: '/formaspago', name: 'formaspago', component: require('./components/FormasPago.vue').default },
+    { path: '/condicionespago', name: 'condicionespago', component: require('./components/CondicionesPago.vue').default },
+    { path: '/clientes', name: 'clientes', component: require('./components/Clientes.vue').default },
+    { path: '/vendedores', name: 'vendedores', component: require('./components/Vendedores.vue').default },
+    { path: '/proveedores', name: 'proveedores', component: require('./components/Proveedores.vue').default },    
+    { path: '/proveedoressimple', name: 'proveedoressimple', component: require('./components/ProveedoresSimple.vue').default },    
+    { path: '/dashboard', name: 'dashboard', component: require('./components/Dashboard.vue').default },
 
-    { path: '/notaspedido/:sBuscar?/:sCriterio?', name: 'notaspedido', component: require('./components/NotasPedido.vue') },
-    { path: '/notaspedidodetalle/:notaspedidoId/:sBuscarNPD?/:sCriterioNPD?', name: 'notaspedidodetalle', component: require('./components/NotasPedidoDetalle.vue') },
+    { path: '/notaspedido/:sBuscar?/:sCriterio?/:sProducto?', name: 'notaspedido', component: require('./components/NotasPedido.vue').default },
+    { path: '/notaspedidodetalle/:notaspedidoId/:sBuscarNPD?/:sCriterioNPD?/:sProductoNPD?', name: 'notaspedidodetalle', component: require('./components/NotasPedidoDetalle.vue').default },
 
-    { path: '/ordenescompra/:sBuscar?/:sCriterio?', name: 'ordenescompra', component: require('./components/OrdenesCompra.vue') },
-    { path: '/ordenescompradetalle/:ordenescompraId/:sBuscarOCD?/:sCriterioOCD?', name: 'ordenescompradetalle', component: require('./components/OrdenesCompraDetalle.vue') },
+    { path: '/ordenescompra/:sBuscar?/:sCriterio?/:sProducto?', name: 'ordenescompra', component: require('./components/OrdenesCompra.vue').default },
+    { path: '/ordenescompradetalle/:ordenescompraId/:sBuscarOCD?/:sCriterioOCD?/:sProductoOCD?', name: 'ordenescompradetalle', component: require('./components/OrdenesCompraDetalle.vue').default },
 
-    { path: '/recibos/:sBuscar?/:sCriterio?', name: 'recibos', component: require('./components/Recibos.vue') },
-    { path: '/recibosdetalle/:reciboId/:sBuscarRED?/:sCriterioRED?', name: 'recibosdetalle', component: require('./components/RecibosDetalle.vue') },
+    { path: '/recibos/:sBuscar?/:sCriterio?', name: 'recibos', component: require('./components/Recibos.vue').default },
+    { path: '/recibosdetalle/:reciboId/:sBuscarRED?/:sCriterioRED?', name: 'recibosdetalle', component: require('./components/RecibosDetalle.vue').default },
 
-    { path: '/notasdebito', name: 'notasdebito', component: require('./components/NotasDebito.vue') },
-    { path: '/notasdebitodetalle/:notadebitoId', name: 'notasdebitodetalle', component: require('./components/NotasDebitoDetalle.vue') },
-    { path: '/notascredito', name: 'notascredito', component: require('./components/NotasCredito.vue') },
-    { path: '/notascreditodetalle/:notacreditoId', name: 'notascreditodetalle', component: require('./components/NotasCreditoDetalle.vue') },    
-    { path: '/consultacheques', name: 'consultacheques', component: require('./components/ConsultaCheques.vue') },
-    { path: '/ctactecliente', name: 'ctactecliente', component: require('./components/CuentaCorrienteCliente.vue') },
-    { path: '/stockproductos', name: 'stockproductos', component: require('./components/StockProducto.vue') },
-    { path: '/movimientostock', name: 'movimientostock', component: require('./components/MovimientosStock.vue') }
+    { path: '/notasdebito', name: 'notasdebito', component: require('./components/NotasDebito.vue').default },
+    { path: '/notasdebitodetalle/:notadebitoId', name: 'notasdebitodetalle', component: require('./components/NotasDebitoDetalle.vue').default },
+    { path: '/notascredito', name: 'notascredito', component: require('./components/NotasCredito.vue').default },
+    { path: '/notascreditodetalle/:notacreditoId', name: 'notascreditodetalle', component: require('./components/NotasCreditoDetalle.vue').default },    
+    { path: '/consultacheques', name: 'consultacheques', component: require('./components/ConsultaCheques.vue').default },
+    { path: '/ctactecliente', name: 'ctactecliente', component: require('./components/CuentaCorrienteCliente.vue').default },
+    { path: '/stockproductos', name: 'stockproductos', component: require('./components/StockProducto.vue').default },
+    { path: '/movimientostock', name: 'movimientostock', component: require('./components/MovimientosStock.vue').default }
 ]
 
 const router = new VueRouter({

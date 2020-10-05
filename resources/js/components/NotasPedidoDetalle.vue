@@ -327,7 +327,7 @@
                 <button v-if="modoEdicion" type="button" class="btn btn-success float-right" @click="actualizaNotaPedido()">
                     <i class="fa fa-save fa-fw"></i> Modificar
                 </button>
-                <router-link v-if="sBuscarNPD" :to="{ name: 'notaspedido', params: { sBuscar: sBuscarNPD, sCriterio: sCriterioNPD }}" class="btn btn-primary float-right" style="margin-right: 5px;">
+                <router-link v-if="sBuscarNPD || sProductoNPD" :to="{ name: 'notaspedido', params: { sBuscar: sBuscarNPD, sCriterio: sCriterioNPD, sProducto: sProductoNPD }}" class="btn btn-primary float-right" style="margin-right: 5px;">
                     <i class="fa fa-hand-point-left fa-fw"></i>Volver
                 </router-link>
                 <router-link v-else to="/notaspedido" class="btn btn-primary float-right" style="margin-right: 5px;">
@@ -364,6 +364,7 @@
                 },
                 sCriterioNPD: '',
                 sBuscarNPD: '',
+                sProductoNPD: 0,
                 //Lista de Seleccion clientes y productos   
 
                 // Errores
@@ -609,8 +610,8 @@
                             title: 'Se genero el pedido correctamente!'
                         });
 
-                        if(this.sBuscarNPD)
-                            this.$router.push('/notaspedido/'+this.sBuscarNPD+'/'+this.sCriterioNPD);
+                        if(this.sBuscarNPD || this.sProductoNPD)
+                            this.$router.push('/notaspedido/'+this.sBuscarNPD+'/'+this.sCriterioNPD+'/'+this.sProductoNPD);
                         else
                             this.$router.push('/notaspedido');
                     })
@@ -651,8 +652,8 @@
                             title: 'Se actualizo el pedido correctamente!'
                         });
 
-                        if(this.sBuscarNPD)
-                            this.$router.push('/notaspedido/'+this.sBuscarNPD+'/'+this.sCriterioNPD);
+                        if(this.sBuscarNPD || this.sProductoNPD)
+                            this.$router.push('/notaspedido/'+this.sBuscarNPD+'/'+this.sCriterioNPD+'/'+this.sProductoNPD);
                         else
                             this.$router.push('/notaspedido');
                     })
@@ -804,9 +805,10 @@
         created() {
             this.notas_pedido_id_edicion = this.$route.params.notaspedidoId;
 
-            if (this.$route.params.sBuscarNPD) {
+            if (this.$route.params.sBuscarNPD || this.$route.params.sProductoNPD) {
                 this.sBuscarNPD = this.$route.params.sBuscarNPD
                 this.sCriterioNPD = this.$route.params.sCriterioNPD
+                this.sProductoNPD = this.$route.params.sProductoNPD
             }
 
             this.cargaClientes();

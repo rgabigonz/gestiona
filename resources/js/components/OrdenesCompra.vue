@@ -5,12 +5,12 @@
             <div class="card border-success mb-3">
                 <div class="card-header bg-transparent border-light">Busqueda
                     <div class="card-tools">
-                        <button class="btn btn-secondary" @click="cargarOrdenesCompra(1, sBuscar, sCriterio)"><i class="fas fa-search fa-fw"></i></button>
+                        <button class="btn btn-secondary" @click="cargarOrdenesCompra(1, sBuscar, sCriterio, sProducto)"><i class="fas fa-search fa-fw"></i></button>
                     </div>
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col col-md-4">
+                        <div class="form-group col-md-4">
                             <select class="form-control" v-model="sCriterio">
                                 <option value="ordenes_compras.id">Numero Nota de Pedido</option>
                                 <option value="proveedores.nombre">Proveedor</option>
@@ -20,10 +20,18 @@
                                 <option value="ordenes_compras.numero_negocio">Numero de Negocio</option>
                             </select>
                         </div>
-                        <div class="col col-md-8">
-                            <input v-model="sBuscar" @keyup.enter="cargarOrdenesCompra(1, sBuscar, sCriterio)" type="text" class="form-control" placeholder="Dato a buscar...">
+                        <div class="form-group col-md-8">
+                            <input v-model="sBuscar" @keyup.enter="cargarOrdenesCompra(1, sBuscar, sCriterio, sProducto)" type="text" class="form-control" placeholder="Dato a buscar...">
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <select class="form-control" v-model="sProducto" ref="sProducto">
+                                <option value=0>Producto...</option>
+                                <option v-for="lproducto in lproductos" :key="lproducto.id" :value="lproducto.id">{{ lproducto.nombre }}</option>
+                            </select>   
+                        </div>
+                    </div>                    
                 </div>
             </div>
             <div class="card border-info mb-3">
@@ -134,7 +142,9 @@
                 },
                 offset: 3,
                 sCriterio: 'ordenes_compras.id',
-                sBuscar: ''
+                sBuscar: '',
+                sProducto: 0,
+                lproductos: {}
             }
         },
         computed: {
@@ -166,13 +176,13 @@
             }
         },
         methods: {
-            cambiarPagina(page, buscar, criterio){
+            cambiarPagina(page, buscar, criterio, producto){
                 this.pagination.current_page = page;
-                this.cargarOrdenesCompra(page, buscar, criterio);
+                this.cargarOrdenesCompra(page, buscar, criterio, producto);
             },
-            cargarOrdenesCompra(page, buscar, criterio) {
+            cargarOrdenesCompra(page, buscar, criterio, producto) {
                 let me = this;                
-                var url = 'api/ordenCompra?page=' + page + '&buscar=' + buscar + '&criterio=' + criterio;
+                var url = 'api/ordenCompra?page=' + page + '&buscar=' + buscar + '&criterio=' + criterio + '&producto=' + producto;
                 axios.get(url).then(data => {
                     var response = data.data;
                     me.ordenes_compras = response.ordenes_compras.data;
@@ -202,7 +212,7 @@
                                 'La ORDEN DE COMPRA a sido ANULADA.',
                                 'success'
                             );
-                            this.cargarOrdenesCompra(1, this.sBuscar, this.sCriterio);
+                            this.cargarOrdenesCompra(1, this.sBuscar, this.sCriterio, this.sProducto);
                         })
                     }
                 })
@@ -230,7 +240,7 @@
                                 'success'
                             );
                             //Fire.$emit('AfterAction');
-                            this.cargarOrdenesCompra(1, this.sBuscar, this.sCriterio);
+                            this.cargarOrdenesCompra(1, this.sBuscar, this.sCriterio, this.sProducto);
                         })
                     }
                 })
@@ -249,6 +259,18 @@
                     document.body.appendChild(link);
                     link.click();
                 });
+            },
+            cargaProductos() {
+                let me = this;                
+                var url = 'api/producto/cargaProductos';
+                axios.get(url).then(data => {
+                    var response = data.data;
+                    me.lproductos = response.productos;
+                }).catch((error) => {
+                    if (error.response.status == 401) {
+                        swal('Error!', 'La sesion ha caducado.', 'warning');
+                    }
+                });
             }
         },
         created() {
@@ -260,9 +282,12 @@
                 if (this.$route.params.sBuscar) {
                     this.sBuscar = this.$route.params.sBuscar;
                     this.sCriterio = this.$route.params.sCriterio;
+                    this.sProducto = this.$route.params.sProducto;
                 }
             }
-            this.cargarOrdenesCompra(1, this.sBuscar, this.sCriterio);
+
+            this.cargarOrdenesCompra(1, this.sBuscar, this.sCriterio, this.sProducto);
+            this.cargaProductos();
         }
     }
 </script>

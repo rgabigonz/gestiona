@@ -5,22 +5,30 @@
             <div class="card border-success mb-3">
                 <div class="card-header bg-transparent border-light">Busqueda
                     <div class="card-tools">
-                        <button class="btn btn-secondary" @click="cargarNotasPedido(1, sBuscar, sCriterio)"><i class="fas fa-search fa-fw"></i></button>
+                        <button class="btn btn-secondary" @click="cargarNotasPedido(1, sBuscar, sCriterio, sProducto)"><i class="fas fa-search fa-fw"></i></button>
                     </div>
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col col-md-4">
+                        <div class="form-group col-md-4">
                             <select class="form-control" v-model="sCriterio">
                                 <option value="notas_pedidos.id">Numero Nota de Venta</option>
                                 <option value="clientes.nombre">Cliente</option>
                                 <option value="vendedores.nombre">Distribuidor</option>
                             </select>
                         </div>
-                        <div class="col col-md-8">
-                            <input v-model="sBuscar" @keyup.enter="cargarNotasPedido(1, sBuscar, sCriterio)" type="text" class="form-control" placeholder="Dato a buscar...">
+                        <div class="form-group col-md-8">
+                            <input v-model="sBuscar" @keyup.enter="cargarNotasPedido(1, sBuscar, sCriterio, sProducto)" type="text" class="form-control" placeholder="Dato a buscar...">
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <select class="form-control" v-model="sProducto" ref="sProducto">
+                                <option value=0>Producto...</option>
+                                <option v-for="lproducto in lproductos" :key="lproducto.id" :value="lproducto.id">{{ lproducto.nombre }}</option>
+                            </select>   
+                        </div>
+                    </div>                     
                 </div>
             </div>
             <div class="card border-info mb-3">
@@ -67,7 +75,7 @@
                                 <a href="#" v-if="nota_pedido.estado == 'PE'" @click="anulaPresupuesto(nota_pedido.id)">
                                     <i class="fa fa-trash-alt yellow"></i>
                                 </a>
-                                <router-link v-if="sBuscar" :to="{ name: 'notaspedidodetalle', params: { notaspedidoId: nota_pedido.id, sBuscarNPD: sBuscar, sCriterioNPD: sCriterio } }">
+                                <router-link v-if="sBuscar" :to="{ name: 'notaspedidodetalle', params: { notaspedidoId: nota_pedido.id, sBuscarNPD: sBuscar, sCriterioNPD: sCriterio, sProductoNPD: sProducto } }">
                                     <i class="fa fa-table indigo"></i>
                                 </router-link>
                                 <router-link v-else :to="{ name: 'notaspedidodetalle', params: { notaspedidoId: nota_pedido.id } }">
@@ -119,7 +127,9 @@
                 },
                 offset: 3,
                 sCriterio: 'notas_pedidos.id',
-                sBuscar: ''
+                sBuscar: '',
+                sProducto: 0,
+                lproductos: {}
             }
         },
         computed: {
@@ -151,13 +161,13 @@
             }
         },
         methods: {
-            cambiarPagina(page, buscar, criterio){
+            cambiarPagina(page, buscar, criterio, producto){
                 this.pagination.current_page = page;
-                this.cargarNotasPedido(page, buscar, criterio);
+                this.cargarNotasPedido(page, buscar, criterio, producto);
             },
-            cargarNotasPedido(page, buscar, criterio) {
+            cargarNotasPedido(page, buscar, criterio, producto) {
                 let me = this;                
-                var url = 'api/notaPedido?page=' + page + '&buscar=' + buscar + '&criterio=' + criterio;
+                var url = 'api/notaPedido?page=' + page + '&buscar=' + buscar + '&criterio=' + criterio + '&producto=' + producto;
                 axios.get(url).then(data => {
                     var response = data.data;
                     me.notas_pedidos = response.notas_pedidos.data;
@@ -188,7 +198,7 @@
                                 'success'
                             );
                             //Fire.$emit('AfterAction');
-                            this.cargarNotasPedido(1, this.sBuscar, this.sCriterio);
+                            this.cargarNotasPedido(1, this.sBuscar, this.sCriterio, this.sProducto);
                         })
                     }
                 })
@@ -215,7 +225,7 @@
                                 'El PEDIDO a sido CONFIRMADO.',
                                 'success'
                             );
-                            this.cargarNotasPedido(1, this.sBuscar, this.sCriterio);
+                            this.cargarNotasPedido(1, this.sBuscar, this.sCriterio, this.sProducto);
                         })
                     }
                 })
@@ -234,15 +244,33 @@
                     document.body.appendChild(link);
                     link.click();
                 });
+            },
+            cargaProductos() {
+                let me = this;                
+                var url = 'api/producto/cargaProductos';
+                axios.get(url).then(data => {
+                    var response = data.data;
+                    me.lproductos = response.productos;
+                }).catch((error) => {
+                    if (error.response.status == 401) {
+                        swal('Error!', 'La sesion ha caducado.', 'warning');
+                    }
+                });
             }
         },
         created() {
-            if (this.$route.params.sBuscar) {
+            if (this.$route.params.sBuscar || this.$route.params.sProducto) {
                 this.sBuscar = this.$route.params.sBuscar;
                 this.sCriterio = this.$route.params.sCriterio;
+
+                //if (this.$route.params.sProducto)
+                    this.sProducto = this.$route.params.sProducto;
+                //else
+                    //this.sProducto = 0;
             }
 
-            this.cargarNotasPedido(1, this.sBuscar, this.sCriterio);
+            this.cargarNotasPedido(1, this.sBuscar, this.sCriterio, this.sProducto);
+            this.cargaProductos();
         }
     }
 </script>
