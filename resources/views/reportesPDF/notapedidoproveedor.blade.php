@@ -246,11 +246,9 @@
                             <th>Producto</th>
                             <th>Cantidad</th>							
                             <th>Precio</th>
-							@if ($datoOrdenCompra[0]['tipo'] == 'CL')
 								<th>Flete</th>
 								<th>C. Venta</th>
 								<th>C. Gestion</th>
-							@endif
 							<th>P. Unitario</th>
                             <th>Subtotal</th>
                         </tr>
@@ -261,11 +259,9 @@
                             <td><b>{{ $det->nombre_producto }}</b> / {{ $det->descripcion_producto }}</td>
                             <td>{{ $det->cantidad }}</td>							
                             <td>$ {{ number_format($det->precio, 2, ',', '.') }}</td>
-							@if ($datoOrdenCompra[0]['tipo'] == 'CL')
 								<td>$ {{ number_format($det->flete, 2, ',', '.') }}</td>
 								<td>$ {{ number_format($det->comision_venta, 2, ',', '.') }}</td>
 								<td>$ {{ number_format($det->comision_gestion, 2, ',', '.') }}</td>
-							@endif
 							<td>$ {{ number_format($det->flete + $det->comision_venta + $det->comision_gestion + $det->precio, 2, ',', '.') }}</td>
                             <td>$ {{ number_format(($det->flete + $det->comision_venta + $det->comision_gestion + $det->precio) * $det->cantidad, 2, ',', '.') }}</td>
                         </tr>
@@ -275,11 +271,10 @@
                         <tr>
                             <th></th>
                             <th></th>
-							@if ($datoOrdenCompra[0]['tipo'] == 'CL')
 								<th></th>
 								<th></th>
 								<th></th>
-							@endif
+
 							<th></th>
                             <th>Total sin IVA: </th>
                             <td>$ {{ number_format($datoOrdenCompra[0]['total_siniva'], 2, ',', '.') }}</td>
@@ -287,11 +282,9 @@
                         <tr>
                             <th></th>
                             <th></th>
-							@if ($datoOrdenCompra[0]['tipo'] == 'CL')
 								<th></th>
 								<th></th>
 								<th></th>
-							@endif
 							<th></th>
                             <th>IVA 10,5%: </th>
                             <td>$ {{ number_format($datoOrdenCompra[0]['total_iva105'], 2, ',', '.') }}</td>
@@ -299,11 +292,9 @@
                         <tr>
                             <th></th>
                             <th></th>
-							@if ($datoOrdenCompra[0]['tipo'] == 'CL')
 								<th></th>
 								<th></th>
 								<th></th>
-							@endif
 							<th></th>
                             <th>IVA 21%: </th>
                             <td>$ {{ number_format($datoOrdenCompra[0]['total_iva21'], 2, ',', '.') }}</td>
@@ -311,11 +302,9 @@
                         <tr>
                             <th></th>
                             <th></th>
-							@if ($datoOrdenCompra[0]['tipo'] == 'CL')
 								<th></th>
 								<th></th>
 								<th></th>
-							@endif
 							<th></th>
                             <th>Total: </th>
                             <td>$ {{ number_format($datoOrdenCompra[0]['total'], 2, ',', '.') }}</td>
