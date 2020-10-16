@@ -13,8 +13,7 @@
                         <div class="col col-md-4">
                             <select class="form-control" v-model="sCriterio">
                                 <option value="numero_cheque">N° Cheque</option>
-                                <!-- <option value="estado_cheque">Estado</option>
-                                <option value="fecha_cobro_cheque">Fecha de Cobro</option> -->
+                                <option value="importe">Importe Cheque</option>
                             </select>
                         </div>
                         <div class="col col-md-8">
@@ -54,7 +53,7 @@
                             <td v-else>${{ cheque.precio_dolar_cheque }}</td>                            
                             <td>
                                 <div v-if="cheque.estado_cheque == 'PE'">
-                                    <span class="badge badge-info">En cartera</span>
+                                    <span class="badge badge-danger">En cartera</span>
                                 </div>
                                 <div v-else>
                                     <span class="badge badge-success">Entregado</span>
