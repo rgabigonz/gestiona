@@ -121,6 +121,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <p>Recibos</p>
                   </router-link>
                 </li>
+                <li class="nav-item">
+                  <router-link to="/ordenespago" class="nav-link">
+                    <i class="fas fa-file-invoice-dollar nav-icon"></i>
+                    <p>Ordenes de Pago</p>
+                  </router-link>
+                </li>                
                 <hr>
                 <li class="nav-item">
                   <router-link to="/notasdebito" class="nav-link">

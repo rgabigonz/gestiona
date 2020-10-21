@@ -163,13 +163,21 @@ Route::middleware('auth:api')->group( function () {
     ]);    
 
     //Rutas Recibos
-    //Route::get('/recibo/ReciboPDF/{recibo}','Api\ReciboController@ReciboPDF');
     Route::get('/recibo/devuelveRecibo/{recibo}', 'Api\ReciboController@devuelveRecibo');
     Route::put('/recibo/anulaRecibo/{recibo}', 'Api\ReciboController@anulaRecibo');
     Route::put('/recibo/confirmaRecibo/{recibo}', 'Api\ReciboController@confirmaRecibo');
 
     Route::apiResources([
         'recibo' => 'Api\ReciboController'
+    ]);
+
+    //Rutas Ordenes Pago
+    Route::get('/ordenpago/devuelveOrdenPago/{ordenpago}', 'Api\OrdenPagoController@devuelveOrdenPago');
+    Route::put('/ordenpago/anulaOrdenPago/{ordenpago}', 'Api\OrdenPagoController@anulaOrdenPago');
+    Route::put('/ordenpago/confirmaOrdenPago/{ordenpago}', 'Api\OrdenPagoController@confirmaOrdenPago');
+
+    Route::apiResources([
+        'ordenpago' => 'Api\OrdenPagoController'
     ]);
 
     //Rutas Notas Debito

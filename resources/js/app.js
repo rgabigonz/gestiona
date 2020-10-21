@@ -65,7 +65,11 @@ let routes = [
     { path: '/consultacheques', name: 'consultacheques', component: require('./components/ConsultaCheques.vue') },
     { path: '/ctactecliente', name: 'ctactecliente', component: require('./components/CuentaCorrienteCliente.vue') },
     { path: '/stockproductos', name: 'stockproductos', component: require('./components/StockProducto.vue') },
-    { path: '/movimientostock', name: 'movimientostock', component: require('./components/MovimientosStock.vue') }
+    { path: '/movimientostock', name: 'movimientostock', component: require('./components/MovimientosStock.vue') },
+
+    { path: '/ordenespago/:sBuscar?/:sCriterio?', name: 'ordenespago', component: require('./components/OrdenesPago.vue') },
+    { path: '/ordenespagodetalle/:ordenpagoId/:sBuscarOPD?/:sCriterioOPD?', name: 'ordenespagodetalle', component: require('./components/OrdenesPagoDetalle.vue') }
+
 ]
 
 const router = new VueRouter({
